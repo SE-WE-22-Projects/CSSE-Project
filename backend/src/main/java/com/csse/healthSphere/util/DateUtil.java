@@ -2,12 +2,14 @@ package com.csse.healthSphere.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class DateUtil {
 
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
     private static final String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
@@ -39,6 +41,17 @@ public class DateUtil {
      */
     public static LocalDate parseDate(String dateStr) throws DateTimeParseException {
         return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT));
+    }
+
+    /**
+     * Parses a string to a LocalTime using the default format (yyyy-MM-dd).
+     *
+     * @param dateStr the string to parse
+     * @return the parsed LocalDate
+     * @throws DateTimeParseException if the string cannot be parsed
+     */
+    public static LocalTime parseTime(String dateStr) throws DateTimeParseException {
+        return LocalTime.parse(dateStr, DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT));
     }
 
     /**
