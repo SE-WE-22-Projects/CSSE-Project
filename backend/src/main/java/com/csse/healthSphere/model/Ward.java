@@ -12,6 +12,6 @@ public class Ward {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int wardId;
 
-    @OneToMany(mappedBy = "departmentId")
+    @OneToMany(mappedBy = "ward")
     private List<MedicalStaff> medicalStaff;
 }
