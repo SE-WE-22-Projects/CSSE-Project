@@ -47,6 +47,7 @@ public class AppointmentService {
     }
 
     public void deleteAppointment(Long id){
-
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
+        appointmentRepository.delete(appointment);
     }
 }
