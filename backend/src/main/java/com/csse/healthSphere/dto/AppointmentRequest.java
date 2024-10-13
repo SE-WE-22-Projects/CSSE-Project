@@ -10,8 +10,8 @@ public class AppointmentRequest {
     private LocalDate date;
     private LocalTime time;
     private int queueNo;
-    private String status; // TODO: Use enum when implemented
-//    private int patientId;
+    // private String status; // TODO: Use enum when implemented
+   private long patientId;
 //    private int doctorId;
 
     // TODO: do we need to add doctorId / schedule
