@@ -12,7 +12,7 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int personId;
-    LocalDate date;
+    LocalDate dob;
     String name;
     String address;
     String email;
