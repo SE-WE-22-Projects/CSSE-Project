@@ -41,7 +41,9 @@ public class AppointmentService {
 
     public Appointment updateAppointment(Long id, AppointmentRequest appointmentRequest){
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
-        modelMapper.map(appointmentRequest, appointment);
+        appointment.setTime(appointmentRequest.getTime());
+        appointment.setDate(appointmentRequest.getDate());
+        appointment.setQueueNo(appointmentRequest.getQueueNo());
 
         return appointmentRepository.save(appointment);
     }
