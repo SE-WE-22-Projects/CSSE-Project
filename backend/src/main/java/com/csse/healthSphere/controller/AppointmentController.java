@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@RequestMapping("/appointment")
+@RestController
 @RequiredArgsConstructor
 public class AppointmentController {
     private final AppointmentService appointmentService;
@@ -53,7 +54,7 @@ public class AppointmentController {
     }
 
     // delete appointment by id
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppointment(
             @PathVariable Long id
     ){
