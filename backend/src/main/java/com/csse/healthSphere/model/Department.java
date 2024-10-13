@@ -13,6 +13,4 @@ public class Department {
     int departmentId;
     String name;
 
-    @OneToMany(mappedBy = "department")
-    private List<MedicalStaff> medicalStaff;
 }
