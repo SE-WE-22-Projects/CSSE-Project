@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,5 +18,7 @@ public class Person {
     String address;
     String email;
     String phoneNo;
+
+    @JsonIgnore
     String password;
 }
