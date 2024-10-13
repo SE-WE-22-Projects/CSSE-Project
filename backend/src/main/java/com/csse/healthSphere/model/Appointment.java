@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class Appointment {
     int queueNo;
     String status; // TODO: Need to add enum
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "patientId")
     Patient patient;
