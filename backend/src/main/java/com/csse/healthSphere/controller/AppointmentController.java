@@ -21,15 +21,16 @@ public class AppointmentController {
     @PostMapping
     public ResponseEntity<Appointment> createAppointment(
             @RequestBody AppointmentRequest appointmentRequest
-            ){
+    ) {
         Appointment createdAppointment = appointmentService.createAppointment(appointmentRequest);
+        createdAppointment.setPatient(null);
         return new ResponseEntity<>(createdAppointment, HttpStatus.CREATED);
 
     }
 
     // get all appointments
     @GetMapping
-    public ResponseEntity<List<Appointment>> getAllAppointments(){
+    public ResponseEntity<List<Appointment>> getAllAppointments() {
         List<Appointment> appointmentList = appointmentService.getAllAppointments();
         return new ResponseEntity<>(appointmentList, HttpStatus.OK);
     }
@@ -38,26 +39,26 @@ public class AppointmentController {
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointmentById(
             @PathVariable Long id
-    ){
+    ) {
         Appointment appointment = appointmentService.getAppointmentById(id);
-        return new ResponseEntity<>(appointment,HttpStatus.OK);
+        return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 
     // update appintment by id
     @PutMapping("/{id}")
-    public  ResponseEntity<Appointment> updateAppointment(
+    public ResponseEntity<Appointment> updateAppointment(
             @PathVariable Long id,
             @RequestBody AppointmentRequest appointmentRequest
-    ){
-        Appointment updatedAppointment = appointmentService.updateAppointment(id,appointmentRequest);
-        return new ResponseEntity<>(updatedAppointment,HttpStatus.OK);
+    ) {
+        Appointment updatedAppointment = appointmentService.updateAppointment(id, appointmentRequest);
+        return new ResponseEntity<>(updatedAppointment, HttpStatus.OK);
     }
 
     // delete appointment by id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppointment(
             @PathVariable Long id
-    ){
+    ) {
         appointmentService.deleteAppointment(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

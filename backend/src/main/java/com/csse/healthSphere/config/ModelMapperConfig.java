@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
+
 
 @Configuration
 public class ModelMapperConfig {
@@ -25,6 +25,7 @@ public class ModelMapperConfig {
             return source == null ? null : DateUtil.parseDateTime(source);
         }
     };
+
     Converter<String, LocalTime> timeConverter = new AbstractConverter<>() {
         protected LocalTime convert(String source) {
             return source == null ? null : DateUtil.parseTime(source);
