@@ -28,21 +28,22 @@ public class AppointmentService {
 
         appointment.setPatient(patient);
         appointment.setStatus("pending");
-
         return appointmentRepository.save(appointment);
     }
 
     public List<Appointment> getAllAppointments(){
-
-        return List.of();
+        return appointmentRepository.findAll();
     }
 
     public Appointment getAppointmentById(Long id){
-        return null;
+        return appointmentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
     }
 
     public Appointment updateAppointment(Long id, AppointmentRequest appointmentRequest){
-        return null;
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
+        modelMapper.map(appointmentRequest, appointment);
+
+        return appointmentRepository.save(appointment);
     }
 
     public void deleteAppointment(Long id){
