@@ -39,7 +39,7 @@ public class MedicalServiceController {
     @GetMapping
     public ResponseEntity<List<MedicalService>> getAllServices() {
         List<MedicalService> medicalServiceList = medicalServiceService.getAllServices();
-        return new ResponseEntity<List<MedicalService>>(medicalServiceList, HttpStatus.OK);
+        return new ResponseEntity<>(medicalServiceList, HttpStatus.OK);
     }
 
     /**

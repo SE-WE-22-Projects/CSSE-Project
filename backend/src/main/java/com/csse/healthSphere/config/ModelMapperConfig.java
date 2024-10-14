@@ -14,19 +14,19 @@ import java.time.LocalTime;
 
 @Configuration
 public class ModelMapperConfig {
-    Converter<String, LocalDate> dateConverter = new AbstractConverter<>() {
+    final Converter<String, LocalDate> dateConverter = new AbstractConverter<>() {
         protected LocalDate convert(String source) {
             return source == null ? null : DateUtil.parseDate(source);
         }
     };
 
-    Converter<String, LocalDateTime> dateTimeConverter = new AbstractConverter<>() {
+    final Converter<String, LocalDateTime> dateTimeConverter = new AbstractConverter<>() {
         protected LocalDateTime convert(String source) {
             return source == null ? null : DateUtil.parseDateTime(source);
         }
     };
 
-    Converter<String, LocalTime> timeConverter = new AbstractConverter<>() {
+    final Converter<String, LocalTime> timeConverter = new AbstractConverter<>() {
         protected LocalTime convert(String source) {
             return source == null ? null : DateUtil.parseTime(source);
         }

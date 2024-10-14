@@ -1,6 +1,5 @@
 package com.csse.healthSphere.repository;
 
-import com.csse.healthSphere.model.Patient;
 import com.csse.healthSphere.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

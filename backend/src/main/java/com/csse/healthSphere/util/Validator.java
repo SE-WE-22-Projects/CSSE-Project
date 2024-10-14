@@ -3,7 +3,6 @@ package com.csse.healthSphere.util;
 public class Validator {
     /**
      * Validates whether the given email address is in a valid format.
-     *
      * Example usage:
      * <pre>{@code
      * boolean isValid = validator.isValidEmail("test@example.com");
@@ -20,7 +19,6 @@ public class Validator {
 
     /**
      * Validates whether the given phone number contains only digits and is not null.
-     *
      * Example usage:
      * <pre>{@code
      * boolean isValid = validator.isValidPhoneNumber("1234567890");
