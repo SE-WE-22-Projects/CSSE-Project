@@ -8,6 +8,6 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 public class Doctor extends MedicalStaff {
-    String speciality;
-    String regNo;
+    private String speciality;
+    private String regNo;
 }
