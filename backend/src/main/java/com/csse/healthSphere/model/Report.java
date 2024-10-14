@@ -14,7 +14,7 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "serviceId")
-    Service service;
+    MedicalService medicalService;
 
     @ManyToOne
     @JoinColumn(name = "patientId")
