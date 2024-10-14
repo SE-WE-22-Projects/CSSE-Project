@@ -19,7 +19,7 @@ public class MedicalServiceService {
 
     public MedicalService createService(MedicalServiceRequest medicalServiceRequest) {
         MedicalService medicalService = modelMapper.map(medicalServiceRequest, MedicalService.class);
-
+        medicalService.setServiceId(null);
         return medicalServiceRepository.save(medicalService);
     }
 
