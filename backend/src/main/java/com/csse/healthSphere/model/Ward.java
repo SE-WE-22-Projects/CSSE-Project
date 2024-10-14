@@ -3,8 +3,6 @@ package com.csse.healthSphere.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Data
 public class Ward {
