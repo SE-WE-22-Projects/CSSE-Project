@@ -8,6 +8,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import axios from 'axios'
 import { baseURL, siteTheme } from './config.ts'
+import { DefaultApi } from './api/api.ts'
+import { Configuration } from './api/configuration.ts'
 
 // set the base url used for all axios requests.
 axios.defaults.baseURL = baseURL;
@@ -21,6 +23,12 @@ axios.interceptors.request.use(async (cfg) => {
   return cfg;
 });
 
+export const API = new DefaultApi(new Configuration({
+  basePath: baseURL, accessToken: async () => {
+    const jwt = localStorage.getItem("auth");
+    return jwt || "";
+  }
+}));
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

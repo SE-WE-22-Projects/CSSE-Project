@@ -1,0 +1,234 @@
+openapi: "3.1.0"
+info:
+  title: "backend API"
+  description: "backend API"
+  version: "1.0.0"
+servers:
+  - url: "https://backend"
+paths:
+  /:
+    get:
+      summary: "GET "
+      operationId: "index"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /api/appointment/{id}:
+    put:
+      summary: "PUT api/appointment/{id}"
+      operationId: "updateAppointment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+    delete:
+      summary: "DELETE api/appointment/{id}"
+      operationId: "deleteAppointment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/appointment/{id}"
+      operationId: "getAppointmentById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+  /api/appointment:
+    post:
+      summary: "POST api/appointment"
+      operationId: "createAppointment"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+    get:
+      summary: "GET api/appointment"
+      operationId: "getAllAppointments"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Appointment"
+  /api/bill/{id}:
+    put:
+      summary: "PUT api/bill/{id}"
+      operationId: "updateBill"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+    delete:
+      summary: "DELETE api/bill/{id}"
+      operationId: "deleteBill"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/bill/{id}"
+      operationId: "getBillById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+  /api/bill:
+    post:
+      summary: "POST api/bill"
+      operationId: "createBill"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+    get:
+      summary: "GET api/bill"
+      operationId: "getAllBills"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Appointment"
+components:
+  schemas:
+    AppointmentRequest:
+      type: "object"
+      properties:
+        date:
+          type: "string"
+          format: "date"
+        time:
+          type: "string"
+          format: "partial-time"
+        queueNo:
+          type: "integer"
+          format: "int32"
+        patientId:
+          type: "integer"
+          format: "int64"
+      required:
+        - "date"
+        - "time"
+        - "queueNo"
+    Appointment:
+      type: "object"
+      properties:
+        appointmentId:
+          type: "integer"
+          format: "int32"
+        date:
+          type: "string"
+          format: "date"
+        time:
+          type: "string"
+          format: "partial-time"
+        queueNo:
+          type: "integer"
+          format: "int32"
+        status:
+          type: "string"
+    Void:
+      type: "object"
+      properties: { }

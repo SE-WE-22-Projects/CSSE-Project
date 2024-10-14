@@ -15,13 +15,8 @@ public class TestController {
 
     @GetMapping("/")
     public String index() {
-        test();
         return repository.findAll().toString();
     }
 
-    private void test() {
-        ModelMapper modelMapper = new ModelMapper();
-        System.out.println(modelMapper.map(new AppointmentRequest(), Appointment.class));
-    }
 
 }
