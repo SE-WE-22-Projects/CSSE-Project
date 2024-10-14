@@ -8,7 +8,7 @@ import lombok.Data;
 public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int prescriptionId;
+    Long prescriptionId;
 
     @ManyToOne
     @JoinColumn(name = "patientId")

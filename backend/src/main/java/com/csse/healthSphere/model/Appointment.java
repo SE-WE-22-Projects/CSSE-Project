@@ -13,7 +13,7 @@ import java.time.LocalTime;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int appointmentId;
+    Long appointmentId;
 
     LocalDate date;
     LocalTime time;
