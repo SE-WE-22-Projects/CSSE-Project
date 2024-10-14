@@ -1,10 +1,7 @@
 package com.csse.healthSphere;
 
-import com.csse.healthSphere.dto.AppointmentRequest;
-import com.csse.healthSphere.model.Appointment;
 import com.csse.healthSphere.repository.MedicalStaffRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
