@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.csse.healthSphere.enums.BillStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,9 +13,8 @@ public class Bill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long billId;
 
-    private String status; // TODO: need enum
+    private BillStatus status;
     private float total;
-    private String type; // TODO: need enum
 
     @OneToOne
     @JoinColumn(name = "payment_id")

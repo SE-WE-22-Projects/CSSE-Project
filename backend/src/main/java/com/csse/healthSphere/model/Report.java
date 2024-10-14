@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.csse.healthSphere.enums.ReportStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class Report {
     private Long reportId;
 
     private String result;
-    private String status;   // TODO: need enum
+    private ReportStatus status;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
