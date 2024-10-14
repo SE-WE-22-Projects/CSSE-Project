@@ -6,6 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 public abstract class Charge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
