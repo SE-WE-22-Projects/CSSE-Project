@@ -8,7 +8,7 @@ import lombok.Data;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int reportId;
+    Long reportId;
     String result;
     String status;   // TODO: need enum
 

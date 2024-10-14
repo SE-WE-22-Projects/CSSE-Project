@@ -11,7 +11,7 @@ import lombok.Data;
 public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int billId;
+    Long billId;
 
     String status; // TODO: need enum
     float totalPayment;

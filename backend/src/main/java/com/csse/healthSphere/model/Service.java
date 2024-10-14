@@ -11,7 +11,7 @@ import lombok.Data;
 public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int serviceId;
+    Long serviceId;
     String name;
     String description;
     String category;

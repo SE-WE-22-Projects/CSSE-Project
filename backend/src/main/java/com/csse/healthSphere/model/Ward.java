@@ -8,7 +8,7 @@ import lombok.Data;
 public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int wardId;
+    Long wardId;
 
     String name;
     String location;
