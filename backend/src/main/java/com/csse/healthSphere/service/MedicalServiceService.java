@@ -17,21 +17,22 @@ public class MedicalServiceService {
     private final MedicalServiceRepository medicalServiceRepository;
     private final ModelMapper modelMapper;
 
-    public MedicalService createService(MedicalServiceRequest medicalServiceRequest){
+    public MedicalService createService(MedicalServiceRequest medicalServiceRequest) {
         MedicalService medicalService = modelMapper.map(medicalServiceRequest, MedicalService.class);
+
         return medicalServiceRepository.save(medicalService);
     }
 
-    public List<MedicalService> getAllServices(){
+    public List<MedicalService> getAllServices() {
         return medicalServiceRepository.findAll();
     }
 
-    public MedicalService getServiceById(Long id){
-        return medicalServiceRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Service not found"));
+    public MedicalService getServiceById(Long id) {
+        return medicalServiceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
     }
 
-    public MedicalService updateService(Long id, MedicalServiceRequest medicalServiceRequest){
-        MedicalService medicalService = medicalServiceRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Service not found"));
+    public MedicalService updateService(Long id, MedicalServiceRequest medicalServiceRequest) {
+        MedicalService medicalService = medicalServiceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
         medicalService.setName(medicalServiceRequest.getName());
         medicalService.setDescription(medicalServiceRequest.getDescription());
         medicalService.setPrice(medicalServiceRequest.getPrice());
@@ -39,8 +40,8 @@ public class MedicalServiceService {
         return medicalServiceRepository.save(medicalService);
     }
 
-    public void deleteService(Long id){
-        MedicalService medicalService = medicalServiceRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Service not found"));
+    public void deleteService(Long id) {
+        MedicalService medicalService = medicalServiceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
         medicalServiceRepository.delete(medicalService);
     }
 }

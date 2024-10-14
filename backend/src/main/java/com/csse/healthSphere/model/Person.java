@@ -12,13 +12,12 @@ import java.time.LocalDate;
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int personId;
+    Long personId;
     LocalDate dob;
     String name;
     String address;
     String email;
     String phoneNo;
-
     @JsonIgnore
     String password;
 }
