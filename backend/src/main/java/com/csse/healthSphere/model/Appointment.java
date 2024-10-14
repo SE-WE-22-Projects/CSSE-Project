@@ -8,10 +8,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/**
- * - bill: Bill
- * - schedule: Schedule
- */
+
 
 @Entity
 @Data
