@@ -1,6 +1,7 @@
 package com.csse.healthSphere.service;
 
 import com.csse.healthSphere.dto.AppointmentRequest;
+import com.csse.healthSphere.enums.AppointmentStatus;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
 import com.csse.healthSphere.model.Appointment;
 import com.csse.healthSphere.model.Patient;
@@ -26,7 +27,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 
         appointment.setPatient(patient);
-        appointment.setStatus("pending");
+        appointment.setStatus(AppointmentStatus.PENDING);
         appointment.setAppointmentId(null);
         return appointmentRepository.save(appointment);
     }
