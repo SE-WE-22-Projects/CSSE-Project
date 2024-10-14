@@ -3,15 +3,13 @@ package com.csse.healthSphere.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 @Entity
 @Data
-public class Ward {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Charge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long wardId;
+    private Long chargeId;
 
-    private String name;
-    private int capacity;
-    private String location;
+    private Float amount;
 }

@@ -8,15 +8,16 @@ import lombok.Data;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long reportId;
-    String result;
-    String status;   // TODO: need enum
+    private Long reportId;
+
+    private String result;
+    private String status;   // TODO: need enum
 
     @ManyToOne
-    @JoinColumn(name = "serviceId")
-    MedicalService medicalService;
+    @JoinColumn(name = "service_id")
+    private MedicalService medicalService;
 
     @ManyToOne
-    @JoinColumn(name = "patientId")
-    Patient patient;
+    @JoinColumn(name = "admission_id")
+    private Admission admission;
 }

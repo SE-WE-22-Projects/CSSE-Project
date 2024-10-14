@@ -1,18 +1,25 @@
 package com.csse.healthSphere.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
 public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long billId;
+    private Long billId;
 
-    String status; // TODO: need enum
-    float totalPayment;
+    private String status; // TODO: need enum
+    private float total;
+    private String type; // TODO: need enum
+
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
+    @OneToMany
+    private List<Charge> charges;
 }

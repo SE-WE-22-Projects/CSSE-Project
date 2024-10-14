@@ -6,14 +6,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+
 @Entity
 @Data
 public class MedicalService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long serviceId;
-    String name;
-    String description;
-    String category;
-    float price;
+    private Long serviceId;
+    private String name;
+    private String description;
+    private String category;
+    private float price;
 }
