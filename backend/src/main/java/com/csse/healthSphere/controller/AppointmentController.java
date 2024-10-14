@@ -23,9 +23,7 @@ public class AppointmentController {
             @RequestBody AppointmentRequest appointmentRequest
     ) {
         Appointment createdAppointment = appointmentService.createAppointment(appointmentRequest);
-        createdAppointment.setPatient(null);
         return new ResponseEntity<>(createdAppointment, HttpStatus.CREATED);
-
     }
 
     // get all appointments
@@ -44,7 +42,7 @@ public class AppointmentController {
         return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 
-    // update appintment by id
+    // update appointment by id
     @PutMapping("/{id}")
     public ResponseEntity<Appointment> updateAppointment(
             @PathVariable Long id,

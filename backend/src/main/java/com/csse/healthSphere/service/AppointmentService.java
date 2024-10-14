@@ -19,27 +19,28 @@ public class AppointmentService {
     private final ModelMapper modelMapper;
     private final PatientRepository patientRepository;
 
-    public Appointment createAppointment(AppointmentRequest appointmentRequest){
-        Appointment appointment =modelMapper.map(appointmentRequest, Appointment.class);
+    public Appointment createAppointment(AppointmentRequest appointmentRequest) {
+        Appointment appointment = modelMapper.map(appointmentRequest, Appointment.class);
         // fetch patient & check existence
         Patient patient = patientRepository.findById(appointmentRequest.getPatientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));;
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 
         appointment.setPatient(patient);
         appointment.setStatus("pending");
+        appointment.setAppointmentId(null);
         return appointmentRepository.save(appointment);
     }
 
-    public List<Appointment> getAllAppointments(){
+    public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 
-    public Appointment getAppointmentById(Long id){
-        return appointmentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
+    public Appointment getAppointmentById(Long id) {
+        return appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
     }
 
-    public Appointment updateAppointment(Long id, AppointmentRequest appointmentRequest){
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
+    public Appointment updateAppointment(Long id, AppointmentRequest appointmentRequest) {
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
         appointment.setTime(appointmentRequest.getTime());
         appointment.setDate(appointmentRequest.getDate());
         appointment.setQueueNo(appointmentRequest.getQueueNo());
@@ -47,8 +48,8 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
-    public void deleteAppointment(Long id){
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
+    public void deleteAppointment(Long id) {
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
         appointmentRepository.delete(appointment);
     }
 }

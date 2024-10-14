@@ -9,7 +9,7 @@ import java.time.LocalTime;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int scheduleId;
+    Long scheduleId;
 
     String scheduleName;
 

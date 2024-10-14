@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int recordId;
+    Long recordId;
 
     @OneToOne
     @JoinColumn(name = "patientId")
