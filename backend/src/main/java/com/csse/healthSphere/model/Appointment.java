@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.csse.healthSphere.enums.AppointmentStatus;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class Appointment {
     private LocalDate date;
     private LocalTime time;
     private int queueNo;
-    private String status; // TODO: Need to add enum
+    private AppointmentStatus status;
 
 
     @ManyToOne

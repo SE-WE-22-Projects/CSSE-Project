@@ -11,6 +11,4 @@ public class MedicalRecordRequest {
     LocalDate admissionDate;
     LocalDate dischargeDate;
     String description;
-
-    // TODO: need to add prescriptions list
 }
