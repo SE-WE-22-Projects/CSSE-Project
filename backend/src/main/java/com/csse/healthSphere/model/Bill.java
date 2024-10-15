@@ -19,7 +19,4 @@ public class Bill {
     @OneToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
-    @OneToMany
-    private List<Charge> charges;
 }

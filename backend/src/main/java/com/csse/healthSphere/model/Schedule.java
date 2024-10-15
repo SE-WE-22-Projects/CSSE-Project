@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.csse.healthSphere.enums.WeekDay;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public class Schedule {
     private String description;
     private LocalTime startTime;
     private LocalTime endTime;
-    private LocalDate date;
+    private WeekDay day;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
