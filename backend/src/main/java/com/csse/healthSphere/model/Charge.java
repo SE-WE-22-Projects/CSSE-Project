@@ -11,6 +11,8 @@ public abstract class Charge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chargeId;
-
+    @ManyToOne
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
     private Float amount;
 }

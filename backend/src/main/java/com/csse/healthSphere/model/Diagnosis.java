@@ -18,6 +18,10 @@ public class Diagnosis {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
+    @OneToOne
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
+
     private String diagnosis;
     private String prescription;
 }
