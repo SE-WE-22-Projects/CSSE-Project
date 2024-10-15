@@ -1,0 +1,159 @@
+openapi: "3.1.0"
+info:
+  title: "backend API"
+  description: "backend API"
+  version: "1.0.0"
+servers:
+  - url: "https://backend"
+paths:
+  /api/charge/{id}:
+    get:
+      summary: "GET api/charge/{id}"
+      operationId: "getServiceById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Charge"
+components:
+  schemas:
+    Patient:
+      type: "object"
+      properties:
+        emergencyContactNo:
+          type: "string"
+        personId:
+          type: "integer"
+          format: "int64"
+        dob:
+          type: "string"
+          format: "date"
+        name:
+          type: "string"
+        address:
+          type: "string"
+        gender:
+          type: "string"
+        email:
+          type: "string"
+        phoneNo:
+          type: "string"
+    Department:
+      type: "object"
+      properties:
+        departmentId:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+    Ward:
+      type: "object"
+      properties:
+        wardId:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        capacity:
+          type: "integer"
+          format: "int32"
+        location:
+          type: "string"
+    Doctor:
+      type: "object"
+      properties:
+        speciality:
+          type: "string"
+        regNo:
+          type: "string"
+        department:
+          $ref: "#/components/schemas/Department"
+        ward:
+          $ref: "#/components/schemas/Ward"
+        personId:
+          type: "integer"
+          format: "int64"
+        dob:
+          type: "string"
+          format: "date"
+        name:
+          type: "string"
+        address:
+          type: "string"
+        gender:
+          type: "string"
+        email:
+          type: "string"
+        phoneNo:
+          type: "string"
+    Schedule:
+      type: "object"
+      properties:
+        scheduleId:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        startTime:
+          type: "string"
+          format: "partial-time"
+        endTime:
+          type: "string"
+          format: "partial-time"
+        day:
+          type: "string"
+          enum:
+            - "SUNDAY"
+            - "MONDAY"
+            - "TUESDAY"
+            - "WEDNESDAY"
+            - "THURSDAY"
+            - "FRIDAY"
+            - "SATURDAY"
+        doctor:
+          $ref: "#/components/schemas/Doctor"
+    Appointment:
+      type: "object"
+      properties:
+        appointmentId:
+          type: "integer"
+          format: "int64"
+        date:
+          type: "string"
+          format: "date"
+        time:
+          type: "string"
+          format: "partial-time"
+        queueNo:
+          type: "integer"
+          format: "int32"
+        status:
+          type: "string"
+          enum:
+            - "PENDING"
+        patient:
+          $ref: "#/components/schemas/Patient"
+        schedule:
+          $ref: "#/components/schemas/Schedule"
+    Charge:
+      type: "object"
+      properties:
+        chargeId:
+          type: "integer"
+          format: "int64"
+        appointment:
+          $ref: "#/components/schemas/Appointment"
+        amount:
+          type: "number"
+          format: "float"
