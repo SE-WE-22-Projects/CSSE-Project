@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Header from './components/Header';
 import SideMenu from './components/SideMenu';
-import AppTheme from '../shared-theme/AppTheme';
+import AppTheme from '../shared/components/theme/AppTheme';
 import { Outlet } from 'react-router-dom';
 import { Link as MUILink, Typography } from '@mui/material';
 
