@@ -1,11 +1,11 @@
+import { Box } from '@mui/material'
 import './App.css'
-import Dashboard from './admin/Dashboard'
+import LandingPage from './user/LandingPage'
 
 function App() {
-
-  return <>
-    <Dashboard />
-  </>
+  return <Box sx={{ minWidth: "100vw" }}>
+    <LandingPage />
+  </Box>
 }
 
 export default App

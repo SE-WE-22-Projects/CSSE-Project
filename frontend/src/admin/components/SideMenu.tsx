@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import MenuContent from './MenuContent';
 import OptionsMenu from './OptionsMenu';
+import SiteLogo from '../../shared/components/Logo';
 
 const drawerWidth = 240;
 
@@ -21,11 +22,6 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-const LogoText = styled(Typography)({
-  fontSize: "1.2rem",
-  textAlign: "start",
-  display: "inline-block"
-})
 
 
 export default function SideMenu() {
@@ -40,8 +36,7 @@ export default function SideMenu() {
       }}
     >
       <Box sx={{ py: "12px" }}>
-        <LogoText>Health</LogoText>
-        <LogoText color='#DB5356'>Sphere</LogoText>
+        <SiteLogo />
       </Box>
 
       <Divider />
