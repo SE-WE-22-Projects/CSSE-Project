@@ -1,53 +1,35 @@
-import { createBrowserRouter, Link, RouteObject, RouterProvider } from "react-router-dom";
-import { ReactElement } from "react";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-import inventory from "./systems/inventory";
-import mapping from "./systems/mapping";
-import employee from "./systems/employee";
-import promotions from "./systems/promotion";
+function App() {
+  const [count, setCount] = useState(0)
 
-let routes: Map<String, RouteObject> = new Map();
-
-
-
-/**
- * Temporary main page that lists all subsystems
- */
-function TempMain() {
-  let links: ReactElement[] = [];
-  routes.forEach((v, k) => {
-    links.push(
+  return (
+    <>
       <div>
-        <Link to={v.path!}>{k}</Link>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
       </div>
-    );
-  });
-
-  return links;
-}
-
-
-// load all routes from the systems into the routes map
-const importedRoutes = [promotions, inventory, mapping, employee];
-importedRoutes.forEach((route) => {
-  routes.set(route.basePath, {
-    path: "/" + route.basePath.toLowerCase(),
-    element: route.layout,
-    children: route.routes,
-  });
-});
-
-
-// create router with all loaded routes
-const domRouter = createBrowserRouter([{
-  path: "/",
-  element: <TempMain />
-},
-...routes.values(),
-]);
-
-const App = () => {
-  return <RouterProvider router={domRouter} />
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
 
 export default App
