@@ -1,5 +1,5 @@
 import { Delete, Edit, Visibility } from "@mui/icons-material";
-import { Paper } from "@mui/material";
+import { Paper, Skeleton } from "@mui/material";
 import { DataGrid, DataGridProps, GridActionsCellItem, GridColDef, GridValidRowModel } from "@mui/x-data-grid";
 import { ReactElement } from "react";
 
@@ -50,8 +50,16 @@ function StyledDataGrid<R extends GridValidRowModel,>(props: DataGridProps<R> & 
     }
 
 
-    return <Paper elevation={1}>
-        <DataGrid {...props} />
+    return <Paper elevation={2}>
+        <DataGrid {...props} slots={{
+            loadingOverlay: () => <Skeleton />,
+        }}
+            initialState={{
+                sorting: {
+                    sortModel: [{ field: props.columns[0].field, sort: 'asc' }],
+                },
+            }}
+        />
     </Paper>
 }
 
