@@ -25,7 +25,7 @@ public class ScheduleController {
      * @return the newly created schedule
      */
     @PostMapping
-    public ResponseEntity<Schedule> createService(
+    public ResponseEntity<Schedule> createSchedule(
             @RequestBody ScheduleRequest scheduleRequest
     ) {
         Schedule createdSchedule = scheduleService.createSchedule(scheduleRequest);
@@ -38,7 +38,7 @@ public class ScheduleController {
      * @return a list of all schedules
      */
     @GetMapping
-    public ResponseEntity<List<Schedule>> getAllServices() {
+    public ResponseEntity<List<Schedule>> getAllSchedules() {
         List<Schedule> scheduleList = scheduleService.getAllSchedules();
         return new ResponseEntity<>(scheduleList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class ScheduleController {
      * @return the schedule for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Schedule> getServiceById(
+    public ResponseEntity<Schedule> getScheduleById(
             @PathVariable Long id
     ) {
         Schedule schedule = scheduleService.getScheduleById(id);
@@ -65,7 +65,7 @@ public class ScheduleController {
      * @return the updated schedule
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Schedule> updateService(
+    public ResponseEntity<Schedule> updateSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleRequest scheduleRequest
     ) {
@@ -80,7 +80,7 @@ public class ScheduleController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long id
     ) {
         scheduleService.deleteSchedule(id);

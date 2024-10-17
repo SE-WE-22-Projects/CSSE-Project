@@ -25,7 +25,7 @@ public class DiagnosisController {
      * @return the newly created diagnosis
      */
     @PostMapping
-    public ResponseEntity<Diagnosis> createService(
+    public ResponseEntity<Diagnosis> createDiagnosis(
             @RequestBody DiagnosisRequest diagnosisRequest
     ) {
         Diagnosis createdDiagnosis = diagnosisService.createDiagnosis(diagnosisRequest);
@@ -38,7 +38,7 @@ public class DiagnosisController {
      * @return a list of all diagnosis
      */
     @GetMapping
-    public ResponseEntity<List<Diagnosis>> getAllServices() {
+    public ResponseEntity<List<Diagnosis>> getAllDiagnosis() {
         List<Diagnosis> diagnosisList = diagnosisService.getAllDiagnosis();
         return new ResponseEntity<>(diagnosisList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class DiagnosisController {
      * @return the diagnosis for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Diagnosis> getServiceById(
+    public ResponseEntity<Diagnosis> getDiagnosisById(
             @PathVariable Long id
     ) {
         Diagnosis diagnosis = diagnosisService.getDiagnosisById(id);
@@ -65,7 +65,7 @@ public class DiagnosisController {
      * @return the updated diagnosis
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Diagnosis> updateService(
+    public ResponseEntity<Diagnosis> updateDiagnosis(
             @PathVariable Long id,
             @RequestBody DiagnosisRequest diagnosisRequest
     ) {
@@ -80,7 +80,7 @@ public class DiagnosisController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteDiagnosis(
             @PathVariable Long id
     ) {
         diagnosisService.deleteDiagnosis(id);

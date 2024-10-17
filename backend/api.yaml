@@ -6,9 +6,341 @@ info:
 servers:
   - url: "https://backend"
 paths:
-  /api/charge/{id}:
+  /:
     get:
-      summary: "GET api/charge/{id}"
+      summary: "GET "
+      operationId: "index"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /api/appointment/{id}:
+    put:
+      summary: "PUT api/appointment/{id}"
+      operationId: "updateAppointment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+    delete:
+      summary: "DELETE api/appointment/{id}"
+      operationId: "deleteAppointment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/appointment/{id}"
+      operationId: "getAppointmentById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+  /api/appointment:
+    post:
+      summary: "POST api/appointment"
+      operationId: "createAppointment"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppointmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Appointment"
+    get:
+      summary: "GET api/appointment"
+      operationId: "getAllAppointments"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Appointment"
+  /api/appointment/patient/{patientId}:
+    get:
+      summary: "GET api/appointment/patient/{patientId}"
+      operationId: "findAppointmentsByPatient"
+      parameters:
+        - name: "patientId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Appointment"
+  /api/appointment/schedule/{scheduleId}:
+    get:
+      summary: "GET api/appointment/schedule/{scheduleId}"
+      operationId: "findAppointmentsBySchedule"
+      parameters:
+        - name: "scheduleId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Appointment"
+  /api/appointment/doctor/{doctorId}:
+    get:
+      summary: "GET api/appointment/doctor/{doctorId}"
+      operationId: "findAppointsByDoctor"
+      parameters:
+        - name: "doctorId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Appointment"
+  /api/doctor/{id}:
+    put:
+      summary: "PUT api/doctor/{id}"
+      operationId: "updateDoctor"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DoctorRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Doctor"
+    delete:
+      summary: "DELETE api/doctor/{id}"
+      operationId: "deleteDoctor"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/doctor/{id}"
+      operationId: "getDoctorById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Doctor"
+  /api/doctor:
+    post:
+      summary: "POST api/doctor"
+      operationId: "createDoctor"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DoctorRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Doctor"
+    get:
+      summary: "GET api/doctor"
+      operationId: "getAllDoctors"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Doctor"
+  /api/patient:
+    post:
+      summary: "POST api/patient"
+      operationId: "createPatient"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Patient"
+    get:
+      summary: "GET api/patient"
+      operationId: "getAllPatients"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Patient"
+  /api/patient/{id}:
+    get:
+      summary: "GET api/patient/{id}"
+      operationId: "getPatientById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Patient"
+  /api/service/{id}:
+    put:
+      summary: "PUT api/service/{id}"
+      operationId: "updateService"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MedicalServiceRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MedicalService"
+    delete:
+      summary: "DELETE api/service/{id}"
+      operationId: "deleteService"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/service/{id}"
       operationId: "getServiceById"
       parameters:
         - name: "id"
@@ -23,9 +355,999 @@ paths:
           content:
             '*/*':
               schema:
+                $ref: "#/components/schemas/MedicalService"
+  /api/service:
+    post:
+      summary: "POST api/service"
+      operationId: "createService"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MedicalServiceRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MedicalService"
+    get:
+      summary: "GET api/service"
+      operationId: "getAllServices"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/MedicalService"
+  /api/bill/{id}:
+    put:
+      summary: "PUT api/bill/{id}"
+      operationId: "updateBill"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Bill"
+    delete:
+      summary: "DELETE api/bill/{id}"
+      operationId: "deleteBill"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/bill/{id}"
+      operationId: "getBillById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Bill"
+  /api/bill:
+    post:
+      summary: "POST api/bill"
+      operationId: "createBill"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Bill"
+    get:
+      summary: "GET api/bill"
+      operationId: "getAllBills"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Bill"
+  /api/diagnosis/{id}:
+    put:
+      summary: "PUT api/diagnosis/{id}"
+      operationId: "updateDiagnosis"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosisRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+    delete:
+      summary: "DELETE api/diagnosis/{id}"
+      operationId: "deleteDiagnosis"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/diagnosis/{id}"
+      operationId: "getDiagnosisById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+  /api/diagnosis:
+    post:
+      summary: "POST api/diagnosis"
+      operationId: "createDiagnosis"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosisRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+    get:
+      summary: "GET api/diagnosis"
+      operationId: "getAllDiagnosis"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Diagnosis"
+  /api/diagnosis/appointment/{appointmentId}:
+    get:
+      summary: "GET api/diagnosis/appointment/{appointmentId}"
+      operationId: "findDiagnosisByAppointment"
+      parameters:
+        - name: "appointmentId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Diagnosis"
+  /api/diagnosis/patient/{patientId}:
+    get:
+      summary: "GET api/diagnosis/patient/{patientId}"
+      operationId: "findDiagnosisByPatient"
+      parameters:
+        - name: "patientId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Diagnosis"
+  /api/report/{id}:
+    put:
+      summary: "PUT api/report/{id}"
+      operationId: "updateReport"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Report"
+    delete:
+      summary: "DELETE api/report/{id}"
+      operationId: "deleteReport"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/report/{id}"
+      operationId: "getReportById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Report"
+  /api/report:
+    post:
+      summary: "POST api/report"
+      operationId: "createReport"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Report"
+    get:
+      summary: "GET api/report"
+      operationId: "getAllReports"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Report"
+  /api/admission/{id}:
+    put:
+      summary: "PUT api/admission/{id}"
+      operationId: "updateAdmission"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdmissionRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Admission"
+    delete:
+      summary: "DELETE api/admission/{id}"
+      operationId: "deleteAdmission"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/admission/{id}"
+      operationId: "getAdmissionById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Admission"
+  /api/admission:
+    post:
+      summary: "POST api/admission"
+      operationId: "createAdmission"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdmissionRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Admission"
+    get:
+      summary: "GET api/admission"
+      operationId: "getAllAdmissions"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Admission"
+  /api/admission/appointment/{appointmentId}:
+    get:
+      summary: "GET api/admission/appointment/{appointmentId}"
+      operationId: "findAdmissionByAppointment"
+      parameters:
+        - name: "appointmentId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Admission"
+  /api/admission/patient/{patientId}:
+    get:
+      summary: "GET api/admission/patient/{patientId}"
+      operationId: "findAdmissionsByPatient"
+      parameters:
+        - name: "patientId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Admission"
+  /api/ward/{id}:
+    put:
+      summary: "PUT api/ward/{id}"
+      operationId: "updateWard"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WardRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Ward"
+    delete:
+      summary: "DELETE api/ward/{id}"
+      operationId: "deleteWard"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/ward/{id}"
+      operationId: "getWardById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Ward"
+  /api/ward:
+    post:
+      summary: "POST api/ward"
+      operationId: "createWard"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WardRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Ward"
+    get:
+      summary: "GET api/ward"
+      operationId: "getAllWards"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Ward"
+  /api/staff/{id}:
+    put:
+      summary: "PUT api/staff/{id}"
+      operationId: "updateStaff"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MedicalStaffRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MedicalStaff"
+    delete:
+      summary: "DELETE api/staff/{id}"
+      operationId: "deleteStaff"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/staff/{id}"
+      operationId: "getStaffById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MedicalStaff"
+  /api/staff:
+    post:
+      summary: "POST api/staff"
+      operationId: "createStaff"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MedicalStaffRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MedicalStaff"
+    get:
+      summary: "GET api/staff"
+      operationId: "getAllSStaff"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/MedicalStaff"
+  /api/department/{id}:
+    put:
+      summary: "PUT api/department/{id}"
+      operationId: "updateDepartment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepartmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Department"
+    delete:
+      summary: "DELETE api/department/{id}"
+      operationId: "deleteDepartment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/department/{id}"
+      operationId: "getDepartmentById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Department"
+  /api/department:
+    post:
+      summary: "POST api/department"
+      operationId: "createDepartment"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepartmentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Department"
+    get:
+      summary: "GET api/department"
+      operationId: "getAllDepartments"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Department"
+  /api/charge/{id}:
+    put:
+      summary: "PUT api/charge/{id}"
+      operationId: "updateChargeById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChargeRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
                 $ref: "#/components/schemas/Charge"
+    delete:
+      summary: "DELETE api/charge/{id}"
+      operationId: "deleteChargeById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/charge/{id}"
+      operationId: "getChargeById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Charge"
+  /api/charge:
+    post:
+      summary: "POST api/charge"
+      operationId: "createCharge"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChargeRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Charge"
+    get:
+      summary: "GET api/charge"
+      operationId: "getAllCharges"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Charge"
+  /api/payment/{id}:
+    put:
+      summary: "PUT api/payment/{id}"
+      operationId: "updatePayment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Payment"
+    delete:
+      summary: "DELETE api/payment/{id}"
+      operationId: "deletePayment"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/payment/{id}"
+      operationId: "getPaymentById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Payment"
+  /api/payment:
+    post:
+      summary: "POST api/payment"
+      operationId: "createPayment"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Payment"
+    get:
+      summary: "GET api/payment"
+      operationId: "getAllPayments"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Payment"
+  /api/schedule/{id}:
+    put:
+      summary: "PUT api/schedule/{id}"
+      operationId: "updateSchedule"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Schedule"
+    delete:
+      summary: "DELETE api/schedule/{id}"
+      operationId: "deleteSchedule"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/schedule/{id}"
+      operationId: "getScheduleById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Schedule"
+  /api/schedule:
+    post:
+      summary: "POST api/schedule"
+      operationId: "createSchedule"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Schedule"
+    get:
+      summary: "GET api/schedule"
+      operationId: "getAllSchedules"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Schedule"
 components:
   schemas:
+    AppointmentRequest:
+      type: "object"
+      properties:
+        date:
+          type: "string"
+          format: "date"
+        time:
+          type: "string"
+          format: "partial-time"
+        queueNo:
+          type: "integer"
+          format: "int32"
+        patientId:
+          type: "integer"
+          format: "int64"
     Patient:
       type: "object"
       properties:
@@ -146,6 +1468,270 @@ components:
           $ref: "#/components/schemas/Patient"
         schedule:
           $ref: "#/components/schemas/Schedule"
+    Void:
+      type: "object"
+      properties: { }
+    DoctorRequest:
+      type: "object"
+      properties:
+        speciality:
+          type: "string"
+        regNo:
+          type: "string"
+        departmentId:
+          type: "integer"
+          format: "int32"
+        wardId:
+          type: "integer"
+          format: "int32"
+        dob:
+          type: "string"
+          format: "date"
+        name:
+          type: "string"
+        address:
+          type: "string"
+        email:
+          type: "string"
+        phoneNo:
+          type: "string"
+        password:
+          type: "string"
+    PatientRequest:
+      type: "object"
+      properties:
+        emergencyContactNo:
+          type: "string"
+        dob:
+          type: "string"
+          format: "date"
+        name:
+          type: "string"
+        address:
+          type: "string"
+        email:
+          type: "string"
+        phoneNo:
+          type: "string"
+        password:
+          type: "string"
+    MedicalServiceRequest:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        category:
+          type: "string"
+        price:
+          type: "number"
+          format: "float"
+    MedicalService:
+      type: "object"
+      properties:
+        serviceId:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        category:
+          type: "string"
+        price:
+          type: "number"
+          format: "float"
+    BillRequest:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+        totalPayment:
+          type: "number"
+          format: "float"
+    Payment:
+      type: "object"
+      properties:
+        paymentId:
+          type: "integer"
+          format: "int64"
+        paymentType:
+          type: "string"
+        paymentDate:
+          type: "string"
+          format: "date"
+    Bill:
+      type: "object"
+      properties:
+        billId:
+          type: "integer"
+          format: "int64"
+        status:
+          type: "string"
+          enum: [ ]
+        total:
+          type: "number"
+          format: "float"
+        payment:
+          $ref: "#/components/schemas/Payment"
+        paymentDate:
+          type: "string"
+          format: "date"
+    DiagnosisRequest:
+      type: "object"
+      properties:
+        patientId:
+          type: "integer"
+          format: "int64"
+        doctorId:
+          type: "integer"
+          format: "int64"
+        appointmentId:
+          type: "integer"
+          format: "int64"
+        diagnosis:
+          type: "string"
+        prescription:
+          type: "string"
+    Diagnosis:
+      type: "object"
+      properties:
+        diagnosisId:
+          type: "integer"
+          format: "int64"
+        patient:
+          $ref: "#/components/schemas/Patient"
+        doctor:
+          $ref: "#/components/schemas/Doctor"
+        appointment:
+          $ref: "#/components/schemas/Appointment"
+        diagnosis:
+          type: "string"
+        prescription:
+          type: "string"
+    ReportRequest:
+      type: "object"
+      properties:
+        result:
+          type: "string"
+        status:
+          type: "string"
+        serviceId:
+          type: "integer"
+          format: "int32"
+        patientId:
+          type: "integer"
+          format: "int32"
+    Admission:
+      type: "object"
+      properties:
+        admissionId:
+          type: "integer"
+          format: "int64"
+        admissionDate:
+          type: "string"
+          format: "date"
+        dischargeDate:
+          type: "string"
+          format: "date"
+        description:
+          type: "string"
+        appointment:
+          $ref: "#/components/schemas/Appointment"
+        diagnosis:
+          $ref: "#/components/schemas/Diagnosis"
+        reports:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Report"
+    Report:
+      type: "object"
+      properties:
+        reportId:
+          type: "integer"
+          format: "int64"
+        result:
+          type: "string"
+        status:
+          type: "string"
+          enum: [ ]
+        medicalService:
+          $ref: "#/components/schemas/MedicalService"
+        admission:
+          $ref: "#/components/schemas/Admission"
+    AdmissionRequest:
+      type: "object"
+      properties:
+        admissionDate:
+          type: "string"
+          format: "date"
+        dischargeDate:
+          type: "string"
+          format: "date"
+        description:
+          type: "string"
+        appointmentId:
+          type: "integer"
+          format: "int64"
+    WardRequest:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    MedicalStaffRequest:
+      type: "object"
+      properties:
+        departmentId:
+          type: "integer"
+          format: "int32"
+        wardId:
+          type: "integer"
+          format: "int32"
+        dob:
+          type: "string"
+          format: "date"
+        name:
+          type: "string"
+        address:
+          type: "string"
+        email:
+          type: "string"
+        phoneNo:
+          type: "string"
+        password:
+          type: "string"
+    MedicalStaff:
+      type: "object"
+      properties:
+        department:
+          $ref: "#/components/schemas/Department"
+        ward:
+          $ref: "#/components/schemas/Ward"
+        personId:
+          type: "integer"
+          format: "int64"
+        dob:
+          type: "string"
+          format: "date"
+        name:
+          type: "string"
+        address:
+          type: "string"
+        gender:
+          type: "string"
+        email:
+          type: "string"
+        phoneNo:
+          type: "string"
+    DepartmentRequest:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    ChargeRequest:
+      type: "object"
+      properties: { }
     Charge:
       type: "object"
       properties:
@@ -157,3 +1743,9 @@ components:
         amount:
           type: "number"
           format: "float"
+    PaymentRequest:
+      type: "object"
+      properties: { }
+    ScheduleRequest:
+      type: "object"
+      properties: { }
