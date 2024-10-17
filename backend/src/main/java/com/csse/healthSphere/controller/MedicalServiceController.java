@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/service")
+@RequestMapping("/api/service")
 @RestController
 @RequiredArgsConstructor
 public class MedicalServiceController {
@@ -20,8 +20,8 @@ public class MedicalServiceController {
     /**
      * Create a new medical service
      *
-     * @param medicalServiceRequest
-     * @return
+     * @param medicalServiceRequest: the data for the new medical service
+     * @return the newly created service
      */
     @PostMapping
     public ResponseEntity<MedicalService> createService(
@@ -34,19 +34,19 @@ public class MedicalServiceController {
     /**
      * Get all medical services
      *
-     * @return
+     * @return a list of all medical services
      */
     @GetMapping
     public ResponseEntity<List<MedicalService>> getAllServices() {
         List<MedicalService> medicalServiceList = medicalServiceService.getAllServices();
-        return new ResponseEntity<List<MedicalService>>(medicalServiceList, HttpStatus.OK);
+        return new ResponseEntity<>(medicalServiceList, HttpStatus.OK);
     }
 
     /**
      * Get a medical service by id
      *
-     * @param id
-     * @return
+     * @param id the id of the medical service
+     * @return the medical service for the given id
      */
     @GetMapping("/{id}")
     public ResponseEntity<MedicalService> getServiceById(
@@ -59,9 +59,9 @@ public class MedicalServiceController {
     /**
      * Update a medical service by id
      *
-     * @param id
-     * @param medicalServiceRequest
-     * @return
+     * @param id                    the id of the medical service
+     * @param medicalServiceRequest the updated content of the medical service
+     * @return the updated medical service
      */
     @PutMapping("/{id}")
     public ResponseEntity<MedicalService> updateService(
@@ -75,8 +75,8 @@ public class MedicalServiceController {
     /**
      * Delete a medical service by id
      *
-     * @param id
-     * @return
+     * @param id the id of the medical service
+     * @return an empty response
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteService(
@@ -89,8 +89,8 @@ public class MedicalServiceController {
     /**
      * Handle ResourceNotFoundException
      *
-     * @param e
-     * @return
+     * @param e the exception
+     * @return a response containing an error message
      */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {

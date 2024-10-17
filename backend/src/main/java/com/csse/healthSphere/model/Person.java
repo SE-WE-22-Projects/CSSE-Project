@@ -9,15 +9,16 @@ import java.time.LocalDate;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Data
-public class Person {
+public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long personId;
-    LocalDate dob;
-    String name;
-    String address;
-    String email;
-    String phoneNo;
+    private Long personId;
+    private LocalDate dob;
+    private String name;
+    private String address;
+    private String gender;
+    private String email;
+    private String phoneNo;
     @JsonIgnore
-    String password;
+    private String password;
 }

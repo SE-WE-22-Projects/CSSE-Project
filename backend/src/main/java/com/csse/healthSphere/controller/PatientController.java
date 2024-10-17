@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/patient")
+@RequestMapping("/api/patient")
 @RestController
 @RequiredArgsConstructor
 public class PatientController {
@@ -21,24 +21,24 @@ public class PatientController {
     @PostMapping
     public ResponseEntity<Patient> createPatient(
             @RequestBody PatientRequest patientRequest
-            ){
+    ) {
         Patient createdPatient = patientService.createPatient(patientRequest);
         return new ResponseEntity<>(createdPatient, HttpStatus.CREATED);
     }
 
     // get all patients
     @GetMapping
-    public ResponseEntity<List<Patient>> getAllPatients(){
+    public ResponseEntity<List<Patient>> getAllPatients() {
         List<Patient> patientList = patientService.getAllPatients();
-        return new ResponseEntity<>(patientList,HttpStatus.OK);
+        return new ResponseEntity<>(patientList, HttpStatus.OK);
     }
 
     // get patient by id
     @GetMapping("/{id}")
     public ResponseEntity<Patient> getPatientById(
             @PathVariable Long id
-    ){
+    ) {
         Patient patient = patientService.getPatientById(id);
-        return new ResponseEntity<>(patient,HttpStatus.OK);
+        return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 }

@@ -9,10 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix("api", HandlerTypePredicate.forAnnotation(RestController.class));
-    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

@@ -8,5 +8,5 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 public class Patient extends Person {
-    String emergencyContactNo;
+    private String emergencyContactNo;
 }
