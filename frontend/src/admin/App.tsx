@@ -7,18 +7,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { Dashboard } from "./Dashboard";
 import { Routes } from "./routes";
-
-
-/**
- * Appointment
- * Schedule
- * Staff
- * Finance
- * Report
- * Diagnosis
- * 
- * Patient
- */
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 
 const router = createBrowserRouter([
@@ -32,12 +22,14 @@ const router = createBrowserRouter([
 const DashboardApp = () => {
     return (
         <AppTheme>
-            <CssBaseline enableColorScheme />
-            <ConfirmProvider>
-                <SnackbarProvider>
-                    <RouterProvider router={router} />
-                </SnackbarProvider>
-            </ConfirmProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <CssBaseline enableColorScheme />
+                <ConfirmProvider>
+                    <SnackbarProvider>
+                        <RouterProvider router={router} />
+                    </SnackbarProvider>
+                </ConfirmProvider>
+            </LocalizationProvider>
         </AppTheme>
     )
 }
