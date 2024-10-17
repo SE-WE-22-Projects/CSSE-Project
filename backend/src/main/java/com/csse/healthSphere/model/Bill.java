@@ -4,6 +4,7 @@ import com.csse.healthSphere.enums.BillStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -19,4 +20,5 @@ public class Bill {
     @OneToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
+    private LocalDate paymentDate;
 }
