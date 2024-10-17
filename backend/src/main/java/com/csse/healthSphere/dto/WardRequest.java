@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class WardRequest {
-    String name;
-
+    private String name;
+    private int capacity;
+    private String location;
 }

@@ -54,9 +54,27 @@ public class DoctorController {
 
     // delete doctor by id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDoctor(
+            @PathVariable Long id
+    ) {
         doctorService.deleteDoctor(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/department/{departmentId}")
+    public ResponseEntity<List<Doctor>> findDoctorsByDepartment(
+            @PathVariable Long departmentId
+    ){
+        List<Doctor> doctorList = doctorService.findDoctorsByDepartment(departmentId);
+        return new ResponseEntity<>(doctorList,HttpStatus.OK);
+    }
+
+    @GetMapping("/ward/{wardId}")
+    public ResponseEntity<List<Doctor>> findDoctorsByWard(
+            @PathVariable Long wardId
+    ) {
+        List<Doctor> doctorList = doctorService.findDoctorsByWard(wardId);
+        return new ResponseEntity<>(doctorList,HttpStatus.OK);
     }
 
     // Exception handler for ResourceNotFoundException

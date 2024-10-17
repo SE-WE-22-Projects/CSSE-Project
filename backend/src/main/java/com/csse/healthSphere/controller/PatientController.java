@@ -41,4 +41,21 @@ public class PatientController {
         Patient patient = patientService.getPatientById(id);
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Patient> updatePatient(
+            @PathVariable Long id,
+            @RequestBody PatientRequest patientRequest
+    ) {
+        Patient updatedPatient = patientService.updatePatient(id, patientRequest);
+        return new ResponseEntity<>(updatedPatient, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePatient(
+            @PathVariable Long id
+    ){
+        patientService.deletePatient(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

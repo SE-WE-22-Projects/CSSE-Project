@@ -10,7 +10,6 @@ public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wardId;
-
     private String name;
     private int capacity;
     private String location;
