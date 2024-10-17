@@ -10,6 +10,7 @@ public class PersonRequest {
     String name;
     String address;
     String email;
+    String gender;
     String phoneNo;
     String password;
 }

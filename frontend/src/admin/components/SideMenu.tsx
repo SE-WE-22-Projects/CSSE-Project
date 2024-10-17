@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import MenuContent from './MenuContent';
 import OptionsMenu from './OptionsMenu';
 import SiteLogo from '../../shared/components/Logo';
+import { SystemRoutes } from '../Dashboard';
 
 const drawerWidth = 240;
 
@@ -24,7 +25,8 @@ const Drawer = styled(MuiDrawer)({
 
 
 
-export default function SideMenu() {
+export default function SideMenu({ routes }: { routes: SystemRoutes }) {
+
   return (
     <Drawer
       variant="permanent"
@@ -35,12 +37,15 @@ export default function SideMenu() {
         },
       }}
     >
-      <Box sx={{ py: "12px" }}>
+      <Box sx={{ py: "12px", px: '12px' }}>
         <SiteLogo />
       </Box>
 
       <Divider />
-      <MenuContent />
+
+      <MenuContent routes={routes} />
+
+
       <Stack
         direction="row"
         sx={{
