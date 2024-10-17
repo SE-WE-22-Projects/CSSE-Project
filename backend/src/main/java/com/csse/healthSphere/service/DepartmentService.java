@@ -4,6 +4,7 @@ import com.csse.healthSphere.dto.DepartmentRequest;
 import com.csse.healthSphere.model.Department;
 import com.csse.healthSphere.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
+    private final ModelMapper modelMapper;
 
     public Department createDepartment(DepartmentRequest departmentRequest){
         return null;
