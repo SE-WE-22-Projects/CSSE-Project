@@ -4,5 +4,9 @@ import lombok.Data;
 
 @Data
 public class DiagnosisRequest {
-// TODO: write this
+    private Long patientId;
+    private Long doctorId;
+    private Long appointmentId;
+    private String diagnosis;
+    private String prescription;
 }
