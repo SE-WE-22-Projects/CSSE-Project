@@ -50,16 +50,17 @@ function StyledDataGrid<R extends GridValidRowModel,>(props: DataGridProps<R> & 
     }
 
 
-    return <Paper elevation={2}>
-        <DataGrid {...props} slots={{
-            loadingOverlay: () => <Skeleton />,
+    return <Paper elevation={2}> <DataGrid {...props} slots={{
+        loadingOverlay: () => <Skeleton />,
+    }}
+
+        rows={props.rows}
+        initialState={{
+            sorting: {
+                sortModel: [{ field: props.columns[0].field, sort: 'asc' }],
+            },
         }}
-            initialState={{
-                sorting: {
-                    sortModel: [{ field: props.columns[0].field, sort: 'asc' }],
-                },
-            }}
-        />
+    />
     </Paper>
 }
 

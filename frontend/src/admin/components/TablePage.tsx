@@ -2,12 +2,13 @@ import { GridColDef, GridValidRowModel } from '@mui/x-data-grid'
 import { useEffect, useState } from 'react'
 import { useConfirm } from 'material-ui-confirm';
 import { enqueueSnackbar } from 'notistack';
-import { Box, Button, Divider, Paper, Stack } from '@mui/material';
+import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
 import { PageSubtitle, PageTitle } from '../../shared/components/Logo';
 import DataForm, { FieldData, Fields } from '../../shared/components/DataForm';
 import StyledDataGrid from '../../shared/components/StyledDataGrid';
 import { AxiosResponse } from 'axios';
 import { Add } from '@mui/icons-material';
+import { DNA } from 'react-loader-spinner';
 
 function sleep(duration: number): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -45,6 +46,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     const confirm = useConfirm();
 
     const fetchRows = (async () => {
+        setLoading(true)
         let response = await props.readHandler();
         setRows([...response.data]);
         setLoading(false);
@@ -53,17 +55,17 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     // load data from server
     useEffect(() => {
         fetchRows()
-        setLoading(true)
     }, []);
 
     const onCreate = async (data: FieldData<F>) => {
-        await sleep(1000);
 
         try {
+            setLoading(true);
             await props.createHandler(data);
 
             // update the state
             await fetchRows();
+            await sleep(500);
 
             enqueueSnackbar(`${props.name} created successfully`, { variant: "success" });
 
@@ -75,12 +77,14 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     }
 
     const onUpdate = async (data: FieldData<F>) => {
-        await sleep(1000);
         try {
+            setLoading(true);
+
             await props.updateHandler(props.getId(selectedItem!), data)
 
             // update the state
             await fetchRows();
+            await sleep(500);
 
             enqueueSnackbar(`${props.name} Updated Successfully`, { variant: "success" });
 
@@ -107,6 +111,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
 
         await confirm({ title: `Permanently Delete ${props.name} ${id}?` });
         try {
+            setLoading(true);
             await props.deleteHandler(props.getId(row))
 
             fetchRows();
@@ -147,21 +152,37 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                 </Paper>
                 :
                 <>
-                    <Stack direction="row" py={1}>
-                        <Box sx={{ flexGrow: 1 }} />
-                        <Button variant="outlined" startIcon={<Add />} sx={{
-                            backgroundColor: "#DB5356",
-                            color: "white",
-                            border: 'none'
-                        }} onClick={() => setEditorShown(true)}>Add {props.name}</Button>
-                    </Stack>
-                    <StyledDataGrid
-                        columns={props.columns}
-                        rows={rows}
-                        getRowId={props.getId}
-                        onDelete={onDelete}
-                        onEdit={onEdit}
-                        loading={loading} />
+                    {loading ?
+                        <Stack direction="column" alignItems="center" sx={{ width: "100%" }}>
+                            <DNA
+                                visible={true}
+                                height="30vh"
+                                width="30vw"
+                                ariaLabel="dna-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="dna-wrapper"
+                            />
+                            <Typography sx={{ fontSize: "1.4em" }}>Loading...</Typography>
+                        </Stack> :
+                        <>
+                            <Stack direction="row" py={1}>
+                                <Box sx={{ flexGrow: 1 }} />
+                                <Button variant="outlined" startIcon={<Add />} sx={{
+                                    backgroundColor: "#DB5356",
+                                    color: "white",
+                                    border: 'none'
+                                }} onClick={() => setEditorShown(true)}>Add {props.name}</Button>
+                            </Stack>
+                            <StyledDataGrid
+                                columns={props.columns}
+                                rows={rows}
+                                getRowId={props.getId}
+                                onDelete={onDelete}
+                                onEdit={onEdit}
+                                loading={loading} />
+                        </>
+                    }
+
                 </>
             }
         </>
