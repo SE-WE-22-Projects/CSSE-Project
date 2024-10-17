@@ -19,7 +19,7 @@ import java.util.List;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final DoctorRepository doctorRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     /**
      * Creates a schedule from the given data
