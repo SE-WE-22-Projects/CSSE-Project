@@ -15,3 +15,6 @@ public class Payment {
     private String paymentType;
     private LocalDate paymentDate;
 }
+
+
+// TODO: no need any more

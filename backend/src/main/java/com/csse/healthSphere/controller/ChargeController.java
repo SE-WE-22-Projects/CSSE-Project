@@ -25,7 +25,7 @@ public class ChargeController {
      * @return the newly created charge
      */
     @PostMapping
-    public ResponseEntity<Charge> createService(
+    public ResponseEntity<Charge> createCharge(
             @RequestBody ChargeRequest chargeRequest
     ) {
         Charge createdCharge = chargeService.createCharge(chargeRequest);
@@ -38,7 +38,7 @@ public class ChargeController {
      * @return a list of all charges
      */
     @GetMapping
-    public ResponseEntity<List<Charge>> getAllServices() {
+    public ResponseEntity<List<Charge>> getAllCharges() {
         List<Charge> chargeList = chargeService.getAllCharges();
         return new ResponseEntity<>(chargeList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class ChargeController {
      * @return the charge for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Charge> getServiceById(
+    public ResponseEntity<Charge> getChargeById(
             @PathVariable Long id
     ) {
         Charge charge = chargeService.getChargeById(id);
@@ -65,7 +65,7 @@ public class ChargeController {
      * @return the updated charge
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Charge> updateService(
+    public ResponseEntity<Charge> updateChargeById(
             @PathVariable Long id,
             @RequestBody ChargeRequest chargeRequest
     ) {
@@ -80,7 +80,7 @@ public class ChargeController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteChargeById(
             @PathVariable Long id
     ) {
         chargeService.deleteCharge(id);

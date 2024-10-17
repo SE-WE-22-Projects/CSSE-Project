@@ -25,7 +25,7 @@ public class ReportController {
      * @return the newly created report
      */
     @PostMapping
-    public ResponseEntity<Report> createService(
+    public ResponseEntity<Report> createReport(
             @RequestBody ReportRequest reportRequest
     ) {
         Report createdReport = reportService.createReport(reportRequest);
@@ -38,7 +38,7 @@ public class ReportController {
      * @return a list of all reports
      */
     @GetMapping
-    public ResponseEntity<List<Report>> getAllServices() {
+    public ResponseEntity<List<Report>> getAllReports() {
         List<Report> reportList = reportService.getAllReports();
         return new ResponseEntity<>(reportList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class ReportController {
      * @return the report for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Report> getServiceById(
+    public ResponseEntity<Report> getReportById(
             @PathVariable Long id
     ) {
         Report report = reportService.getReportById(id);
@@ -65,7 +65,7 @@ public class ReportController {
      * @return the updated report
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Report> updateService(
+    public ResponseEntity<Report> updateReport(
             @PathVariable Long id,
             @RequestBody ReportRequest reportRequest
     ) {
@@ -80,7 +80,7 @@ public class ReportController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteReport(
             @PathVariable Long id
     ) {
         reportService.deleteReport(id);

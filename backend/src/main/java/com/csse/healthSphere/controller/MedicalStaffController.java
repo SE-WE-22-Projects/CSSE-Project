@@ -25,7 +25,7 @@ public class MedicalStaffController {
      * @return the newly created medical staff
      */
     @PostMapping
-    public ResponseEntity<MedicalStaff> createService(
+    public ResponseEntity<MedicalStaff> createStaff(
             @RequestBody MedicalStaffRequest medicalStaffRequest
     ) {
         MedicalStaff createdMedicalStaff = medicalStaffService.createMedicalStaff(medicalStaffRequest);
@@ -38,7 +38,7 @@ public class MedicalStaffController {
      * @return a list of all medical staffs
      */
     @GetMapping
-    public ResponseEntity<List<MedicalStaff>> getAllServices() {
+    public ResponseEntity<List<MedicalStaff>> getAllSStaff() {
         List<MedicalStaff> medicalStaffList = medicalStaffService.getAllMedicalStaffs();
         return new ResponseEntity<>(medicalStaffList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class MedicalStaffController {
      * @return the medical staff for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<MedicalStaff> getServiceById(
+    public ResponseEntity<MedicalStaff> getStaffById(
             @PathVariable Long id
     ) {
         MedicalStaff medicalStaff = medicalStaffService.getMedicalStaffById(id);
@@ -65,7 +65,7 @@ public class MedicalStaffController {
      * @return the updated medical staff
      */
     @PutMapping("/{id}")
-    public ResponseEntity<MedicalStaff> updateService(
+    public ResponseEntity<MedicalStaff> updateStaff(
             @PathVariable Long id,
             @RequestBody MedicalStaffRequest medicalStaffRequest
     ) {
@@ -80,7 +80,7 @@ public class MedicalStaffController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteStaff(
             @PathVariable Long id
     ) {
         medicalStaffService.deleteMedicalStaff(id);

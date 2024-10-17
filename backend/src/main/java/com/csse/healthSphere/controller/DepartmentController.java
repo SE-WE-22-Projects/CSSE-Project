@@ -25,7 +25,7 @@ public class DepartmentController {
      * @return the newly created department
      */
     @PostMapping
-    public ResponseEntity<Department> createService(
+    public ResponseEntity<Department> createDepartment(
             @RequestBody DepartmentRequest departmentRequest
     ) {
         Department createdDepartment = departmentService.createDepartment(departmentRequest);
@@ -38,7 +38,7 @@ public class DepartmentController {
      * @return a list of all departments
      */
     @GetMapping
-    public ResponseEntity<List<Department>> getAllServices() {
+    public ResponseEntity<List<Department>> getAllDepartments() {
         List<Department> departmentList = departmentService.getAllDepartments();
         return new ResponseEntity<>(departmentList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class DepartmentController {
      * @return the department for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Department> getServiceById(
+    public ResponseEntity<Department> getDepartmentById(
             @PathVariable Long id
     ) {
         Department department = departmentService.getDepartmentById(id);
@@ -65,7 +65,7 @@ public class DepartmentController {
      * @return the updated department
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Department> updateService(
+    public ResponseEntity<Department> updateDepartment(
             @PathVariable Long id,
             @RequestBody DepartmentRequest departmentRequest
     ) {
@@ -80,7 +80,7 @@ public class DepartmentController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteDepartment(
             @PathVariable Long id
     ) {
         departmentService.deleteDepartment(id);

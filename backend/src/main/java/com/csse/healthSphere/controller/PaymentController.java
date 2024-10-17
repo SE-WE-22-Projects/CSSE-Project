@@ -25,7 +25,7 @@ public class PaymentController {
      * @return the newly created payment
      */
     @PostMapping
-    public ResponseEntity<Payment> createService(
+    public ResponseEntity<Payment> createPayment(
             @RequestBody PaymentRequest paymentRequest
     ) {
         Payment createdPayment = paymentService.createPayment(paymentRequest);
@@ -38,7 +38,7 @@ public class PaymentController {
      * @return a list of all payments
      */
     @GetMapping
-    public ResponseEntity<List<Payment>> getAllServices() {
+    public ResponseEntity<List<Payment>> getAllPayments() {
         List<Payment> paymentList = paymentService.getAllPayments();
         return new ResponseEntity<>(paymentList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class PaymentController {
      * @return the payment for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getServiceById(
+    public ResponseEntity<Payment> getPaymentById(
             @PathVariable Long id
     ) {
         Payment payment = paymentService.getPaymentById(id);
@@ -65,7 +65,7 @@ public class PaymentController {
      * @return the updated payment
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Payment> updateService(
+    public ResponseEntity<Payment> updatePayment(
             @PathVariable Long id,
             @RequestBody PaymentRequest paymentRequest
     ) {
@@ -80,7 +80,7 @@ public class PaymentController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deletePayment(
             @PathVariable Long id
     ) {
         paymentService.deletePayment(id);

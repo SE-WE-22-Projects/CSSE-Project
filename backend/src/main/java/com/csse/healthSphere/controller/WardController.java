@@ -25,7 +25,7 @@ public class WardController {
      * @return the newly created ward
      */
     @PostMapping
-    public ResponseEntity<Ward> createService(
+    public ResponseEntity<Ward> createWard(
             @RequestBody WardRequest wardRequest
     ) {
         Ward createdWard = wardService.createWard(wardRequest);
@@ -38,7 +38,7 @@ public class WardController {
      * @return a list of all wards
      */
     @GetMapping
-    public ResponseEntity<List<Ward>> getAllServices() {
+    public ResponseEntity<List<Ward>> getAllWards() {
         List<Ward> wardList = wardService.getAllWards();
         return new ResponseEntity<>(wardList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class WardController {
      * @return the ward for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Ward> getServiceById(
+    public ResponseEntity<Ward> getWardById(
             @PathVariable Long id
     ) {
         Ward ward = wardService.getWardById(id);
@@ -65,7 +65,7 @@ public class WardController {
      * @return the updated ward
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Ward> updateService(
+    public ResponseEntity<Ward> updateWard(
             @PathVariable Long id,
             @RequestBody WardRequest wardRequest
     ) {
@@ -80,7 +80,7 @@ public class WardController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteWard(
             @PathVariable Long id
     ) {
         wardService.deleteWard(id);

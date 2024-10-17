@@ -25,7 +25,7 @@ public class AdmissionController {
      * @return the newly created admission
      */
     @PostMapping
-    public ResponseEntity<Admission> createService(
+    public ResponseEntity<Admission> createAdmission(
             @RequestBody AdmissionRequest admissionRequest
     ) {
         Admission createdAdmission = admissionService.createAdmission(admissionRequest);
@@ -38,7 +38,7 @@ public class AdmissionController {
      * @return a list of all admissions
      */
     @GetMapping
-    public ResponseEntity<List<Admission>> getAllServices() {
+    public ResponseEntity<List<Admission>> getAllAdmissions() {
         List<Admission> admissionList = admissionService.getAllAdmissions();
         return new ResponseEntity<>(admissionList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class AdmissionController {
      * @return the admission for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Admission> getServiceById(
+    public ResponseEntity<Admission> getAdmissionById(
             @PathVariable Long id
     ) {
         Admission admission = admissionService.getAdmissionById(id);
@@ -65,7 +65,7 @@ public class AdmissionController {
      * @return the updated admission
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Admission> updateService(
+    public ResponseEntity<Admission> updateAdmission(
             @PathVariable Long id,
             @RequestBody AdmissionRequest admissionRequest
     ) {
@@ -80,11 +80,27 @@ public class AdmissionController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteAdmission(
             @PathVariable Long id
     ) {
         admissionService.deleteAdmission(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/appointment/{appointmentId}")
+    public ResponseEntity<Admission> findAdmissionByAppointment(
+            @PathVariable Long appointmentId
+    ) {
+        Admission admission = admissionService.findAdmissionByAppointment(appointmentId);
+        return new ResponseEntity<>(admission, HttpStatus.OK);
+    }
+
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<Admission>> findAdmissionsByPatient(
+            @PathVariable Long patientId
+    ) {
+        List<Admission> admissionList = admissionService.findAdmissionsByPatient(patientId);
+        return new ResponseEntity<>(admissionList, HttpStatus.OK);
     }
 
     /**

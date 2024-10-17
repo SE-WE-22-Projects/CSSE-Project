@@ -25,7 +25,7 @@ public class BillController {
      * @return the newly created bill
      */
     @PostMapping
-    public ResponseEntity<Bill> createService(
+    public ResponseEntity<Bill> createBill(
             @RequestBody BillRequest billRequest
     ) {
         Bill createdBill = billService.createBill(billRequest);
@@ -38,7 +38,7 @@ public class BillController {
      * @return a list of all bills
      */
     @GetMapping
-    public ResponseEntity<List<Bill>> getAllServices() {
+    public ResponseEntity<List<Bill>> getAllBills() {
         List<Bill> billList = billService.getAllBills();
         return new ResponseEntity<>(billList, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class BillController {
      * @return the bill for the given id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Bill> getServiceById(
+    public ResponseEntity<Bill> getBillById(
             @PathVariable Long id
     ) {
         Bill bill = billService.getBillById(id);
@@ -65,7 +65,7 @@ public class BillController {
      * @return the updated bill
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Bill> updateService(
+    public ResponseEntity<Bill> updateBill(
             @PathVariable Long id,
             @RequestBody BillRequest billRequest
     ) {
@@ -80,7 +80,7 @@ public class BillController {
      * @return an empty response
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteService(
+    public ResponseEntity<Void> deleteBill(
             @PathVariable Long id
     ) {
         billService.deleteBill(id);
