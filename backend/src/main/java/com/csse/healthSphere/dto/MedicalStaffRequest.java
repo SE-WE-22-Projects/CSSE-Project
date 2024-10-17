@@ -6,6 +6,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class MedicalStaffRequest extends PersonRequest {
-    int departmentId;
-    int wardId;
+    Long departmentId;
+    Long wardId;
 }
