@@ -6,6 +6,5 @@ import lombok.Data;
 public class ReportRequest {
     String result;
     String status;
-    int serviceId;
-    int patientId;
+    Long serviceId;
 }
