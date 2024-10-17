@@ -24,6 +24,8 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     title: string
     subtitle: string
 
+    disableAdd?: boolean
+
     columns: GridColDef<T>[]
     formFields: F
 
@@ -165,14 +167,19 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                             <Typography sx={{ fontSize: "1.4em" }}>Loading...</Typography>
                         </Stack> :
                         <>
-                            <Stack direction="row" py={1}>
-                                <Box sx={{ flexGrow: 1 }} />
-                                <Button variant="outlined" startIcon={<Add />} sx={{
-                                    backgroundColor: "#DB5356",
-                                    color: "white",
-                                    border: 'none'
-                                }} onClick={() => setEditorShown(true)}>Add {props.name}</Button>
-                            </Stack>
+
+                            {props.disableAdd ? null :
+                                <Stack direction="row" py={1}>
+                                    <Box sx={{ flexGrow: 1 }} />
+                                    <Button variant="outlined" startIcon={<Add />} sx={{
+                                        backgroundColor: "#DB5356",
+                                        color: "white",
+                                        border: 'none'
+                                    }} onClick={() => setEditorShown(true)}>Add {props.name}</Button>
+                                </Stack>
+                            }
+
+
                             <StyledDataGrid
                                 columns={props.columns}
                                 rows={rows}
