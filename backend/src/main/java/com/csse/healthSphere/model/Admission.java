@@ -11,7 +11,7 @@ import java.util.List;
 public class Admission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long admissionId;
 
     private LocalDate admissionDate;
     private LocalDate dischargeDate;

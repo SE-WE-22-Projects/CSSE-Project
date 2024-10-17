@@ -87,6 +87,22 @@ public class AdmissionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/appointment/{appointmentId}")
+    public ResponseEntity<Admission> findAdmissionByAppointment(
+            @PathVariable Long appointmentId
+    ) {
+        Admission admission = admissionService.findAdmissionByAppointment(appointmentId);
+        return new ResponseEntity<>(admission, HttpStatus.OK);
+    }
+
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<Admission>> findAdmissionsByPatient(
+            @PathVariable Long patientId
+    ) {
+        List<Admission> admissionList = admissionService.findAdmissionsByPatient(patientId);
+        return new ResponseEntity<>(admissionList, HttpStatus.OK);
+    }
+
     /**
      * Handle ResourceNotFoundException
      *
