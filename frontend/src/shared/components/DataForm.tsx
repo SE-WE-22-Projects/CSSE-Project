@@ -3,9 +3,9 @@ import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
 
-const emailRegex = /^.{2,}@.{2,}\..{2,}$/
-const numberRegex = /^[+-]?\d+(\.\d+)?$/
-const phoneRegex = /\d{10}/
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const numberRegex = /^[+-]?\d+(\.\d+)?$/;
+const phoneRegex = /\d{10}/;
 
 enum FieldType {
     Text,
