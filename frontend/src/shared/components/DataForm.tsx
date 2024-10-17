@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, CircularProgress, FormControl, FormHelperText, InputLabel, Stack, StackOwnProps, TextareaAutosize, TextField, TextFieldVariants } from '@mui/material'
+import { Autocomplete, Box, Button, CircularProgress, Stack, StackOwnProps, TextField, TextFieldVariants } from '@mui/material'
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -84,7 +84,7 @@ interface FieldNumber extends FieldBasic<number> {
     max?: number
 }
 
-type OptionType<T> = { label: string, value: T }[] | T[]
+export type OptionType<T> = { label: string, value: T }[] | T[]
 
 interface FieldSelect<T> extends FieldBasic<T> {
     type: FieldType.Select,
@@ -394,8 +394,8 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
                     return <NumberInput key={idx} {...fieldProps} />
                 } else if (field.type === FieldType.Select) {
                     return <SelectInput key={idx} {...fieldProps} />
-                } else if (field.type === FieldType.Text && (field as FieldText).textArea) {
-                    return <TextAreaInput key={idx} {...fieldProps} />
+                    // } else if (field.type === FieldType.Text && (field as FieldText).textArea) {
+                    // return <TextAreaInput key={idx} {...fieldProps} />
                 }
 
                 return <StringInput key={idx} {...fieldProps} />
@@ -441,34 +441,11 @@ const StringInput = ({ value, onChange, field, fullWidth, error, setError, disab
             setHasFocus(false);
             setError(validateField(field, value));
         }}
+        multiline={(field as FieldText).textArea}
         fullWidth={fullWidth}
         disabled={disabled} />
 }
 
-/**
- * An text area input that takes a string value.
- */
-const TextAreaInput = ({ value, onChange, field, fullWidth, error, setError, disabled }: InputProps<string>) => {
-    const [hasFocus, setHasFocus] = useState(false);
-
-    return <FormControl error={!!error && !hasFocus} variant='outlined' fullWidth={fullWidth}>
-        <InputLabel>{field.label}</InputLabel>
-        <TextareaAutosize
-            required={!field.notRequired}
-            value={value ?? ""}
-            onChange={(v) => onChange(v.target.value)}
-            onFocus={() => setHasFocus(true)}
-            onBlur={() => {
-                setHasFocus(false);
-                setError(validateField(field, value));
-            }}
-            disabled={disabled} />
-        <FormHelperText error={!!error && !hasFocus} id="my-helper-text">{(!hasFocus && error) ? error : field.helper}</FormHelperText>
-    </FormControl>;
-
-
-
-}
 
 /**
  * An input field that takes a number as the input

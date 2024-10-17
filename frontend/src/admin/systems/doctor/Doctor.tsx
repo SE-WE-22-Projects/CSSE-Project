@@ -19,8 +19,16 @@ const FormFields = {
     address: Field.text("Address", { textArea: true }),
     email: Field.email("Email"),
     phoneNo: Field.phone("Phone"),
-    departmentId: Field.number("Department"),
-    ward: Field.number("Ward"),
+    departmentId: Field.select("Department", {
+        loader: async () => (await API.getAllDepartments()).data,
+        valueFor: (v) => v.departmentId,
+        labelFor: (v) => v.name!
+    }),
+    wardId: Field.select("Ward", {
+        loader: async () => (await API.getAllWards()).data,
+        valueFor: (v) => v.wardId,
+        labelFor: (v) => v.name!
+    }),
     speciality: Field.text("Speciality"),
     regNo: Field.text("Registration No")
 }
@@ -34,9 +42,9 @@ const DoctorPage = () => {
         formFields={FormFields}
         getId={(w) => w.personId!}
         readHandler={() => API.getAllDoctors()}
-        createHandler={(req) => API.createDoctor(req)}
+        createHandler={(req) => API.createDoctor(req as any)}
         deleteHandler={(id) => API.deleteDoctor(id)}
-        updateHandler={(id, req) => API.updateDoctor(id, req)}
+        updateHandler={(id, req) => API.updateDoctor(id, req as any)}
     />
 }
 
