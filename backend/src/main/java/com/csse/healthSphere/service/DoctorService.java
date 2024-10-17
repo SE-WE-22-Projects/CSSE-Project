@@ -28,7 +28,13 @@ public class DoctorService {
      * @return
      */
     public Doctor createDoctor(DoctorRequest doctorRequest) {
+        Department department = departmentRepository.findById(doctorRequest.getDepartmentId())
+                .orElseThrow(()-> new ResourceNotFoundException("Department not found"));
+        Ward ward = wardRepository.findById(doctorRequest.getWardId())
+                .orElseThrow(()-> new ResourceNotFoundException("Ward not found"));
         Doctor doctor = modelMapper.map(doctorRequest, Doctor.class);
+        doctor.setDepartment(department);
+        doctor.setWard(ward);
         doctor.setPersonId(null);
         return doctorRepository.save(doctor);
     }
