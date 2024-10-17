@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, CircularProgress, Stack, StackOwnProps, TextField, TextFieldVariants } from '@mui/material'
+import { Autocomplete, Box, Button, CircularProgress, FormControl, FormHelperText, InputLabel, Stack, StackOwnProps, TextareaAutosize, TextField, TextFieldVariants } from '@mui/material'
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -71,7 +71,10 @@ interface FieldText extends FieldBasic<string> {
     type: FieldType.Text,
     minLength?: number
     maxLength?: number
+    textArea?: boolean
 }
+
+
 
 interface FieldNumber extends FieldBasic<number> {
     type: FieldType.Number,
@@ -341,6 +344,8 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
     const submit = async () => {
         let canSubmit = validate();
 
+        console.log(data);
+
         if (canSubmit && props.onSubmit !== undefined) {
 
             let maybePromise = props.onSubmit(data as FieldData<T>);
@@ -389,6 +394,8 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
                     return <NumberInput key={idx} {...fieldProps} />
                 } else if (field.type === FieldType.Select) {
                     return <SelectInput key={idx} {...fieldProps} />
+                } else if (field.type === FieldType.Text && (field as FieldText).textArea) {
+                    return <TextAreaInput key={idx} {...fieldProps} />
                 }
 
                 return <StringInput key={idx} {...fieldProps} />
@@ -436,6 +443,31 @@ const StringInput = ({ value, onChange, field, fullWidth, error, setError, disab
         }}
         fullWidth={fullWidth}
         disabled={disabled} />
+}
+
+/**
+ * An text area input that takes a string value.
+ */
+const TextAreaInput = ({ value, onChange, field, fullWidth, error, setError, disabled }: InputProps<string>) => {
+    const [hasFocus, setHasFocus] = useState(false);
+
+    return <FormControl error={!!error && !hasFocus} variant='outlined' fullWidth={fullWidth}>
+        <InputLabel>{field.label}</InputLabel>
+        <TextareaAutosize
+            required={!field.notRequired}
+            value={value ?? ""}
+            onChange={(v) => onChange(v.target.value)}
+            onFocus={() => setHasFocus(true)}
+            onBlur={() => {
+                setHasFocus(false);
+                setError(validateField(field, value));
+            }}
+            disabled={disabled} />
+        <FormHelperText error={!!error && !hasFocus} id="my-helper-text">{(!hasFocus && error) ? error : field.helper}</FormHelperText>
+    </FormControl>;
+
+
+
 }
 
 /**
@@ -560,10 +592,11 @@ function SelectInput<T>({ value, onChange, field, fullWidth, setError, error, di
 
 
     const handleOpen = () => {
+        setOpen(true);
+
         if (!shouldLoad) return;
 
         setOptions([]);
-        setOpen(true);
         (async () => {
             const select = field as FieldLoadSelect<T>;
             setLoading(true);
@@ -596,7 +629,6 @@ function SelectInput<T>({ value, onChange, field, fullWidth, setError, error, di
                 setHasFocus(false);
                 setError(validateField(field, value));
             }}
-            fullWidth={fullWidth}
             slotProps={{
                 input: {
                     ...params.InputProps,
@@ -612,6 +644,7 @@ function SelectInput<T>({ value, onChange, field, fullWidth, setError, error, di
         value={selected}
         onChange={(_, v) => onChange(v?.value)
         }
+        fullWidth={fullWidth}
     />
 }
 
