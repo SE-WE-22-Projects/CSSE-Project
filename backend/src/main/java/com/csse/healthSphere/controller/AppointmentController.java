@@ -61,6 +61,29 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<Appointment>> findAppointmentsByPatient(
+            @PathVariable Long patientId
+    ) {
+        List<Appointment> appointmentList = appointmentService.findAppointmentsByPatient(patientId);
+        return new ResponseEntity<>(appointmentList, HttpStatus.OK);
+    }
+
+    @GetMapping("/schedule/{scheduleId}")
+    public ResponseEntity<List<Appointment>> findAppointmentsBySchedule(
+            @PathVariable Long scheduleId
+    ) {
+        List<Appointment> appointmentList = appointmentService.findAppointmentsBySchedule(scheduleId);
+        return new ResponseEntity<>(appointmentList, HttpStatus.OK);
+    }
+
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<Appointment>> findAppointsByDoctor(
+            @PathVariable Long doctorId
+    ){
+        List<Appointment> appointmentList = appointmentService.findAppointmentsByDoctor(doctorId);
+        return new ResponseEntity<>(appointmentList, HttpStatus.OK);
+    }
 
     // Exception handler for ResourceNotFoundException
     @ExceptionHandler(ResourceNotFoundException.class)
