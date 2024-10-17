@@ -897,12 +897,6 @@ export interface ReportRequest {
      * @memberof ReportRequest
      */
     'serviceId'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ReportRequest
-     */
-    'patientId'?: number;
 }
 /**
  * 
@@ -969,6 +963,62 @@ export type ScheduleDayEnum = typeof ScheduleDayEnum[keyof typeof ScheduleDayEnu
 /**
  * 
  * @export
+ * @interface ScheduleRequest
+ */
+export interface ScheduleRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ScheduleRequest
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ScheduleRequest
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ScheduleRequest
+     */
+    'startTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ScheduleRequest
+     */
+    'endTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ScheduleRequest
+     */
+    'day'?: ScheduleRequestDayEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ScheduleRequest
+     */
+    'doctorId'?: number;
+}
+
+export const ScheduleRequestDayEnum = {
+    Sunday: 'SUNDAY',
+    Monday: 'MONDAY',
+    Tuesday: 'TUESDAY',
+    Wednesday: 'WEDNESDAY',
+    Thursday: 'THURSDAY',
+    Friday: 'FRIDAY',
+    Saturday: 'SATURDAY'
+} as const;
+
+export type ScheduleRequestDayEnum = typeof ScheduleRequestDayEnum[keyof typeof ScheduleRequestDayEnum];
+
+/**
+ * 
+ * @export
  * @interface Ward
  */
 export interface Ward {
@@ -1009,6 +1059,18 @@ export interface WardRequest {
      * @memberof WardRequest
      */
     'name'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof WardRequest
+     */
+    'capacity'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof WardRequest
+     */
+    'location'?: string;
 }
 
 /**
@@ -1380,13 +1442,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary POST api/schedule
-         * @param {object} body 
+         * @param {ScheduleRequest} scheduleRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createSchedule: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('createSchedule', 'body', body)
+        createSchedule: async (scheduleRequest: ScheduleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'scheduleRequest' is not null or undefined
+            assertParamExists('createSchedule', 'scheduleRequest', scheduleRequest)
             const localVarPath = `/api/schedule`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1406,7 +1468,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(scheduleRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1736,6 +1798,40 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteDoctor', 'id', id)
             const localVarPath = `/api/doctor/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary DELETE api/patient/{id}
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePatient: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deletePatient', 'id', id)
+            const localVarPath = `/api/patient/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2179,6 +2275,74 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('findDiagnosisByPatient', 'patientId', patientId)
             const localVarPath = `/api/diagnosis/patient/{patientId}`
                 .replace(`{${"patientId"}}`, encodeURIComponent(String(patientId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary GET api/doctor/department/{departmentId}
+         * @param {number} departmentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findDoctorsByDepartment: async (departmentId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'departmentId' is not null or undefined
+            assertParamExists('findDoctorsByDepartment', 'departmentId', departmentId)
+            const localVarPath = `/api/doctor/department/{departmentId}`
+                .replace(`{${"departmentId"}}`, encodeURIComponent(String(departmentId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary GET api/doctor/ward/{wardId}
+         * @param {number} wardId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findDoctorsByWard: async (wardId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'wardId' is not null or undefined
+            assertParamExists('findDoctorsByWard', 'wardId', wardId)
+            const localVarPath = `/api/doctor/ward/{wardId}`
+                .replace(`{${"wardId"}}`, encodeURIComponent(String(wardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3409,6 +3573,46 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary PUT api/patient/{id}
+         * @param {number} id 
+         * @param {PatientRequest} patientRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePatient: async (id: number, patientRequest: PatientRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updatePatient', 'id', id)
+            // verify required parameter 'patientRequest' is not null or undefined
+            assertParamExists('updatePatient', 'patientRequest', patientRequest)
+            const localVarPath = `/api/patient/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patientRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary PUT api/payment/{id}
          * @param {number} id 
          * @param {object} body 
@@ -3491,15 +3695,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary PUT api/schedule/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {ScheduleRequest} scheduleRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateSchedule: async (id: number, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateSchedule: async (id: number, scheduleRequest: ScheduleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updateSchedule', 'id', id)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateSchedule', 'body', body)
+            // verify required parameter 'scheduleRequest' is not null or undefined
+            assertParamExists('updateSchedule', 'scheduleRequest', scheduleRequest)
             const localVarPath = `/api/schedule/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3520,7 +3724,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(scheduleRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3790,12 +3994,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary POST api/schedule
-         * @param {object} body 
+         * @param {ScheduleRequest} scheduleRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createSchedule(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Schedule>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createSchedule(body, options);
+        async createSchedule(scheduleRequest: ScheduleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Schedule>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSchedule(scheduleRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createSchedule']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3928,6 +4132,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDoctor(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.deleteDoctor']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary DELETE api/patient/{id}
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePatient(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePatient(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.deletePatient']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4097,6 +4314,32 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.findDiagnosisByPatient(patientId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.findDiagnosisByPatient']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary GET api/doctor/department/{departmentId}
+         * @param {number} departmentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findDoctorsByDepartment(departmentId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Doctor>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findDoctorsByDepartment(departmentId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.findDoctorsByDepartment']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary GET api/doctor/ward/{wardId}
+         * @param {number} wardId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findDoctorsByWard(wardId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Doctor>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findDoctorsByWard(wardId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.findDoctorsByWard']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4561,6 +4804,20 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary PUT api/patient/{id}
+         * @param {number} id 
+         * @param {PatientRequest} patientRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updatePatient(id: number, patientRequest: PatientRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Patient>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePatient(id, patientRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.updatePatient']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary PUT api/payment/{id}
          * @param {number} id 
          * @param {object} body 
@@ -4591,12 +4848,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary PUT api/schedule/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {ScheduleRequest} scheduleRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateSchedule(id: number, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Schedule>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSchedule(id, body, options);
+        async updateSchedule(id: number, scheduleRequest: ScheduleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Schedule>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSchedule(id, scheduleRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateSchedule']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4756,12 +5013,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary POST api/schedule
-         * @param {object} body 
+         * @param {ScheduleRequest} scheduleRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createSchedule(body: object, options?: any): AxiosPromise<Schedule> {
-            return localVarFp.createSchedule(body, options).then((request) => request(axios, basePath));
+        createSchedule(scheduleRequest: ScheduleRequest, options?: any): AxiosPromise<Schedule> {
+            return localVarFp.createSchedule(scheduleRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4862,6 +5119,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         deleteDoctor(id: number, options?: any): AxiosPromise<object> {
             return localVarFp.deleteDoctor(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary DELETE api/patient/{id}
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePatient(id: number, options?: any): AxiosPromise<object> {
+            return localVarFp.deletePatient(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4992,6 +5259,26 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         findDiagnosisByPatient(patientId: number, options?: any): AxiosPromise<Array<Diagnosis>> {
             return localVarFp.findDiagnosisByPatient(patientId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary GET api/doctor/department/{departmentId}
+         * @param {number} departmentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findDoctorsByDepartment(departmentId: number, options?: any): AxiosPromise<Array<Doctor>> {
+            return localVarFp.findDoctorsByDepartment(departmentId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary GET api/doctor/ward/{wardId}
+         * @param {number} wardId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findDoctorsByWard(wardId: number, options?: any): AxiosPromise<Array<Doctor>> {
+            return localVarFp.findDoctorsByWard(wardId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5347,6 +5634,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary PUT api/patient/{id}
+         * @param {number} id 
+         * @param {PatientRequest} patientRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePatient(id: number, patientRequest: PatientRequest, options?: any): AxiosPromise<Patient> {
+            return localVarFp.updatePatient(id, patientRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary PUT api/payment/{id}
          * @param {number} id 
          * @param {object} body 
@@ -5371,12 +5669,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary PUT api/schedule/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {ScheduleRequest} scheduleRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateSchedule(id: number, body: object, options?: any): AxiosPromise<Schedule> {
-            return localVarFp.updateSchedule(id, body, options).then((request) => request(axios, basePath));
+        updateSchedule(id: number, scheduleRequest: ScheduleRequest, options?: any): AxiosPromise<Schedule> {
+            return localVarFp.updateSchedule(id, scheduleRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5544,13 +5842,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary POST api/schedule
-     * @param {object} body 
+     * @param {ScheduleRequest} scheduleRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public createSchedule(body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createSchedule(body, options).then((request) => request(this.axios, this.basePath));
+    public createSchedule(scheduleRequest: ScheduleRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).createSchedule(scheduleRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5671,6 +5969,18 @@ export class DefaultApi extends BaseAPI {
      */
     public deleteDoctor(id: number, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).deleteDoctor(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary DELETE api/patient/{id}
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public deletePatient(id: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).deletePatient(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5827,6 +6137,30 @@ export class DefaultApi extends BaseAPI {
      */
     public findDiagnosisByPatient(patientId: number, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).findDiagnosisByPatient(patientId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary GET api/doctor/department/{departmentId}
+     * @param {number} departmentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public findDoctorsByDepartment(departmentId: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).findDoctorsByDepartment(departmentId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary GET api/doctor/ward/{wardId}
+     * @param {number} wardId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public findDoctorsByWard(wardId: number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).findDoctorsByWard(wardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6255,6 +6589,19 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @summary PUT api/patient/{id}
+     * @param {number} id 
+     * @param {PatientRequest} patientRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public updatePatient(id: number, patientRequest: PatientRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).updatePatient(id, patientRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary PUT api/payment/{id}
      * @param {number} id 
      * @param {object} body 
@@ -6283,13 +6630,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary PUT api/schedule/{id}
      * @param {number} id 
-     * @param {object} body 
+     * @param {ScheduleRequest} scheduleRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public updateSchedule(id: number, body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateSchedule(id, body, options).then((request) => request(this.axios, this.basePath));
+    public updateSchedule(id: number, scheduleRequest: ScheduleRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).updateSchedule(id, scheduleRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
