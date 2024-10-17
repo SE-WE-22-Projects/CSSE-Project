@@ -35,7 +35,7 @@ export default function SideMenu() {
         },
       }}
     >
-      <Box sx={{ py: "12px" }}>
+      <Box sx={{ py: "12px", px: '12px' }}>
         <SiteLogo />
       </Box>
 

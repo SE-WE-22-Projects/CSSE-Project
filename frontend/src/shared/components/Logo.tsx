@@ -16,3 +16,14 @@ export const SiteLogo = () => {
 }
 
 export default SiteLogo
+
+export const PageTitle = styled(Typography)({
+    fontSize: '1.5rem',
+    fontWeight: '600',
+    lineHeight: '1.5em'
+});
+
+export const PageSubtitle = styled(Typography)({
+    fontSize: '1em',
+    marginBottom: '16px',
+});
