@@ -86,17 +86,17 @@ interface FieldNumber extends FieldBasic<number> {
 
 export type OptionType<T> = { label: string, value: T }
 
-interface FieldSelect<T> extends FieldBasic<T> {
+
+interface FieldSelectBasic<T, D = T> extends FieldBasic<T> {
     type: FieldType.Select,
-    values: OptionType<T>[]
 
     /**
-     * A function that returns the label for the given option
-     * Ex: the name from a person object
-     * @param o the option
-     * @returns the label to display
-     */
-    labelFor?: (o: T) => string;
+    * A function that returns the label for the given option
+    * Ex: the name from a person object
+    * @param o the option
+    * @returns the label to display
+    */
+    labelFor?: (o: D) => string;
 
     /**
      * A function that should return the value for the given option
@@ -104,8 +104,10 @@ interface FieldSelect<T> extends FieldBasic<T> {
      * @param o the option
      * @returns the value for selecting this option
      */
-    valueFor?: (o: T) => any;
+    valueFor?: (o: D) => any;
 
+
+    getInitial?: (o: any) => T;
 
     /**
      * Internal property. DO NOT USE.
@@ -113,8 +115,17 @@ interface FieldSelect<T> extends FieldBasic<T> {
     options: { label: string, value: T }[]
 }
 
+interface FieldSelect<T> extends FieldSelectBasic<T> {
+    values: OptionType<T>[]
+}
 
-interface FieldLoadSelect<T> extends FieldBasic<T> {
+
+interface FieldLoadSelect<T> extends FieldSelectBasic<T> {
+    type: FieldType.Select,
+    loader: () => Promise<OptionType<T>[]>
+}
+
+interface FieldLoadSelect2<T, D> extends FieldSelectBasic<T, D> {
     type: FieldType.Select,
 
     /**
@@ -123,7 +134,7 @@ interface FieldLoadSelect<T> extends FieldBasic<T> {
      * @param o the option
      * @returns the label to display
      */
-    labelFor?: (o: T) => string;
+    labelFor: (o: D) => string;
 
     /**
      * A function that should return the value for the given option
@@ -131,24 +142,34 @@ interface FieldLoadSelect<T> extends FieldBasic<T> {
      * @param o the option
      * @returns the value for selecting this option
      */
-    valueFor?: (o: T) => any;
+    valueFor: (o: D) => T;
 
-    loader: () => Promise<OptionType<T>[]>
-
-
-    /**
-     * Internal property. DO NOT USE.
-     */
-    options: { label: string, value: T }[] | null
+    loader: () => Promise<D[]>
 }
 
-type AllFields = FieldText | FieldNumber | FieldEmail | FieldPhone | FieldDate | FieldTime | FieldDateTime | FieldSelect<any> | FieldLoadSelect<any>
+type AllSelectFields<T> = FieldLoadSelect<T> | FieldLoadSelect2<T, any> | FieldSelect<T>
+
+type AllFields = FieldText | FieldNumber | FieldEmail | FieldPhone | FieldDate | FieldTime | FieldDateTime | FieldSelect<any> | FieldLoadSelect<any> | FieldLoadSelect2<any, any>
 
 
 type FieldProps<T extends AllFields> = Omit<Omit<Omit<T, 'type'>, 'internal'>, 'label'>;
-type SelectFieldProps<T> = Omit<FieldProps<FieldLoadSelect<T>>, 'options'> | Omit<FieldProps<FieldSelect<T>>, 'options'>
 
-export const Field = {
+interface FieldTypes {
+    text(label: string, field?: FieldProps<FieldText>): FieldText
+    email(label: string, field?: FieldProps<FieldEmail>): FieldEmail
+    phone(label: string, field?: FieldProps<FieldPhone>): FieldPhone
+    date(label: string, field?: FieldProps<FieldDate>): FieldDate
+    time(label: string, field?: FieldProps<FieldTime>): FieldTime
+    dateTime(label: string, field?: FieldProps<FieldDateTime>): FieldDateTime
+    number(label: string, field?: FieldProps<FieldNumber>): FieldNumber
+
+    select<T>(label: string, field?: Omit<FieldProps<FieldSelect<T>>, 'options'>): FieldSelect<T>
+    select<T>(label: string, field?: Omit<FieldProps<FieldLoadSelect<T>>, 'options'>): FieldLoadSelect<T>
+    select<T, D>(label: string, field?: Omit<FieldProps<FieldLoadSelect2<T, D>>, 'options'>): FieldLoadSelect2<T, D>
+}
+
+export const Field: FieldTypes = {
+
     text: (label: string, field?: FieldProps<FieldText>): FieldText => {
         return { ...field, label, type: FieldType.Text };
     },
@@ -177,17 +198,12 @@ export const Field = {
         return { ...field, label, type: FieldType.Number }
     },
 
-    select: function <T,>(label: string, field: SelectFieldProps<T>): FieldSelect<T> | FieldLoadSelect<T> {
-
-        let newField: FieldSelect<T> | FieldLoadSelect<T>
-
+    select: (label: string, field: any) => {
         if ((field as any).loader !== undefined) {
-            newField = { ...(field as FieldProps<FieldLoadSelect<T>>), label, options: null, type: FieldType.Select };
+            return { ...(field as any), label, type: FieldType.Select };
         } else {
-            newField = { ...(field as FieldProps<FieldSelect<T>>), label, type: FieldType.Select, options: getOptions(field as FieldSelect<T>, true) }
+            return { ...(field as any), label, type: FieldType.Select, options: getOptions(field as any, true) }
         }
-
-        return newField;
     }
 }
 
@@ -353,6 +369,7 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
         Object.entries(props.fields).forEach((f) => {
             let error = validateField(f[1], formState.current[f[0]]?.value);
             if (error !== null && error !== undefined) {
+                console.debug(`Validation error in ${f[0]}: ${error}`)
                 canSubmit = false;
             }
 
@@ -397,6 +414,8 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
                     hasInitial: props.initial !== undefined,
                     revalidate: revalidate,
 
+                    initialState: props.initial,
+
                     inputProps: {
                         label: field.label,
                         disabled: isSubmitting,
@@ -412,8 +431,10 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
                     return <NumberInput key={idx} {...fieldProps as InputFieldProps<number>} />
                 } else if (field.type === FieldType.Select) {
                     return <SelectInput key={idx} {...fieldProps as InputFieldProps<any>} />
-                } else if (field.type === FieldType.Text) {
+                } else if (field.type === FieldType.Text || field.type === FieldType.Email || field.type === FieldType.Phone) {
                     return <StringInput key={idx} {...fieldProps as InputFieldProps<string>} />
+                } else {
+                    throw `Unsupported form field type ${FieldType[(field as any).type]}`
                 }
 
             }
@@ -435,6 +456,8 @@ type InputFieldProps<T, F extends AllFields = any, V extends Fields = Fields, K 
     initial?: T
     hasInitial: boolean
     state: MutableRefObject<Partial<FormState<V>>>
+
+    initialState: any
 
     revalidate: number
 
@@ -603,38 +626,46 @@ const DateInput = (props: InputFieldProps<string>) => {
     return <DateTimePicker {...inputProps} minDate={dateField.minDate} maxDate={dateField.maxDate} />
 }
 
-function getOptions<T>(field: FieldSelect<T>, check: boolean, loadValues?: OptionType<T>[]) {
+function getOptions<T, F extends AllSelectFields<T>>(field: F, check: boolean, loadValues?: OptionType<T>[]) {
     let labels = {} as any;
     let values = {} as any;
 
-    return (loadValues ?? field.values).map((opt) => {
-        let label: string
-        if (field.labelFor !== undefined) {
-            label = field.labelFor(opt as T);
-        } else {
-            label = (opt as { label: string }).label;
-        }
+    return (loadValues ?? (field as any).values).map((opt: OptionType<T>) => {
+        let option = parseOption<T, F>(field as any, opt);
 
-        let value: T
-        if (field.valueFor !== undefined) {
-            value = field.valueFor(opt as T);
-        } else {
-            value = (opt as { value: T }).value;
-        }
 
         if (check) {
-            if (labels[label]) console.error("Duplicate label", label, "in selection");
-            if (values[value]) console.error("Duplicate label", label, "in selection");
+            if (labels[option.label]) console.error("Duplicate label", option.label, "in selection");
+            if (values[option.value]) console.error("Duplicate value", option.value, "in selection");
 
-            labels[label] = true;
-            values[value] = true;
+            labels[option.label] = true;
+            values[option.value] = true;
         }
 
-        return { label, value }
+        return option;
     })
 };
 
-function SelectInput<T>(props: InputFieldProps<T>) {
+function parseOption<T, F extends AllSelectFields<T>>(field: F, opt: OptionType<T>) {
+    let label: string
+
+    if (field.labelFor !== undefined) {
+        label = field.labelFor(opt as T);
+    } else {
+        label = (opt as { label: string }).label;
+    }
+
+    let value: T
+    if (field.valueFor !== undefined) {
+        value = field.valueFor(opt as T);
+    } else {
+        value = (opt as { value: T }).value;
+    }
+
+    return { label, value }
+}
+
+function SelectInput<T, F extends AllSelectFields<T>>(props: InputFieldProps<T, F>) {
     const shouldLoad = (props.field as FieldLoadSelect<T>).loader !== undefined;
 
     const [hasFocus, setHasFocus] = useState(false);
@@ -643,6 +674,15 @@ function SelectInput<T>(props: InputFieldProps<T>) {
 
     const [options, setOptions] = useState(shouldLoad ? [] : (props.field as FieldSelect<T>).options);
     const [loading, setLoading] = useState(shouldLoad);
+
+    const setInitialValue = (opts: OptionType<T>[]) => {
+        const initial = props.field.getInitial !== undefined ? props.field.getInitial(props.initialState) : props.initial;
+        const selected = opts.find((v) => v.value === initial);
+        if (selected !== undefined) {
+            props.state.current[props.formKey]!.value = initial;
+        }
+        setValue(selected ?? null);
+    }
 
 
     // validates the current value of the field.
@@ -659,16 +699,14 @@ function SelectInput<T>(props: InputFieldProps<T>) {
             valid: false
         };
 
-        if (props.hasInitial && !loading) {
-            const selected = options.find((v) => v.value === props.initial);
-            setValue(selected ?? null);
-            validate();
+        if (props.hasInitial && !loading && props.initial !== undefined) {
+            setInitialValue(options);
         }
     }, [props.initial]);
 
     // revalidate the input value on form revalidate or option load complete
     useEffect(() => {
-        if (props.revalidate !== 0 || (shouldLoad && !loading && props.hasInitial)) {
+        if (shouldLoad && !loading && props.hasInitial) {
             validate();
         }
     }, [props.revalidate, loading]);
@@ -678,13 +716,10 @@ function SelectInput<T>(props: InputFieldProps<T>) {
 
         (async () => {
             const select = props.field as FieldLoadSelect<T>;
-            setLoading(true);
             const data = getOptions(select as any, true, await select.loader());
 
             if (props.hasInitial) {
-                const selected = data.find((v) => v.value === props.initial);
-                setValue(selected ?? null);
-                validate();
+                setInitialValue(data);
             }
 
             setLoading(false);

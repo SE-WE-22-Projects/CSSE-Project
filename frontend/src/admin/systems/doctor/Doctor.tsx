@@ -1,11 +1,11 @@
 import { GridColDef } from '@mui/x-data-grid'
-import { Patient } from '../../../api';
+import { Doctor } from '../../../api';
 import { Field } from '../../../shared/components/DataForm';
 import TablePage from '../../components/TablePage';
 import { API } from '../../../config';
 
 
-const GridFields: GridColDef<Patient>[] = [
+const GridFields: GridColDef<Doctor>[] = [
     { field: 'personId', headerName: 'ID', width: 90 },
     { field: 'name', headerName: "Name", width: 200, flex: 1 },
     { field: 'dob', headerName: "Date of Birth", width: 200, flex: 1 },
@@ -21,11 +21,13 @@ const FormFields = {
     phoneNo: Field.phone("Phone"),
     departmentId: Field.select("Department", {
         loader: async () => (await API.getAllDepartments()).data,
+        getInitial: (o: Doctor) => o.department?.departmentId,
         valueFor: (v) => v.departmentId,
         labelFor: (v) => v.name!
     }),
     wardId: Field.select("Ward", {
         loader: async () => (await API.getAllWards()).data,
+        getInitial: (o: Doctor) => o.ward?.wardId,
         valueFor: (v) => v.wardId,
         labelFor: (v) => v.name!
     }),
