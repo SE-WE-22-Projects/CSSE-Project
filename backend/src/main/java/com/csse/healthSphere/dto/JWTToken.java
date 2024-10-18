@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class JWTToken {
-    String name;
-    String email;
+    private String email;
 }

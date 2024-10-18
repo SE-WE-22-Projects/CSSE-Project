@@ -8,60 +8,39 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthenticationService userDetailsService;
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                // Spring Security should completely ignore URLs starting with / resources/
-                .requestMatchers("/ resources/**").requestMatchers("/api/auth/**");
-    }
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(cfg ->
-        {
-            try {
-                cfg.requestMatchers("/ public/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll();
-                cfg.anyRequest().hasRole("USER").and().formLogin(withDefaults());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.authenticationManager(authenticationManager(userDetailsService(), passwordEncoder()));
+        http.authorizeHttpRequests(request -> {
+            request
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .anyRequest().authenticated();
         });
         return http.build();
     }
 
+
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .passwordEncoder(passwordEncoder()::encode)
-                .build();
-
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password("password")
-                .roles("ADMIN", "USER")
-                .passwordEncoder(passwordEncoder()::encode)
-                .build();
-
         return userDetailsService;
     }
 

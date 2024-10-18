@@ -1,6 +1,5 @@
 package com.csse.healthSphere.service;
 
-import com.csse.healthSphere.model.Person;
 import com.csse.healthSphere.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -29,7 +28,9 @@ public class AuthenticationService implements org.springframework.security.core.
         );
     }
 
-    public Optional<Person> findByEmail(String email) {
-        return personRepository.findPersonByEmail(email);
+    public Optional<UserDetails> findByEmail(String email) {
+        return personRepository.findPersonByEmail(email).map(
+                person -> new User(person.getEmail(), person.getPassword(), new ArrayList<>())
+        );
     }
 }

@@ -1,7 +1,7 @@
 package com.csse.healthSphere.config;
 
 
-import com.csse.healthSphere.repository.PersonRepository;
+import com.csse.healthSphere.dto.JWTToken;
 import com.csse.healthSphere.service.AuthenticationService;
 import com.csse.healthSphere.service.JwtTokenUtil;
 import jakarta.servlet.FilterChain;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -20,8 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -46,14 +45,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
-        if (!jwtTokenUtil.validate(token)) {
+        Optional<JWTToken> jwtToken = jwtTokenUtil.parseToken(token);
+
+
+        if (jwtToken.isEmpty()) {
             chain.doFilter(request, response);
             return;
         }
 
         // Get user identity and set it on the spring security context
-        UserDetails userDetails = authenticationService.findById(1L)//jwtTokenUtil.get(token))
+        UserDetails userDetails = authenticationService.findByEmail(jwtToken.get().getEmail())
                 .orElse(null);
+
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
