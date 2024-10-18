@@ -243,6 +243,7 @@ export type FormState<T extends Fields,> = {
 
 const getDateFormat = (typ: FieldType) => typ === FieldType.Date ? "YYYY-MM-DD" : typ === FieldType.Time ? "HH:mm:ss" : "YYYY-MM-DD HH:mm:ss";
 const dateSeconds = (date: Dayjs) => (date.hour() * 60 + date.minute()) * 60 + date.second();
+const debugValidate = false;
 
 /**
  * Validates the given field. This returns a string explaining the validation error if one is found.
@@ -251,7 +252,9 @@ const dateSeconds = (date: Dayjs) => (date.hour() * 60 + date.minute()) * 60 + d
  * @returns a string explaining the validation error if one is found. null or undefined otherwise.
  */
 const validateField = (field: FieldBasic<any>, value: any, extra?: any): string | null | undefined => {
-    console.debug(`validate: ${typeof value} '${value}'  as ${FieldType[field.type]}`);
+    if (debugValidate)
+        console.debug(`validate: ${typeof value} '${value}'  as ${FieldType[field.type]}`);
+
 
     // check if the required field is given.
     if ((value === null || value === undefined || value === "")) {
@@ -339,7 +342,9 @@ const validateField = (field: FieldBasic<any>, value: any, extra?: any): string 
         case FieldType.Select:
             if (extra?.find !== undefined) {
                 let selected = extra.find((v: any) => v.value === value);
-                console.log(selected);
+                if (selected === undefined) {
+                    return `Please select a valid value`;
+                }
             }
 
             break;
@@ -367,15 +372,18 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
 
         // validate all fields
         Object.entries(props.fields).forEach((f) => {
-            let error = validateField(f[1], formState.current[f[0]]?.value);
-            if (error !== null && error !== undefined) {
+            let field = formState.current[f[0]];
+            let value = formState.current[f[0]]?.value;
+            if (field === undefined || !field.valid) {
+                let error = validateField(f[1], value);
                 console.debug(`Validation error in ${f[0]}: ${error}`)
                 canSubmit = false;
+                data[f[0]] = { invalid: value }
+            } else {
+                data[f[0]] = formState.current[f[0]]?.value;
             }
-
-            data[f[0]] = formState.current[f[0]]?.value;
         });
-        console.debug("Form state is", formState.current);
+        console.debug("Form state is", data);
 
 
         if (!canSubmit) {
@@ -678,9 +686,15 @@ function SelectInput<T, F extends AllSelectFields<T>>(props: InputFieldProps<T, 
     const setInitialValue = (opts: OptionType<T>[]) => {
         const initial = props.field.getInitial !== undefined ? props.field.getInitial(props.initialState) : props.initial;
         const selected = opts.find((v) => v.value === initial);
+
         if (selected !== undefined) {
             props.state.current[props.formKey]!.value = initial;
+
+            let validationMsg = validateField(props.field, initial, opts)
+            props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
+            setError(validationMsg);
         }
+
         setValue(selected ?? null);
     }
 
@@ -699,7 +713,7 @@ function SelectInput<T, F extends AllSelectFields<T>>(props: InputFieldProps<T, 
             valid: false
         };
 
-        if (props.hasInitial && !loading && props.initial !== undefined) {
+        if (props.hasInitial && !shouldLoad) {
             setInitialValue(options);
         }
     }, [props.initial]);
