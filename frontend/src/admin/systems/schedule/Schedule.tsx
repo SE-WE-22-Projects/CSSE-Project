@@ -28,12 +28,13 @@ const FormFields = {
             { label: "Thursday", value: ScheduleRequestDayEnum.Thursday },
             { label: "Friday", value: ScheduleRequestDayEnum.Friday },
             { label: "Saturday", value: ScheduleRequestDayEnum.Saturday },
-        ] as OptionType<ScheduleRequestDayEnum>
+        ] as OptionType<ScheduleRequestDayEnum>[]
     }),
     doctorId: Field.select("Doctor", {
         loader: async () => (await API.getAllDoctors()).data,
         valueFor: (v) => v.personId,
-        labelFor: (v) => v.name!
+        labelFor: (v) => v.name!,
+        getInitial: (o: Schedule) => o.doctor?.personId
     }),
 }
 
