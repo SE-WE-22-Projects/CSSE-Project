@@ -1,6 +1,8 @@
 package com.csse.healthSphere.controller;
 
+import com.csse.healthSphere.dto.AuthUser;
 import com.csse.healthSphere.dto.LoginRequest;
+import com.csse.healthSphere.model.Person;
 import com.csse.healthSphere.repository.PersonRepository;
 import com.csse.healthSphere.service.AuthenticationService;
 import com.csse.healthSphere.service.JwtTokenUtil;
@@ -39,7 +41,7 @@ public class AuthController {
                         )
                 );
 
-        User user = (User) authenticate.getPrincipal();
+        AuthUser user = (AuthUser) authenticate.getPrincipal();
 
         return ResponseEntity.ok().body(jwtTokenUtil.generateAccessToken(user));
     }

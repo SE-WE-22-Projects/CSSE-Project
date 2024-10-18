@@ -1,5 +1,6 @@
 package com.csse.healthSphere.service;
 
+import com.csse.healthSphere.dto.AuthUser;
 import com.csse.healthSphere.dto.JWTToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -29,9 +30,11 @@ public class JwtTokenUtil {
     }
 
 
-    public String generateAccessToken(User user) {
+    public String generateAccessToken(AuthUser user) {
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("email", user.getUsername());
+        claims.put("username", user.getPerson().getName());
+        claims.put("role", user.getAuthorities());
 
         return Jwts.builder().claims(claims)
                 .subject(user.getUsername())
@@ -40,13 +43,6 @@ public class JwtTokenUtil {
                 .signWith(getSignInKey()).compact();
     }
 
-    public boolean validate(String token) {
-        return true;
-    }
-
-    public String getUsername(String token) {
-        return "";
-    }
 
     public Optional<JWTToken> parseToken(String token) {
         try {

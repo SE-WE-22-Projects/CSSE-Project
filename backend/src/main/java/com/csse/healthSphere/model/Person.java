@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.csse.healthSphere.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,6 +20,7 @@ public abstract class Person {
     private String gender;
     private String email;
     private String phoneNo;
+    private Role role;
     @JsonIgnore
     private String password;
 }
