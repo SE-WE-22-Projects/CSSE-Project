@@ -18,7 +18,7 @@ enum FieldType {
     Select
 }
 
-interface FieldBasic<T> {
+interface FieldBasic<T, Content = any> {
 
     label: string,
     helper?: string,
@@ -33,7 +33,7 @@ interface FieldBasic<T> {
      * Validates the field.
      * @returns a string if the field is invalid. Null or undefined otherwise
      */
-    validator?: (v?: string) => string | undefined | null
+    validator?: (v: string | undefined, content: Content) => string | undefined | null
 
     /**
     * Internal property. DO NOT USE.
@@ -251,7 +251,7 @@ const debugValidate = false;
  * @param value the current value of the field
  * @returns a string explaining the validation error if one is found. null or undefined otherwise.
  */
-const validateField = (field: FieldBasic<any>, value: any, extra?: any): string | null | undefined => {
+const validateField = (field: FieldBasic<any>, value: any, formData: MutableRefObject<Partial<FormState<any>>>, extra?: any): string | null | undefined => {
     if (debugValidate)
         console.debug(`validate: ${typeof value} '${value}'  as ${FieldType[field.type]}`);
 
@@ -354,7 +354,8 @@ const validateField = (field: FieldBasic<any>, value: any, extra?: any): string 
 
     // call custom validators if given.
     if (field.validator !== undefined) {
-        return field.validator(value);
+        let content = Object.fromEntries(Object.entries(formData).map(v => [v[0], v[1].value]))
+        return field.validator(value, content);
     }
 }
 
@@ -375,7 +376,7 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
             let field = formState.current[f[0]];
             let value = formState.current[f[0]]?.value;
             if (field === undefined || !field.valid) {
-                let error = validateField(f[1], value);
+                let error = validateField(f[1], value, formState);
                 console.debug(`Validation error in ${f[0]}: ${error}`)
                 canSubmit = false;
                 data[f[0]] = { invalid: value }
@@ -490,7 +491,7 @@ const StringInput = (props: InputFieldProps<string, FieldText> & { parser?: (v?:
 
     // validates the current value of the field.
     const validate = () => {
-        let validationMsg = validateField(props.field, value)
+        let validationMsg = validateField(props.field, value, props.state)
         props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
         setError(validationMsg);
     }
@@ -572,7 +573,7 @@ const DateInput = (props: InputFieldProps<string>) => {
 
     // validates the current value of the field.
     const validate = () => {
-        let validationMsg = validateField(props.field, props.state.current[props.formKey]!.value)
+        let validationMsg = validateField(props.field, props.state.current[props.formKey]!.value, props.state)
         props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
         setError(validationMsg);
     }
@@ -604,7 +605,7 @@ const DateInput = (props: InputFieldProps<string>) => {
                 onFocus: () => setHasFocus(true),
                 onBlur: () => {
                     setHasFocus(false);
-                    setError(validateField(props.field, value));
+                    setError(validateField(props.field, value, props.state));
                 }
             },
         },
@@ -690,7 +691,7 @@ function SelectInput<T, F extends AllSelectFields<T>>(props: InputFieldProps<T, 
         if (selected !== undefined) {
             props.state.current[props.formKey]!.value = initial;
 
-            let validationMsg = validateField(props.field, initial, opts)
+            let validationMsg = validateField(props.field, initial, props.state, opts)
             props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
             setError(validationMsg);
         }
@@ -701,7 +702,7 @@ function SelectInput<T, F extends AllSelectFields<T>>(props: InputFieldProps<T, 
 
     // validates the current value of the field.
     const validate = () => {
-        let validationMsg = validateField(props.field, props.state.current[props.formKey]!.value, options)
+        let validationMsg = validateField(props.field, props.state.current[props.formKey]!.value, props.state, options)
         props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
         setError(validationMsg);
     }
@@ -756,7 +757,7 @@ function SelectInput<T, F extends AllSelectFields<T>>(props: InputFieldProps<T, 
             onFocus={() => setHasFocus(true)}
             onBlur={() => {
                 setHasFocus(false);
-                setError(validateField(props.field, value));
+                setError(validateField(props.field, value, props.state));
             }}
             slotProps={{
                 input: {
