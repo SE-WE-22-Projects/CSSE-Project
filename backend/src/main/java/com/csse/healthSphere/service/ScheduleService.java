@@ -31,6 +31,7 @@ public class ScheduleService {
         Schedule schedule = modelMapper.map(scheduleRequest, Schedule.class);
         Doctor doctor = doctorRepository.findById(scheduleRequest.getDoctorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
+        schedule.setDoctor(doctor);
         schedule.setScheduleId(null);
         return scheduleRepository.save(schedule);
     }

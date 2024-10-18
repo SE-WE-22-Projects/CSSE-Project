@@ -25,7 +25,7 @@ const FormFields = {
 
 const PatientPage = () => {
     return <TablePage
-        disableAdd
+        // disableAdd
         name="Patient" title='Patient Management'
         subtitle='Manager Patient Details'
         columns={GridFields}

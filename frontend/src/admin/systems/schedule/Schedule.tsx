@@ -8,7 +8,7 @@ import { API } from '../../../config';
 const GridFields: GridColDef<Schedule>[] = [
     { field: 'scheduleId', headerName: 'ID', width: 90 },
     { field: 'name', headerName: "Schedule Name", width: 200, flex: 1 },
-    { field: 'doctor', headerName: "Doctor", valueGetter: (e: Doctor) => e.name, width: 200, flex: 1 },
+    { field: 'doctor', headerName: "Doctor", valueGetter: (e: Doctor) => e?.name, width: 200, flex: 1 },
     { field: 'description', headerName: "Description", width: 200, flex: 1 },
     { field: 'startTime', headerName: "Start Time", width: 200, flex: 1 },
     { field: 'endTime', headerName: "End Time", width: 200, flex: 1 },
