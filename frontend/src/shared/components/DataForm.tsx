@@ -1,7 +1,7 @@
 import { Autocomplete, Box, Button, CircularProgress, Stack, StackOwnProps, TextField, TextFieldVariants } from '@mui/material'
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
-import { useEffect, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const numberRegex = /^[+-]?\d+(\.\d+)?$/;
@@ -84,11 +84,11 @@ interface FieldNumber extends FieldBasic<number> {
     max?: number
 }
 
-export type OptionType<T> = { label: string, value: T }[] | T[]
+export type OptionType<T> = { label: string, value: T }
 
 interface FieldSelect<T> extends FieldBasic<T> {
     type: FieldType.Select,
-    values: OptionType<T>
+    values: OptionType<T>[]
 
     /**
      * A function that returns the label for the given option
@@ -133,7 +133,7 @@ interface FieldLoadSelect<T> extends FieldBasic<T> {
      */
     valueFor?: (o: T) => any;
 
-    loader: () => Promise<OptionType<T>>
+    loader: () => Promise<OptionType<T>[]>
 
 
     /**
@@ -213,11 +213,19 @@ export type FieldData<T extends Fields,> = {
     [K in keyof T]: NonNullable<T[K]['__internal']>
 }
 
-type FieldErrors<T extends Fields,> = {
-    [K in keyof T]: string | undefined | null
+
+export type FormState<T extends Fields,> = {
+    [K in keyof T]: {
+        value: NonNullable<T[K]['__internal']>
+        rawValue?: any
+
+        valid: boolean
+    }
 }
 
-const dateFormat = (typ: FieldType) => typ === FieldType.Date ? "YYYY-MM-DD" : typ === FieldType.Time ? "HH:mm:ss" : "YYYY-MM-DD HH:mm:ss";
+
+
+const getDateFormat = (typ: FieldType) => typ === FieldType.Date ? "YYYY-MM-DD" : typ === FieldType.Time ? "HH:mm:ss" : "YYYY-MM-DD HH:mm:ss";
 const dateSeconds = (date: Dayjs) => (date.hour() * 60 + date.minute()) * 60 + date.second();
 
 /**
@@ -226,8 +234,8 @@ const dateSeconds = (date: Dayjs) => (date.hour() * 60 + date.minute()) * 60 + d
  * @param value the current value of the field
  * @returns a string explaining the validation error if one is found. null or undefined otherwise.
  */
-const validateField = (field: FieldBasic<any>, value: any): string | null | undefined => {
-    console.log(`value: '${value}' ${typeof value}`);
+const validateField = (field: FieldBasic<any>, value: any, extra?: any): string | null | undefined => {
+    console.debug(`validate: ${typeof value} '${value}'  as ${FieldType[field.type]}`);
 
     // check if the required field is given.
     if ((value === null || value === undefined || value === "")) {
@@ -239,71 +247,89 @@ const validateField = (field: FieldBasic<any>, value: any): string | null | unde
         return;
     }
 
-    if (field.type === FieldType.Text) {
-        // text length validations.
-        let length = (value as string).length;
-        let minLength = (field as FieldText).minLength || 0;
-        let maxLength = (field as FieldText).maxLength || Infinity;
+    switch (field.type) {
+        case FieldType.Text:
+            // text length validations.
+            let length = (value as string).length;
+            let minLength = (field as FieldText).minLength || 0;
+            let maxLength = (field as FieldText).maxLength || Infinity;
 
-        if (length < minLength) {
-            return `${field.label} must be at least ${minLength} letters.`
-        } else if (length > maxLength) {
-            return `${field.label} must be less than ${maxLength} letters.`
-        }
+            if (length < minLength) {
+                return `${field.label} must be at least ${minLength} letters.`
+            } else if (length > maxLength) {
+                return `${field.label} must be less than ${maxLength} letters.`
+            }
+            break;
 
-    } else if (field.type === FieldType.Email) {
-        // email validation
-        if (!emailRegex.test(value)) {
-            return `Please enter a valid email address`;
-        }
+        case FieldType.Email:
+            // email validation
+            if (!emailRegex.test(value)) {
+                return `Please enter a valid email address`;
+            }
+            break;
 
-    } else if (field.type === FieldType.Phone) {
-        // phone number validation
-        if (!phoneRegex.test(value)) {
-            return `Please enter a valid phone number`;
-        }
-    } else if (field.type === FieldType.Number) {
+        case FieldType.Phone:
+            // phone number validation
+            if (!phoneRegex.test(value)) {
+                return `Please enter a valid phone number`;
+            }
+            break;
 
-        // number validation
-        let numField = field as FieldNumber;
-        let parsed = typeof value === 'number' ? value : parseFloat(value);
+        case FieldType.Number:
+            // number validation
+            let numField = field as FieldNumber;
+            let parsed = typeof value === 'number' ? value : parseFloat(value);
+            let strValue = typeof value === 'string' ? value : parsed.toString();
 
-        if (Number.isNaN(parsed) || !Number.isFinite(parsed)) {
-            return 'Please enter a valid number';
-        } else if (Math.abs(parsed) - Math.round(Math.abs(parsed)) != 0) {
-            return 'Please enter an integer';
-        } else if (!numField.allowNegative && parsed < 0) {
-            return 'Please enter a positive number';
-        } else if (parsed < (numField.min || 0)) {
-            return `${field.label} must be larger than ${numField.min}`;
-        } else if (parsed > (numField.max || Infinity)) {
-            return `${field.label} must be less than ${numField.min}`
-        }
-    } else if (field.type === FieldType.DateTime || field.type === FieldType.Date) {
-        let dateField = field as FieldDateTime | FieldDate;
-        let format = dateFormat(field.type);
-        let date = dayjs(value, format, true);
+            if (Number.isNaN(parsed) || !Number.isFinite(parsed) || !numberRegex.test(strValue)) {
+                return 'Please enter a valid number';
+            } else if (Math.abs(parsed) - Math.round(Math.abs(parsed)) != 0) {
+                return 'Please enter an integer';
+            } else if (!numField.allowNegative && parsed < 0) {
+                return 'Please enter a positive number';
+            } else if (parsed < (numField.min || 0)) {
+                return `${field.label} must be larger than ${numField.min}`;
+            } else if (parsed > (numField.max || Infinity)) {
+                return `${field.label} must be less than ${numField.min}`
+            }
+            break;
 
-        if (!date.isValid()) return "Please select a valid date";
-        else if (dateField.maxDate !== undefined && date.isAfter(dateField.maxDate)) {
-            return `Please select a date before ${dateField.maxDate.format(format)}`
-        } else if (dateField.minDate !== undefined && date.isBefore(dateField.minDate)) {
-            return `Please select a date after ${dateField.minDate.format(format)}`
-        }
-    } else if (field.type === FieldType.Time) {
-        let timeField = field as FieldTime;
-        let format = dateFormat(field.type);
-        let date = dayjs(value, format, true);
+        case FieldType.DateTime:
+        case FieldType.Date:
+            let dateField = field as FieldDateTime | FieldDate;
+            let dateFormat = getDateFormat(field.type);
+            let date = dayjs(value, dateFormat, true);
 
-        if (!date.isValid()) return "Please select a valid time";
-        else if (timeField.minTime && dateSeconds(date) < dateSeconds(timeField.minTime)) {
-            return `Please select a time after ${timeField.minTime.format(format)}`
-        } else if (timeField.maxTime && dateSeconds(date) > dateSeconds(timeField.maxTime)) {
-            return `Please select a time before ${timeField.maxTime.format(format)}`
-        }
+            if (!date.isValid()) return "Please select a valid date";
+            else if (dateField.maxDate !== undefined && date.isAfter(dateField.maxDate)) {
+                return `Please select a date before ${dateField.maxDate.format(dateFormat)}`
+            } else if (dateField.minDate !== undefined && date.isBefore(dateField.minDate)) {
+                return `Please select a date after ${dateField.minDate.format(dateFormat)}`
+            }
+            break
 
+        case FieldType.Time:
+            let timeField = field as FieldTime;
+            let format = getDateFormat(field.type);
+            let time = dayjs(value, format, true);
+
+            if (!time.isValid()) return "Please select a valid time";
+            else if (timeField.minTime && dateSeconds(time) < dateSeconds(timeField.minTime)) {
+                return `Please select a time after ${timeField.minTime.format(format)}`
+            } else if (timeField.maxTime && dateSeconds(time) > dateSeconds(timeField.maxTime)) {
+                return `Please select a time before ${timeField.maxTime.format(format)}`
+            }
+            break;
+        case FieldType.Select:
+            if (extra?.find !== undefined) {
+                let selected = extra.find((v: any) => v.value === value);
+                console.log(selected);
+            }
+
+            break;
+        default:
+            throw "Unsupported form field type"
     }
-
 
     // call custom validators if given.
     if (field.validator !== undefined) {
@@ -313,41 +339,35 @@ const validateField = (field: FieldBasic<any>, value: any): string | null | unde
 
 
 function DataForm<T extends Fields,>(props: FormProps<T>) {
-    const [data, setData] = useState<Partial<FieldData<T>>>(props.initial ?? {});
-    const [errors, setErrors] = useState<Partial<FieldErrors<T>>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [revalidate, setRevalidate] = useState(0);
 
+    const formState = useRef<Partial<FormState<T>>>({});
 
-    const validate = () => {
+    const submit = async () => {
         let canSubmit = true;
 
+        let data = {} as any;
+
         // validate all fields
-        let newErrors = {} as any;
         Object.entries(props.fields).forEach((f) => {
-            let error = validateField(f[1], data[f[0]]);
-            newErrors[f[0]] = error;
+            let error = validateField(f[1], formState.current[f[0]]?.value);
             if (error !== null && error !== undefined) {
                 canSubmit = false;
             }
+
+            data[f[0]] = formState.current[f[0]]?.value;
         });
-        setErrors(newErrors);
+        console.debug("Form state is", formState.current);
 
-        return canSubmit;
 
-    }
+        if (!canSubmit) {
+            setRevalidate(revalidate + 1);
+            return;
+        }
 
-    useEffect(() => {
-        if (props.initial === undefined) return;
-        validate();
-    }, [props.initial]);
 
-    const submit = async () => {
-        let canSubmit = validate();
-
-        console.log(data);
-
-        if (canSubmit && props.onSubmit !== undefined) {
-
+        if (props.onSubmit !== undefined) {
             let maybePromise = props.onSubmit(data as FieldData<T>);
             if (maybePromise.then !== undefined) {
                 setIsSubmitting(true);
@@ -368,37 +388,34 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
                 let key = f[0];
                 let field = f[1];
 
-                const fieldProps = {
+                const fieldProps: InputFieldProps<any> = {
                     field: field,
-                    value: data[key] as any,
-                    error: errors[key],
-                    setError: (v: string | undefined | null) => {
-                        let newErrors = { ...errors };
-                        // @ts-expect-error
-                        newErrors[key] = v;
-                        setErrors(newErrors);
+                    formKey: key,
+                    state: formState,
+
+                    initial: props.initial?.[key],
+                    hasInitial: props.initial !== undefined,
+                    revalidate: revalidate,
+
+                    inputProps: {
+                        label: field.label,
+                        disabled: isSubmitting,
+                        fullWidth: props.fullWidth,
+                        required: !field.notRequired,
+                        variant: 'outlined'
                     },
-                    onChange: (v: any) => {
-                        let newData = { ...data }
-                        // @ts-expect-error
-                        newData[key] = v;
-                        setData(newData);
-                    },
-                    disabled: isSubmitting,
-                    fullWidth: props.fullWidth
                 }
 
                 if (field.type === FieldType.Date || field.type === FieldType.Time || field.type == FieldType.DateTime) {
-                    return <DateInput key={idx} {...fieldProps} />
+                    return <DateInput key={idx} {...fieldProps as InputFieldProps<string>} />
                 } else if (field.type === FieldType.Number) {
-                    return <NumberInput key={idx} {...fieldProps} />
+                    return <NumberInput key={idx} {...fieldProps as InputFieldProps<number>} />
                 } else if (field.type === FieldType.Select) {
-                    return <SelectInput key={idx} {...fieldProps} />
-                    // } else if (field.type === FieldType.Text && (field as FieldText).textArea) {
-                    // return <TextAreaInput key={idx} {...fieldProps} />
+                    return <SelectInput key={idx} {...fieldProps as InputFieldProps<any>} />
+                } else if (field.type === FieldType.Text) {
+                    return <StringInput key={idx} {...fieldProps as InputFieldProps<string>} />
                 }
 
-                return <StringInput key={idx} {...fieldProps} />
             }
             )}
 
@@ -412,123 +429,181 @@ function DataForm<T extends Fields,>(props: FormProps<T>) {
     )
 }
 
-type InputProps<T> = {
-    value: T | undefined,
-    onChange: (v: T | undefined) => any,
-    error: string | null | undefined,
-    setError: (error: string | null | undefined) => void,
-    field: AllFields,
-    disabled: boolean,
-    fullWidth?: boolean
+type InputFieldProps<T, F extends AllFields = any, V extends Fields = Fields, K extends keyof V = any> = {
+    formKey: K
+    field: F,
+    initial?: T
+    hasInitial: boolean
+    state: MutableRefObject<Partial<FormState<V>>>
+
+    revalidate: number
+
+    inputProps: MUIInputProps
+}
+
+type MUIInputProps = {
+    label: string,
+    disabled?: boolean,
+    required?: boolean,
+    variant?: TextFieldVariants
+    fullWidth?: boolean,
 }
 
 /**
  * An input that takes a string value.
  */
-const StringInput = ({ value, onChange, field, fullWidth, error, setError, disabled }: InputProps<string>) => {
+const StringInput = (props: InputFieldProps<string, FieldText> & { parser?: (v?: string) => any }) => {
+    const [value, setValue] = useState(props.hasInitial ? props.initial : undefined);
+    const [error, setError] = useState<string | null | undefined>();
     const [hasFocus, setHasFocus] = useState(false);
 
+    // validates the current value of the field.
+    const validate = () => {
+        let validationMsg = validateField(props.field, value)
+        props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
+        setError(validationMsg);
+    }
+
+    // copy the initial value to the state and validate it.
+    useEffect(() => {
+        props.state.current[props.formKey] = {
+            value: props.hasInitial ? props.initial : undefined,
+            valid: false
+        };
+
+        if (props.hasInitial) validate();
+    }, [props.initial]);
+
+    // revalidate the input value
+    useEffect(() => {
+        if (props.revalidate !== 0) validate();
+    }, [props.revalidate]);
+
+
+
     return <TextField
-        label={field.label}
-        variant="outlined"
-        required={!field.notRequired}
-        helperText={(!hasFocus && error) ? error : field.helper}
+        {...props.inputProps}
+        helperText={(!hasFocus && error) ? error : props.field.helper}
         error={!!error && !hasFocus}
         value={value ?? ""}
-        onChange={(v) => onChange(v.target.value)}
-        onFocus={() => setHasFocus(true)}
-        onBlur={() => {
-            setHasFocus(false);
-            setError(validateField(field, value));
+        onChange={(v) => {
+            let data = v.target.value;
+            setValue(data);
+
+            if (props.parser) data = props.parser(data);
+            props.state.current[props.formKey] = {
+                value: data,
+                valid: false
+            };
+
         }}
-        multiline={(field as FieldText).textArea}
-        fullWidth={fullWidth}
-        disabled={disabled} />
+        onFocus={() => setHasFocus(true)}
+
+        onBlur={() => {
+            validate();
+            setHasFocus(false);
+        }}
+
+        multiline={props.field.textArea}
+
+    />
 }
 
 
 /**
  * An input field that takes a number as the input
  */
-const NumberInput = ({ error, setError, value, onChange, field, fullWidth, disabled }: InputProps<number>) => {
-    const [data, setData] = useState<string>();
-
-    // sync the value with the state of data
-    useEffect(() => {
-        if (value === undefined || isNaN(value)) return;
-        if (parseFloat(data ?? "invalid") != value) {
-            setData(value.toString());
-        }
-    }, [[value]])
-
-    return <StringInput value={data} onChange={(v) => {
-        setData(data);
-
-        // try parse the number and call the onChange handler with the updated state
+const NumberInput = (props: InputFieldProps<number>) => {
+    return <StringInput  {...props as InputFieldProps<string>} parser={(v) => {
+        // try to parse the number
         let num: number
         if (v === undefined || !numberRegex.test(v)) {
             num = NaN;
         } else {
             num = Number.parseFloat(v);
         }
-
-        onChange(num);
-    }} field={field} fullWidth={fullWidth} error={error} setError={setError} disabled={disabled} />
+        return num;
+    }} />
 }
 
 /**
  * An input field that handles date/time based selections.
  */
-const DateInput = ({ value, onChange, field, fullWidth, setError, error, disabled }: InputProps<string>) => {
+const DateInput = (props: InputFieldProps<string>) => {
+    // select date format based on field type
+    const format = getDateFormat(props.field.type);
+
+    const [value, setValue] = useState<Dayjs | null>(props.hasInitial ? dayjs(props.initial, format, true) : null);
+    const [error, setError] = useState<string | null | undefined>();
     const [hasFocus, setHasFocus] = useState(false);
 
-    // select date format based on field type
-    const format = dateFormat(field.type);
 
-    // parse the existing value
-    let date = dayjs(value, format);
+
+    // validates the current value of the field.
+    const validate = () => {
+        let validationMsg = validateField(props.field, props.state.current[props.formKey]!.value)
+        props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
+        setError(validationMsg);
+    }
+
+    // copy the initial value to the state and validate it.
+    useEffect(() => {
+        props.state.current[props.formKey] = {
+            value: props.hasInitial ? props.initial : undefined,
+            valid: false
+        };
+
+        if (props.hasInitial) validate();
+    }, [props.initial]);
+
+    // revalidate the input value
+    useEffect(() => {
+        if (props.revalidate !== 0) validate();
+    }, [props.revalidate]);
 
 
     // properties to pass to the date input component
-    const props = {
-        label: field.label,
+    const inputProps = {
+        ...props.inputProps,
         slotProps: {
             textField: {
-                helperText: !hasFocus && error ? error : field.helper,
+                ...props.inputProps,
+                helperText: !hasFocus && error ? error : props.field.helper,
                 error: !hasFocus && !!error,
-                required: !field.notRequired,
-                variant: 'outlined' as TextFieldVariants,
-                fullWidth: fullWidth,
                 onFocus: () => setHasFocus(true),
                 onBlur: () => {
                     setHasFocus(false);
-                    setError(validateField(field, value));
+                    setError(validateField(props.field, value));
                 }
             },
         },
-        value: date,
+        value: value,
 
         onChange: (v: Dayjs | null) => {
-            let value = v?.format(format) ?? "";
-            onChange(value);
-            setError(validateField(field, value));
+            setValue(v);
+
+            props.state.current[props.formKey] = {
+                value: v != null ? v.format(format) : undefined,
+                valid: false
+            };
+
+            validate();
         },
-        disabled: disabled
     }
 
     // create mui date picker based on field type
-    if (field.type === FieldType.Date) {
-        let dateField = field as FieldDate;
-        return <DatePicker {...props} minDate={dateField.minDate} maxDate={dateField.maxDate} />
-    } else if (field.type === FieldType.Time) {
-        let timeField = field as FieldTime;
-        return <TimePicker {...props} minTime={timeField.minTime} maxTime={timeField.maxTime} />
+    if (props.field.type === FieldType.Date) {
+        let dateField = props.field as FieldDate;
+        return <DatePicker {...inputProps} minDate={dateField.minDate} maxDate={dateField.maxDate} />
+    } else if (props.field.type === FieldType.Time) {
+        let timeField = props.field as FieldTime;
+        return <TimePicker {...inputProps} minTime={timeField.minTime} maxTime={timeField.maxTime} />
     }
-    let dateField = field as FieldDateTime;
-    return <DateTimePicker {...props} minDate={dateField.minDate} maxDate={dateField.maxDate} />
+    let dateField = props.field as FieldDateTime;
+    return <DateTimePicker {...inputProps} minDate={dateField.minDate} maxDate={dateField.maxDate} />
 }
 
-function getOptions<T>(field: FieldSelect<T>, check: boolean, loadValues?: OptionType<T>) {
+function getOptions<T>(field: FieldSelect<T>, check: boolean, loadValues?: OptionType<T>[]) {
     let labels = {} as any;
     let values = {} as any;
 
@@ -559,52 +634,80 @@ function getOptions<T>(field: FieldSelect<T>, check: boolean, loadValues?: Optio
     })
 };
 
-function SelectInput<T>({ value, onChange, field, fullWidth, setError, error, disabled }: InputProps<T>) {
-    const shouldLoad = (field as FieldLoadSelect<T>).loader !== undefined;
+function SelectInput<T>(props: InputFieldProps<T>) {
+    const shouldLoad = (props.field as FieldLoadSelect<T>).loader !== undefined;
 
-    const [open, setOpen] = useState(false);
     const [hasFocus, setHasFocus] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [options, setOptions] = useState(shouldLoad ? [] : (field as FieldSelect<T>).options);
+    const [value, setValue] = useState<OptionType<T> | null>(null);
+    const [error, setError] = useState<string | null | undefined>();
+
+    const [options, setOptions] = useState(shouldLoad ? [] : (props.field as FieldSelect<T>).options);
+    const [loading, setLoading] = useState(shouldLoad);
 
 
-    const handleOpen = () => {
-        setOpen(true);
+    // validates the current value of the field.
+    const validate = () => {
+        let validationMsg = validateField(props.field, props.state.current[props.formKey]!.value, options)
+        props.state.current[props.formKey]!.valid = validationMsg === undefined || validationMsg === null;
+        setError(validationMsg);
+    }
 
+    // copy the initial value to the state and validate it.
+    useEffect(() => {
+        props.state.current[props.formKey] = {
+            value: props.hasInitial ? props.initial : undefined,
+            valid: false
+        };
+
+        if (props.hasInitial && !loading) {
+            const selected = options.find((v) => v.value === props.initial);
+            setValue(selected ?? null);
+            validate();
+        }
+    }, [props.initial]);
+
+    // revalidate the input value on form revalidate or option load complete
+    useEffect(() => {
+        if (props.revalidate !== 0 || (shouldLoad && !loading && props.hasInitial)) {
+            validate();
+        }
+    }, [props.revalidate, loading]);
+
+    useEffect(() => {
         if (!shouldLoad) return;
 
-        setOptions([]);
         (async () => {
-            const select = field as FieldLoadSelect<T>;
+            const select = props.field as FieldLoadSelect<T>;
             setLoading(true);
-            const data = getOptions(select as any, true, await select.loader())
+            const data = getOptions(select as any, true, await select.loader());
+
+            if (props.hasInitial) {
+                const selected = data.find((v) => v.value === props.initial);
+                setValue(selected ?? null);
+                validate();
+            }
+
             setLoading(false);
             setOptions(data);
         })();
-    };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const selected = (!!value ? options.find((v) => v.value == value) : null) ?? null;
+    }, [props.field])
 
     return <Autocomplete
         disablePortal
-        open={open}
-        onOpen={handleOpen}
-        onClose={handleClose}
         options={options}
-        disabled={disabled}
-        renderInput={(params) => <TextField {...params} label={field.label}
-            variant="outlined"
-            required={!field.notRequired}
-            helperText={(!hasFocus && error) ? error : field.helper}
+        {...props.inputProps}
+        disabled={props.inputProps.disabled || loading}
+        renderInput={(params) => <TextField
+            {...props.inputProps}
+            {...params}
+
+            helperText={(!hasFocus && error) ? error : props.field.helper}
             error={!!error && !hasFocus}
             onFocus={() => setHasFocus(true)}
             onBlur={() => {
                 setHasFocus(false);
-                setError(validateField(field, value));
+                setError(validateField(props.field, value));
             }}
             slotProps={{
                 input: {
@@ -618,10 +721,19 @@ function SelectInput<T>({ value, onChange, field, fullWidth, setError, error, di
                 },
             }}
         />}
-        value={selected}
-        onChange={(_, v) => onChange(v?.value)
+        onChange={
+            (_, v) => {
+                props.state.current[props.formKey] = {
+                    value: v?.value,
+                    valid: false
+                };
+                setValue(v);
+
+                validate();
+            }
         }
-        fullWidth={fullWidth}
+        getOptionLabel={(v) => v.label}
+        value={value}
     />
 }
 
