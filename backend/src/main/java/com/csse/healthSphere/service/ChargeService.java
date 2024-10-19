@@ -23,7 +23,9 @@ public class ChargeService {
      * @return the created charge
      */
     public Charge createCharge(ChargeRequest chargeRequest) {
-        return null;
+        Charge charge = modelMapper.map(chargeRequest, Charge.class);
+        charge.setChargeId(null);
+        return chargeRepository.save(charge);
     }
 
     /**
@@ -32,7 +34,7 @@ public class ChargeService {
      * @return a list of charges
      */
     public List<Charge> getAllCharges() {
-        return List.of();
+        return chargeRepository.findAll();
     }
 
     /**
@@ -43,7 +45,7 @@ public class ChargeService {
      * @throws ResourceNotFoundException if the charge does not exist
      */
     public Charge getChargeById(Long id) {
-        return null;
+        return chargeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Charge not found"));
     }
 
     /**
@@ -54,7 +56,9 @@ public class ChargeService {
      * @return the updated charge
      */
     public Charge updateCharge(Long id, ChargeRequest chargeRequest) {
-        return null;
+        Charge charge = chargeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Charge not found"));
+        charge.setAmount(chargeRequest.getAmount());
+        return chargeRepository.save(charge);
     }
 
     /**
@@ -63,6 +67,7 @@ public class ChargeService {
      * @param id the id of the charge
      */
     public void deleteCharge(Long id) {
-
+        Charge charge = chargeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Charge not found"));
+        chargeRepository.delete(charge);
     }
 }
