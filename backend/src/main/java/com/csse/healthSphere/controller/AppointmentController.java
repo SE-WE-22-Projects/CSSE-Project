@@ -1,6 +1,8 @@
 package com.csse.healthSphere.controller;
 
+import com.csse.healthSphere.dto.AppointmentCreation;
 import com.csse.healthSphere.dto.AppointmentRequest;
+import com.csse.healthSphere.dto.AuthUser;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
 import com.csse.healthSphere.model.Appointment;
 import com.csse.healthSphere.service.AppointmentService;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/api/appointment")
@@ -83,5 +86,15 @@ public class AppointmentController {
     ){
         List<Appointment> appointmentList = appointmentService.findAppointmentsByDoctor(doctorId);
         return new ResponseEntity<>(appointmentList, HttpStatus.OK);
+    }
+
+    @PostMapping("/patient")
+    public ResponseEntity<Appointment> createAppointmentByPatient(
+            @RequestBody AppointmentCreation appointmentRequest,
+            Principal principal
+    ) {
+        AuthUser authUser = (AuthUser)principal;
+        Appointment createdAppointment = appointmentService.createAppointmentByPatient(appointmentRequest, authUser);
+        return new ResponseEntity<>(createdAppointment, HttpStatus.CREATED);
     }
 }

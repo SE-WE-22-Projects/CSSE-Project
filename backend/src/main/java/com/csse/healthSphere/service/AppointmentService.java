@@ -1,6 +1,8 @@
 package com.csse.healthSphere.service;
 
+import com.csse.healthSphere.dto.AppointmentCreation;
 import com.csse.healthSphere.dto.AppointmentRequest;
+import com.csse.healthSphere.dto.AuthUser;
 import com.csse.healthSphere.enums.AppointmentStatus;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
 import com.csse.healthSphere.model.Appointment;
@@ -113,5 +115,26 @@ public class AppointmentService {
     public List<Appointment> findAppointmentsByDoctor(Long doctorId) {
         Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
         return appointmentRepository.findByScheduleDoctor(doctor);
+    }
+
+    /**
+     *
+     * @param appointmentRequest
+     * @param authUser
+     * @return
+     */
+    public Appointment createAppointmentByPatient(AppointmentCreation appointmentRequest, AuthUser authUser) {
+        Appointment appointment = modelMapper.map(appointmentRequest, Appointment.class);
+        // fetch patient & check existence
+        Patient patient = patientRepository.findById(authUser.getPerson().getPersonId())
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
+
+        Schedule schedule = scheduleRepository.findById(appointmentRequest.getScheduleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
+
+        appointment.setPatient(patient);
+        appointment.setStatus(AppointmentStatus.PENDING);
+        appointment.setSchedule(schedule);
+        return appointmentRepository.save(appointment);
     }
 }
