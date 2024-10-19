@@ -8,8 +8,23 @@ import MedicalServicePage from "./pages/admin/MedicalService";
 import SchedulePage from "./pages/admin/Schedule";
 import AppointmentPage from "./pages/admin/Appointment";
 import Login from "../user/Login";
+import PatientList from "./pages/staff/patients/List";
+import PatientDetails from "./pages/staff/patients/Details";
 
 export const DashboardRoutes: Route[] = [
+    {
+        element: <PatientList />,
+        path: "patients",
+        display: {
+            title: "Patient Details",
+            icon: <Hotel />,
+            admin: false
+        },
+    },
+    {
+        path: "patients/:id",
+        element: <PatientDetails />
+    },
     {
         element: <WardPage />,
         path: "ward",
