@@ -6,6 +6,7 @@ import MenuContent from './MenuContent';
 import SiteLogo from '../../../components/Logo';
 import { SystemRoutes } from '../Dashboard';
 import UserCard from './UserCard';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -34,9 +35,11 @@ export default function SideMenu({ routes }: { routes: SystemRoutes }) {
         },
       }}
     >
-      <Box sx={{ py: "12px", px: '12px' }}>
-        <SiteLogo />
-      </Box>
+      <Link to="/">
+        <Box sx={{ py: "12px", px: '12px' }}>
+          <SiteLogo />
+        </Box>
+      </Link>
 
       <Divider />
 

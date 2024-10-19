@@ -37,7 +37,7 @@ export default function Login() {
     useEffect(() => {
         if (user.loggedIn) {
             if (user.user?.isStaff) {
-                navigate('/admin')
+                navigate('/dashboard')
             } else {
                 navigate('/')
             }

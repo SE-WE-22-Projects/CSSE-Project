@@ -10,7 +10,7 @@ const UserCard = ({ small }: { small?: boolean }) => {
 
     useEffect(() => {
         if (!user.loggedIn || !user.user?.isStaff) {
-            navigate("/login");
+            navigate("/");
         }
     }, [user])
 

@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import SiteLogo from '../../../components/Logo';
 import ColorModeIconDropdown from '../../../theme/ColorModeIconDropdown';
 import { useUser } from '../../../components/User';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserCard from '../../../admin/components/dashboard/UserCard';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -73,12 +73,16 @@ export default function AppAppBar() {
             {
               user.loggedIn ? <UserCard small /> :
                 <>
-                  <Button color="primary" variant="text" size="small">
-                    Sign in
-                  </Button>
-                  <Button color="primary" variant="contained" size="small">
-                    Sign up
-                  </Button>
+                  <Link to="/login">
+                    <Button color="primary" variant="text" size="small">
+                      Sign in
+                    </Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button color="primary" variant="contained" size="small">
+                      Sign up
+                    </Button>
+                  </Link>
                 </>
             }
             <ColorModeIconDropdown />
