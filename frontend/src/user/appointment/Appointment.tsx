@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import AppAppBar from '../components/landing/AppAppBar'
-import { Box, Typography } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { PageTitle } from '../../components/Logo'
 import AppointmentForm from './AppointmentForm'
-import { AppointmentRequest, Doctor, Schedule } from '../../api'
+import { Doctor, Schedule } from '../../api'
 import { API } from '../../config'
 import StyledDataGrid from '../../components/StyledDataGrid'
 import { GridColDef } from '@mui/x-data-grid'
+import { enqueueSnackbar } from 'notistack'
 
 
 const Appointment = () => {
@@ -58,15 +59,30 @@ const Appointment = () => {
     fetchDoctorList();
   }, []);
 
-  const handleSubmit = async (data: {date:string})=>{
-    
+  const handleSubmit = async (data: { date: string }) => {
+    try {
+      await API.createAppointmentByPatient({ ...data, scheduleId: selectedSchedule?.scheduleId });
+      setShowDoctorList(true);
+      setHideAppointmentForm(true);
+      enqueueSnackbar("Appointment Created Successfully");
+    }
+    catch (e) {
+      enqueueSnackbar("Failed to create appointment");
+    }
+  }
+
+  const reset = () => {
+    setSelectedDoctorId(undefined);
+    setSelectedSchedule(undefined);
+    setShowDoctorList(true);
+    setHideAppointmentForm(true);
   }
   return (
     <>
       <AppAppBar />
       <Box marginTop={20} mx={10} alignItems={"center"}>
-        <Box>
-          <PageTitle>Appointment</PageTitle>
+        <Box justifyContent={"center"}>
+          <PageTitle textAlign="center">Create Appointment</PageTitle>
           {
             hideAppointmentForm ?
               showDoctorList ?
@@ -92,6 +108,10 @@ const Appointment = () => {
               :
               <AppointmentForm handleSubmit={handleSubmit} selectedSchedule={selectedSchedule} />
           }
+          <Box my={5} display={"flex"}>
+            <Box flexGrow={1}></Box>
+            <Button variant="contained" onClick={reset}>Reset</Button>
+          </Box>
         </Box>
       </Box>
     </>

@@ -9,6 +9,7 @@ import com.csse.healthSphere.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -93,7 +94,7 @@ public class AppointmentController {
             @RequestBody AppointmentCreation appointmentRequest,
             Principal principal
     ) {
-        AuthUser authUser = (AuthUser)principal;
+        var authUser = (AuthUser)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
         Appointment createdAppointment = appointmentService.createAppointmentByPatient(appointmentRequest, authUser);
         return new ResponseEntity<>(createdAppointment, HttpStatus.CREATED);
     }

@@ -22,8 +22,8 @@ function sleep(duration: number): Promise<void> {
 
 interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     name: string
-    title: string
-    subtitle: string
+    title?: string
+    subtitle?: string
 
     readonly?: false
 
@@ -42,8 +42,8 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
 
 interface ReadOnlyTablePageProps<T extends GridValidRowModel> {
     name: string
-    title: string
-    subtitle: string
+    title?: string
+    subtitle?: string
 
     readonly: true
 
@@ -177,11 +177,14 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
 
     return (
         <>
-            <Box sx={{ pb: 2 }}>
-                <PageTitle >{props.title}</PageTitle>
-                <PageSubtitle>{props.subtitle}</PageSubtitle>
-                <Divider />
-            </Box>
+            {props.title || props.subtitle ?
+                <Box sx={{ pb: 2 }}>
+                    {props.title ? <PageTitle >{props.title}</PageTitle> : null}
+                    {props.subtitle ? <PageSubtitle>{props.subtitle}</PageSubtitle> : null}
+                    <Divider />
+                </Box>
+                : null}
+
 
             {editorShown && !props.readonly ?
                 <Paper elevation={2} sx={{ p: "12px" }}>

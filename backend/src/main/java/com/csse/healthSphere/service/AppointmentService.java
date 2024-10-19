@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -132,9 +133,15 @@ public class AppointmentService {
         Schedule schedule = scheduleRepository.findById(appointmentRequest.getScheduleId())
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
 
+        // get max queue number
+        int queueNo = 1 + appointmentRepository.findMaxQueueNoByScheduleAndDate(appointmentRequest.getScheduleId(),appointmentRequest.getDate());
+        // set time
+        LocalTime time = schedule.getStartTime().plusMinutes((long) queueNo*15);
         appointment.setPatient(patient);
         appointment.setStatus(AppointmentStatus.PENDING);
         appointment.setSchedule(schedule);
+        appointment.setQueueNo(queueNo);
+        appointment.setTime(time);
         return appointmentRepository.save(appointment);
     }
 }

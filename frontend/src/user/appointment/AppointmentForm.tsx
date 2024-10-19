@@ -1,6 +1,5 @@
 import Paper from '@mui/material/Paper'
-import React from 'react'
-import DataForm, { Field, FieldData } from '../../components/DataForm';
+import DataForm, { Field } from '../../components/DataForm';
 import dayjs from 'dayjs';
 import { Schedule, ScheduleRequestDayEnum } from '../../api';
 
