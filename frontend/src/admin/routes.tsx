@@ -1,5 +1,5 @@
 import { Dashboard, Route } from "./components/Dashboard";
-import { Apartment, BookmarkAdd, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
+import { Apartment, Badge, BookmarkAdd, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
 import WardPage from "./pages/admin/Ward";
 import DepartmentPage from "./pages/admin/Department";
 import PatientPage from "./pages/admin/Patient";
@@ -10,6 +10,7 @@ import AppointmentPage from "./pages/admin/Appointment";
 import Login from "../user/Login";
 import PatientList from "./pages/staff/patients/List";
 import PatientDetails from "./pages/staff/patients/Details";
+import WardAllocation from "./pages/admin/WardAllocation";
 
 export const DashboardRoutes: Route[] = [
     {
@@ -76,6 +77,15 @@ export const DashboardRoutes: Route[] = [
         display: {
             title: "Schedule",
             icon: <DateRange />,
+            admin: true
+        }
+    },
+    {
+        element: <WardAllocation />,
+        path: "allocation",
+        display: {
+            title: "Ward Allocation",
+            icon: <Badge />,
             admin: true
         }
     },

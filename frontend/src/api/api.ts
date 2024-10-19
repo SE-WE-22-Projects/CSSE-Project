@@ -1286,6 +1286,19 @@ export interface Ward {
 /**
  * 
  * @export
+ * @interface WardAllocation
+ */
+export interface WardAllocation {
+    /**
+     * 
+     * @type {number}
+     * @memberof WardAllocation
+     */
+    'wardId'?: number;
+}
+/**
+ * 
+ * @export
  * @interface WardRequest
  */
 export interface WardRequest {
@@ -1315,6 +1328,46 @@ export interface WardRequest {
  */
 export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary PUT api/doctor/ward/{doctorId}
+         * @param {number} doctorId 
+         * @param {WardAllocation} wardAllocation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        allocateWard: async (doctorId: number, wardAllocation: WardAllocation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'doctorId' is not null or undefined
+            assertParamExists('allocateWard', 'doctorId', doctorId)
+            // verify required parameter 'wardAllocation' is not null or undefined
+            assertParamExists('allocateWard', 'wardAllocation', wardAllocation)
+            const localVarPath = `/api/doctor/ward/{doctorId}`
+                .replace(`{${"doctorId"}}`, encodeURIComponent(String(doctorId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(wardAllocation, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary POST api/admission
@@ -2686,40 +2739,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getAdmissionById', 'id', id)
             const localVarPath = `/api/admission/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary GET api/admission/patient/{id}
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAdmissionByPatientId: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getAdmissionByPatientId', 'id', id)
-            const localVarPath = `/api/admission/patient/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4343,6 +4362,20 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary PUT api/doctor/ward/{doctorId}
+         * @param {number} doctorId 
+         * @param {WardAllocation} wardAllocation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async allocateWard(doctorId: number, wardAllocation: WardAllocation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Doctor>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.allocateWard(doctorId, wardAllocation, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.allocateWard']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary POST api/admission
          * @param {AdmissionRequest} admissionRequest 
          * @param {*} [options] Override http request option.
@@ -4860,19 +4893,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAdmissionById(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getAdmissionById']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary GET api/admission/patient/{id}
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAdmissionByPatientId(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Admission>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAdmissionByPatientId(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.getAdmissionByPatientId']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5483,6 +5503,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @summary PUT api/doctor/ward/{doctorId}
+         * @param {number} doctorId 
+         * @param {WardAllocation} wardAllocation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        allocateWard(doctorId: number, wardAllocation: WardAllocation, options?: any): AxiosPromise<Doctor> {
+            return localVarFp.allocateWard(doctorId, wardAllocation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary POST api/admission
          * @param {AdmissionRequest} admissionRequest 
          * @param {*} [options] Override http request option.
@@ -5881,16 +5912,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         getAdmissionById(id: number, options?: any): AxiosPromise<Admission> {
             return localVarFp.getAdmissionById(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary GET api/admission/patient/{id}
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAdmissionByPatientId(id: number, options?: any): AxiosPromise<Array<Admission>> {
-            return localVarFp.getAdmissionByPatientId(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6360,6 +6381,19 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @summary PUT api/doctor/ward/{doctorId}
+     * @param {number} doctorId 
+     * @param {WardAllocation} wardAllocation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public allocateWard(doctorId: number, wardAllocation: WardAllocation, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).allocateWard(doctorId, wardAllocation, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary POST api/admission
@@ -6839,18 +6873,6 @@ export class DefaultApi extends BaseAPI {
      */
     public getAdmissionById(id: number, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).getAdmissionById(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary GET api/admission/patient/{id}
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public getAdmissionByPatientId(id: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getAdmissionByPatientId(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

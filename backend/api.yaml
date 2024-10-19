@@ -239,6 +239,30 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/Doctor"
+  /api/doctor/ward/{doctorId}:
+    put:
+      summary: "PUT api/doctor/ward/{doctorId}"
+      operationId: "allocateWard"
+      parameters:
+        - name: "doctorId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WardAllocation"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Doctor"
   /api/doctor:
     post:
       summary: "POST api/doctor"
@@ -885,26 +909,6 @@ paths:
     get:
       summary: "GET api/admission"
       operationId: "getAllAdmissions"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Admission"
-  /api/admission/patient/{id}:
-    get:
-      summary: "GET api/admission/patient/{id}"
-      operationId: "getAdmissionByPatientId"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
       responses:
         "200":
           description: "OK"
@@ -1735,6 +1739,12 @@ components:
           type: "string"
         password:
           type: "string"
+    WardAllocation:
+      type: "object"
+      properties:
+        wardId:
+          type: "integer"
+          format: "int64"
     PatientRequest:
       type: "object"
       properties:
