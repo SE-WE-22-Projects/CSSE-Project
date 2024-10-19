@@ -11,7 +11,7 @@ import Pricing from './components/landing/Pricing';
 
 export default function LandingPage() {
   return <>
-    <AppAppBar />
+    <AppAppBar isHome />
     <Hero />
     <div>
       <LogoCollection />

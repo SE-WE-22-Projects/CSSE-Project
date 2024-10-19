@@ -21,9 +21,9 @@ export default function MenuContent({ routes }: { routes: SystemRoutes }) {
   let location = useLocation();
 
   return (
-    <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
+    <Stack sx={{ flexGrow: 1, p: 1 }}>
       <List dense>
-        {routes.routes.map((item, index) => {
+        {routes.routes.filter(r => !r.display?.admin).map((item, index) => {
           const path = `/${routes.basePath}/${item.path}`
           return <Link key={index} to={path} style={{ textDecoration: "none", color: "unset" }}>
             <ListItem disablePadding sx={{ display: 'block' }}>
@@ -35,6 +35,23 @@ export default function MenuContent({ routes }: { routes: SystemRoutes }) {
           </Link>
         })}
       </List>
+
+      <List dense>
+        <ListItemText>Admin</ListItemText>
+        {routes.routes.filter(r => r.display?.admin).map((item, index) => {
+          const path = `/${routes.basePath}/${item.path}`
+          return <Link key={index} to={path} style={{ textDecoration: "none", color: "unset" }}>
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton selected={location.pathname.startsWith(path)}>
+                <ListItemIcon>{item.display?.icon}</ListItemIcon>
+                <ListItemText primary={item.display?.title} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        })}
+      </List>
+
+      <ListItemText sx={{ flexGrow: 1 }} />
 
       <List dense>
         {secondaryListItems.map((item, index) => (

@@ -53,18 +53,24 @@ interface FieldDate extends FieldBasic<string> {
     type: FieldType.Date,
     maxDate?: Dayjs
     minDate?: Dayjs
+    disableDate?: (day: Dayjs) => boolean
+
 }
 
 interface FieldTime extends FieldBasic<string> {
     type: FieldType.Time,
     maxTime?: Dayjs
     minTime?: Dayjs
+    disableTime?: (day: Dayjs) => boolean
+
 }
 
 interface FieldDateTime extends FieldBasic<string> {
     type: FieldType.DateTime,
     maxDate?: Dayjs
     minDate?: Dayjs
+    disableDate?: (day: Dayjs) => boolean
+    disableTime?: (day: Dayjs) => boolean
 }
 
 interface FieldText extends FieldBasic<string> {
@@ -627,13 +633,16 @@ const DateInput = (props: InputFieldProps<string>) => {
     // create mui date picker based on field type
     if (props.field.type === FieldType.Date) {
         let dateField = props.field as FieldDate;
-        return <DatePicker {...inputProps} minDate={dateField.minDate} maxDate={dateField.maxDate} />
+        return <DatePicker {...inputProps} minDate={dateField.minDate} maxDate={dateField.maxDate}
+            shouldDisableDate={dateField.disableDate} />
     } else if (props.field.type === FieldType.Time) {
         let timeField = props.field as FieldTime;
-        return <TimePicker {...inputProps} minTime={timeField.minTime} maxTime={timeField.maxTime} />
+        return <TimePicker {...inputProps} minTime={timeField.minTime} maxTime={timeField.maxTime}
+            shouldDisableTime={timeField.disableTime} />
     }
     let dateField = props.field as FieldDateTime;
-    return <DateTimePicker {...inputProps} minDate={dateField.minDate} maxDate={dateField.maxDate} />
+    return <DateTimePicker {...inputProps} minDate={dateField.minDate} maxDate={dateField.maxDate}
+        shouldDisableDate={dateField.disableDate} shouldDisableTime={dateField.disableTime} />
 }
 
 function getOptions<T, F extends AllSelectFields<T>>(field: F, check: boolean, loadValues?: OptionType<T>[]) {

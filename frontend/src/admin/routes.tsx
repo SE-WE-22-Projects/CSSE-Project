@@ -1,12 +1,12 @@
 import { Dashboard, Route } from "./components/Dashboard";
 import { Apartment, BookmarkAdd, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
-import WardPage from "./systems/ward/Ward";
-import DepartmentPage from "./systems/department/Department";
-import PatientPage from "./systems/patient/Patient";
-import DoctorPage from "./systems/doctor/Doctor";
-import MedicalServicePage from "./systems/medicalService/MedicalService";
-import SchedulePage from "./systems/schedule/Schedule";
-import AppointmentPage from "./systems/appointment/Appointment";
+import WardPage from "./pages/admin/Ward";
+import DepartmentPage from "./pages/admin/Department";
+import PatientPage from "./pages/admin/Patient";
+import DoctorPage from "./pages/admin/Doctor";
+import MedicalServicePage from "./pages/admin/MedicalService";
+import SchedulePage from "./pages/admin/Schedule";
+import AppointmentPage from "./pages/admin/Appointment";
 import Login from "../user/Login";
 
 export const DashboardRoutes: Route[] = [
@@ -15,7 +15,8 @@ export const DashboardRoutes: Route[] = [
         path: "ward",
         display: {
             title: "Wards",
-            icon: <LocalHospital />
+            icon: <LocalHospital />,
+            admin: true
         }
     },
     {
@@ -23,7 +24,8 @@ export const DashboardRoutes: Route[] = [
         path: "department",
         display: {
             title: "Departments",
-            icon: <Apartment />
+            icon: <Apartment />,
+            admin: true
         }
     },
     {
@@ -31,7 +33,8 @@ export const DashboardRoutes: Route[] = [
         path: "patient",
         display: {
             title: "Patient",
-            icon: <Hotel />
+            icon: <Hotel />,
+            admin: true
         }
     },
     {
@@ -39,7 +42,8 @@ export const DashboardRoutes: Route[] = [
         path: "doctor",
         display: {
             title: "Doctors",
-            icon: <MedicalServices />
+            icon: <MedicalServices />,
+            admin: true
         }
     },
     {
@@ -47,7 +51,8 @@ export const DashboardRoutes: Route[] = [
         path: "service",
         display: {
             title: "Service",
-            icon: <MedicalInformation />
+            icon: <MedicalInformation />,
+            admin: true
         }
     },
     {
@@ -55,7 +60,8 @@ export const DashboardRoutes: Route[] = [
         path: "schedule",
         display: {
             title: "Schedule",
-            icon: <DateRange />
+            icon: <DateRange />,
+            admin: true
         }
     },
     {
@@ -63,7 +69,8 @@ export const DashboardRoutes: Route[] = [
         path: "appointment",
         display: {
             title: "Appointment",
-            icon: <BookmarkAdd />
+            icon: <BookmarkAdd />,
+            admin: true
         }
     }
 ];
