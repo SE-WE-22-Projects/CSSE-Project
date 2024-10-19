@@ -1739,6 +1739,9 @@ components:
         paymentId:
           type: "integer"
           format: "int64"
+        totalAmount:
+          type: "number"
+          format: "double"
         paymentType:
           type: "string"
         paymentDate:
@@ -1924,7 +1927,10 @@ components:
           type: "string"
     ChargeRequest:
       type: "object"
-      properties: { }
+      properties:
+        amount:
+          type: "number"
+          format: "float"
     Charge:
       type: "object"
       properties:
@@ -1938,7 +1944,14 @@ components:
           format: "float"
     PaymentRequest:
       type: "object"
-      properties: { }
+      properties:
+        paymentType:
+          type: "string"
+          enum:
+            - "CREDIT_CARD"
+            - "DEBIT_CARD"
+            - "CASH"
+            - "INSURANCE"
     ScheduleRequest:
       type: "object"
       properties:

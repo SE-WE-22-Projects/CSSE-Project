@@ -293,6 +293,19 @@ export interface Charge {
 /**
  * 
  * @export
+ * @interface ChargeRequest
+ */
+export interface ChargeRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof ChargeRequest
+     */
+    'amount'?: number;
+}
+/**
+ * 
+ * @export
  * @interface Department
  */
 export interface Department {
@@ -926,6 +939,12 @@ export interface Payment {
     'paymentId'?: number;
     /**
      * 
+     * @type {number}
+     * @memberof Payment
+     */
+    'totalAmount'?: number;
+    /**
+     * 
      * @type {string}
      * @memberof Payment
      */
@@ -937,6 +956,29 @@ export interface Payment {
      */
     'paymentDate'?: string;
 }
+/**
+ * 
+ * @export
+ * @interface PaymentRequest
+ */
+export interface PaymentRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentRequest
+     */
+    'paymentType'?: PaymentRequestPaymentTypeEnum;
+}
+
+export const PaymentRequestPaymentTypeEnum = {
+    CreditCard: 'CREDIT_CARD',
+    DebitCard: 'DEBIT_CARD',
+    Cash: 'CASH',
+    Insurance: 'INSURANCE'
+} as const;
+
+export type PaymentRequestPaymentTypeEnum = typeof PaymentRequestPaymentTypeEnum[keyof typeof PaymentRequestPaymentTypeEnum];
+
 /**
  * 
  * @export
@@ -1291,13 +1333,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary POST api/charge
-         * @param {object} body 
+         * @param {ChargeRequest} chargeRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCharge: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('createCharge', 'body', body)
+        createCharge: async (chargeRequest: ChargeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'chargeRequest' is not null or undefined
+            assertParamExists('createCharge', 'chargeRequest', chargeRequest)
             const localVarPath = `/api/charge`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1317,7 +1359,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(chargeRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1471,13 +1513,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary POST api/payment
-         * @param {object} body 
+         * @param {PaymentRequest} paymentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPayment: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('createPayment', 'body', body)
+        createPayment: async (paymentRequest: PaymentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'paymentRequest' is not null or undefined
+            assertParamExists('createPayment', 'paymentRequest', paymentRequest)
             const localVarPath = `/api/payment`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1497,7 +1539,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paymentRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3660,15 +3702,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary PUT api/charge/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {ChargeRequest} chargeRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateChargeById: async (id: number, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateChargeById: async (id: number, chargeRequest: ChargeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updateChargeById', 'id', id)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updateChargeById', 'body', body)
+            // verify required parameter 'chargeRequest' is not null or undefined
+            assertParamExists('updateChargeById', 'chargeRequest', chargeRequest)
             const localVarPath = `/api/charge/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3689,7 +3731,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(chargeRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3860,15 +3902,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary PUT api/payment/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {PaymentRequest} paymentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePayment: async (id: number, body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updatePayment: async (id: number, paymentRequest: PaymentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updatePayment', 'id', id)
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('updatePayment', 'body', body)
+            // verify required parameter 'paymentRequest' is not null or undefined
+            assertParamExists('updatePayment', 'paymentRequest', paymentRequest)
             const localVarPath = `/api/payment/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3889,7 +3931,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(paymentRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4148,12 +4190,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary POST api/charge
-         * @param {object} body 
+         * @param {ChargeRequest} chargeRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCharge(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Charge>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createCharge(body, options);
+        async createCharge(chargeRequest: ChargeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Charge>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createCharge(chargeRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createCharge']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4213,12 +4255,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary POST api/payment
-         * @param {object} body 
+         * @param {PaymentRequest} paymentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPayment(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createPayment(body, options);
+        async createPayment(paymentRequest: PaymentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPayment(paymentRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createPayment']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5048,12 +5090,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary PUT api/charge/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {ChargeRequest} chargeRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateChargeById(id: number, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Charge>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateChargeById(id, body, options);
+        async updateChargeById(id: number, chargeRequest: ChargeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Charge>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateChargeById(id, chargeRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateChargeById']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5118,12 +5160,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary PUT api/payment/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {PaymentRequest} paymentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updatePayment(id: number, body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePayment(id, body, options);
+        async updatePayment(id: number, paymentRequest: PaymentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Payment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePayment(id, paymentRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updatePayment']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5241,12 +5283,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary POST api/charge
-         * @param {object} body 
+         * @param {ChargeRequest} chargeRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCharge(body: object, options?: any): AxiosPromise<Charge> {
-            return localVarFp.createCharge(body, options).then((request) => request(axios, basePath));
+        createCharge(chargeRequest: ChargeRequest, options?: any): AxiosPromise<Charge> {
+            return localVarFp.createCharge(chargeRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5291,12 +5333,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary POST api/payment
-         * @param {object} body 
+         * @param {PaymentRequest} paymentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPayment(body: object, options?: any): AxiosPromise<Payment> {
-            return localVarFp.createPayment(body, options).then((request) => request(axios, basePath));
+        createPayment(paymentRequest: PaymentRequest, options?: any): AxiosPromise<Payment> {
+            return localVarFp.createPayment(paymentRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5931,12 +5973,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary PUT api/charge/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {ChargeRequest} chargeRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateChargeById(id: number, body: object, options?: any): AxiosPromise<Charge> {
-            return localVarFp.updateChargeById(id, body, options).then((request) => request(axios, basePath));
+        updateChargeById(id: number, chargeRequest: ChargeRequest, options?: any): AxiosPromise<Charge> {
+            return localVarFp.updateChargeById(id, chargeRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5986,12 +6028,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * 
          * @summary PUT api/payment/{id}
          * @param {number} id 
-         * @param {object} body 
+         * @param {PaymentRequest} paymentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updatePayment(id: number, body: object, options?: any): AxiosPromise<Payment> {
-            return localVarFp.updatePayment(id, body, options).then((request) => request(axios, basePath));
+        updatePayment(id: number, paymentRequest: PaymentRequest, options?: any): AxiosPromise<Payment> {
+            return localVarFp.updatePayment(id, paymentRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -6097,13 +6139,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary POST api/charge
-     * @param {object} body 
+     * @param {ChargeRequest} chargeRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public createCharge(body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createCharge(body, options).then((request) => request(this.axios, this.basePath));
+    public createCharge(chargeRequest: ChargeRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).createCharge(chargeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6157,13 +6199,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary POST api/payment
-     * @param {object} body 
+     * @param {PaymentRequest} paymentRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public createPayment(body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createPayment(body, options).then((request) => request(this.axios, this.basePath));
+    public createPayment(paymentRequest: PaymentRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).createPayment(paymentRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6927,13 +6969,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary PUT api/charge/{id}
      * @param {number} id 
-     * @param {object} body 
+     * @param {ChargeRequest} chargeRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public updateChargeById(id: number, body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateChargeById(id, body, options).then((request) => request(this.axios, this.basePath));
+    public updateChargeById(id: number, chargeRequest: ChargeRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).updateChargeById(id, chargeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6992,13 +7034,13 @@ export class DefaultApi extends BaseAPI {
      * 
      * @summary PUT api/payment/{id}
      * @param {number} id 
-     * @param {object} body 
+     * @param {PaymentRequest} paymentRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public updatePayment(id: number, body: object, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updatePayment(id, body, options).then((request) => request(this.axios, this.basePath));
+    public updatePayment(id: number, paymentRequest: PaymentRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).updatePayment(id, paymentRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
