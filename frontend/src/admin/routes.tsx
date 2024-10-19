@@ -1,4 +1,4 @@
-import { Route } from "./Dashboard";
+import { Dashboard, Route } from "./components/Dashboard";
 import { Apartment, BookmarkAdd, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
 import WardPage from "./systems/ward/Ward";
 import DepartmentPage from "./systems/department/Department";
@@ -7,8 +7,9 @@ import DoctorPage from "./systems/doctor/Doctor";
 import MedicalServicePage from "./systems/medicalService/MedicalService";
 import SchedulePage from "./systems/schedule/Schedule";
 import AppointmentPage from "./systems/appointment/Appointment";
+import Login from "../user/Login";
 
-export const Routes: Route[] = [
+export const DashboardRoutes: Route[] = [
     {
         element: <WardPage />,
         path: "ward",
@@ -66,3 +67,15 @@ export const Routes: Route[] = [
         }
     }
 ];
+
+
+export const Routes = [
+    {
+        path: "/admin",
+        element: <Dashboard routes={{ title: "HealthSphere", basePath: "admin", routes: DashboardRoutes, dashboard: <></> }} />,
+        children: [...DashboardRoutes],
+    },
+    {
+        path: "/login", element: <Login />
+    }
+]

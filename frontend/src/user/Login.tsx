@@ -1,7 +1,5 @@
-import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -52,31 +50,19 @@ export default function Login() {
     useEffect(redirect, [])
 
     return (
-        <Grid container component="main" sx={{ height: '100vh' }}>
-            <CssBaseline />
-            <Grid
-                item
-                xs={false}
-                sm={4}
-                md={7}
+        <Box sx={{ height: '100%', width: "100%" }}>
+            <Box
                 sx={{
-                    backgroundColor: '#003a2b',
-                    alignContent: "center"
+                    my: 8,
+                    mx: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
                 }}
             >
-            </Grid>
-            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                <Box
-                    sx={{
-                        my: 8,
-                        mx: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Box sx={{ pb: "32px", fontSize: "1.5rem" }}>
-                        <SiteLogo />
+                <Paper sx={{ px: 8, py: 8 }}>
+                    <Box sx={{ pb: "32px" }}>
+                        <SiteLogo size='1.5rem' />
                     </Box>
 
                     <Typography component="h1" variant="h5">
@@ -85,8 +71,8 @@ export default function Login() {
                     <Box sx={{ mt: 1 }}>
                         <DataForm fields={LoginFields} onSubmit={handleSubmit} submitText='Login' />
                     </Box>
-                </Box>
-            </Grid>
-        </Grid>
+                </Paper>
+            </Box>
+        </Box>
     );
 }

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import MenuContent from './MenuContent';
 import SiteLogo from '../../../components/Logo';
-import { SystemRoutes } from '../../Dashboard';
+import { SystemRoutes } from '../Dashboard';
 import UserCard from './UserCard';
 
 const drawerWidth = 240;

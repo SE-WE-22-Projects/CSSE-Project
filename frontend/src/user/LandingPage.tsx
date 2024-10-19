@@ -1,7 +1,5 @@
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import AppAppBar from './components/landing/AppAppBar';
-import AppTheme from '../theme/AppTheme';
 import Hero from './components/landing/Hero';
 import LogoCollection from './components/landing/LogoCollection';
 import FAQ from './components/landing/FAQ';
@@ -12,27 +10,23 @@ import Features from './components/landing/Features';
 import Pricing from './components/landing/Pricing';
 
 export default function LandingPage() {
-  return (
+  return <>
+    <AppAppBar />
+    <Hero />
+    <div>
+      <LogoCollection />
+      <Features />
+      <Divider />
+      <Testimonials />
+      <Divider />
+      <Highlights />
+      <Divider />
+      <Pricing />
+      <Divider />
+      <FAQ />
+      <Divider />
+      <Footer />
+    </div>
+  </>
 
-    <AppTheme>
-      <CssBaseline enableColorScheme />
-
-      <AppAppBar />
-      <Hero />
-      <div>
-        <LogoCollection />
-        <Features />
-        <Divider />
-        <Testimonials />
-        <Divider />
-        <Highlights />
-        <Divider />
-        <Pricing />
-        <Divider />
-        <FAQ />
-        <Divider />
-        <Footer />
-      </div>
-    </AppTheme>
-  );
 }

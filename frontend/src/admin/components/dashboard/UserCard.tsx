@@ -1,9 +1,19 @@
 import { Stack, Avatar, Box, Typography } from '@mui/material'
 import OptionsMenu from './OptionsMenu'
 import { getUser } from '../../../util/user'
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const UserCard = () => {
-    const user = getUser()!;
+    const user = getUser();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user == null) {
+            navigate("/login");
+        }
+    }, [])
+
 
     return (
         <Stack
@@ -18,16 +28,16 @@ const UserCard = () => {
         >
             <Avatar
                 sizes="small"
-                alt={user.username}
+                alt={user?.username}
                 src="/static/images/avatar/7.jpg"
                 sx={{ width: 36, height: 36 }}
             />
             <Box sx={{ mr: 'auto' }}>
                 <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-                    {user.username}
+                    {user?.username}
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    {user.email}
+                    {user?.email}
                 </Typography>
             </Box>
             <OptionsMenu />
