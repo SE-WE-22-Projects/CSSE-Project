@@ -33,7 +33,7 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     getId: (data: T) => number,
     createHandler?: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
     deleteHandler?: ((id: number) => Promise<any>)
-    updateHandler?: ((id: number, updated: FieldData<F>) => Promise<AxiosResponse<T>>)
+    updateHandler?: ((id: number, updated: FieldData<F>, current: T) => Promise<AxiosResponse<T>>)
     viewHandler?: ((row: T) => any)
     searcher?: (row: T, query: RegExp) => boolean
 }
@@ -107,7 +107,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
         try {
             setLoading(true);
 
-            await props.updateHandler(props.getId(selectedItem!), data)
+            await props.updateHandler(props.getId(selectedItem!), data, selectedItem!)
 
             // update the state
             await fetchRows();

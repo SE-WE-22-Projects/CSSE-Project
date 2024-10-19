@@ -1,5 +1,5 @@
 import { Dashboard, Route } from "./components/Dashboard";
-import { Apartment, Badge, BookmarkAdd, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
+import { Apartment, Badge, BookmarkAdd, DateRange, FileCopy, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
 import WardPage from "./pages/admin/Ward";
 import DepartmentPage from "./pages/admin/Department";
 import PatientPage from "./pages/admin/Patient";
@@ -11,6 +11,7 @@ import Login from "../user/Login";
 import PatientList from "./pages/staff/patients/List";
 import PatientDetails from "./pages/staff/patients/Details";
 import WardAllocation from "./pages/admin/WardAllocation";
+import { ReportPage } from "./pages/staff/Report";
 
 export const DashboardRoutes: Route[] = [
     {
@@ -21,6 +22,15 @@ export const DashboardRoutes: Route[] = [
             icon: <Hotel />,
             admin: false
         },
+    },
+    {
+        element: <ReportPage />,
+        path: "report",
+        display: {
+            title: "Reports",
+            icon: <FileCopy />,
+            admin: false
+        }
     },
     {
         path: "patients/:id",
