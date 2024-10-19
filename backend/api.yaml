@@ -251,6 +251,104 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Doctor"
+  /api/doctor/department/{departmentId}:
+    get:
+      summary: "GET api/doctor/department/{departmentId}"
+      operationId: "findDoctorsByDepartment"
+      parameters:
+        - name: "departmentId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Doctor"
+  /api/doctor/ward/{wardId}:
+    get:
+      summary: "GET api/doctor/ward/{wardId}"
+      operationId: "findDoctorsByWard"
+      parameters:
+        - name: "wardId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Doctor"
+  /api/patient/{id}:
+    put:
+      summary: "PUT api/patient/{id}"
+      operationId: "updatePatient"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Patient"
+    delete:
+      summary: "DELETE api/patient/{id}"
+      operationId: "deletePatient"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/patient/{id}"
+      operationId: "getPatientById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Patient"
   /api/patient:
     post:
       summary: "POST api/patient"
@@ -280,24 +378,6 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Patient"
-  /api/patient/{id}:
-    get:
-      summary: "GET api/patient/{id}"
-      operationId: "getPatientById"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Patient"
   /api/service/{id}:
     put:
       summary: "PUT api/service/{id}"
@@ -675,6 +755,32 @@ paths:
     get:
       summary: "GET api/report"
       operationId: "getAllReports"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Report"
+  /api/report/admission/medicalservice/{admissionId}/{medicalServiceId}:
+    get:
+      summary: "GET api/report/admission/medicalservice/{admissionId}/{medicalServiceId}"
+      operationId: "findReportsByAdmissionAndMedicalService"
+      parameters:
+        - name: "admissionId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+        - name: "medicalServiceId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
       responses:
         "200":
           description: "OK"
@@ -1331,6 +1437,40 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Schedule"
+  /api/auth/login:
+    post:
+      summary: "POST api/auth/login"
+      operationId: "login"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /api/auth/set_password:
+    post:
+      summary: "POST api/auth/set_password"
+      operationId: "setPassword"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
 components:
   schemas:
     AppointmentRequest:
@@ -1369,6 +1509,12 @@ components:
           type: "string"
         phoneNo:
           type: "string"
+        role:
+          type: "string"
+          enum:
+            - "USER"
+            - "STAFF"
+            - "ADMIN"
     Department:
       type: "object"
       properties:
@@ -1417,6 +1563,12 @@ components:
           type: "string"
         phoneNo:
           type: "string"
+        role:
+          type: "string"
+          enum:
+            - "USER"
+            - "STAFF"
+            - "ADMIN"
     Schedule:
       type: "object"
       properties:
@@ -1480,10 +1632,10 @@ components:
           type: "string"
         departmentId:
           type: "integer"
-          format: "int32"
+          format: "int64"
         wardId:
           type: "integer"
-          format: "int32"
+          format: "int64"
         dob:
           type: "string"
           format: "date"
@@ -1492,6 +1644,8 @@ components:
         address:
           type: "string"
         email:
+          type: "string"
+        gender:
           type: "string"
         phoneNo:
           type: "string"
@@ -1510,6 +1664,8 @@ components:
         address:
           type: "string"
         email:
+          type: "string"
+        gender:
           type: "string"
         phoneNo:
           type: "string"
@@ -1619,10 +1775,7 @@ components:
           type: "string"
         serviceId:
           type: "integer"
-          format: "int32"
-        patientId:
-          type: "integer"
-          format: "int32"
+          format: "int64"
     Admission:
       type: "object"
       properties:
@@ -1679,15 +1832,20 @@ components:
       properties:
         name:
           type: "string"
+        capacity:
+          type: "integer"
+          format: "int32"
+        location:
+          type: "string"
     MedicalStaffRequest:
       type: "object"
       properties:
         departmentId:
           type: "integer"
-          format: "int32"
+          format: "int64"
         wardId:
           type: "integer"
-          format: "int32"
+          format: "int64"
         dob:
           type: "string"
           format: "date"
@@ -1696,6 +1854,8 @@ components:
         address:
           type: "string"
         email:
+          type: "string"
+        gender:
           type: "string"
         phoneNo:
           type: "string"
@@ -1724,6 +1884,12 @@ components:
           type: "string"
         phoneNo:
           type: "string"
+        role:
+          type: "string"
+          enum:
+            - "USER"
+            - "STAFF"
+            - "ADMIN"
     DepartmentRequest:
       type: "object"
       properties:
@@ -1748,4 +1914,34 @@ components:
       properties: { }
     ScheduleRequest:
       type: "object"
-      properties: { }
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+        startTime:
+          type: "string"
+          format: "partial-time"
+        endTime:
+          type: "string"
+          format: "partial-time"
+        day:
+          type: "string"
+          enum:
+            - "SUNDAY"
+            - "MONDAY"
+            - "TUESDAY"
+            - "WEDNESDAY"
+            - "THURSDAY"
+            - "FRIDAY"
+            - "SATURDAY"
+        doctorId:
+          type: "integer"
+          format: "int64"
+    LoginRequest:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"

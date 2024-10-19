@@ -86,17 +86,4 @@ public class PaymentController {
         paymentService.deletePayment(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    /**
-     * Handle ResourceNotFoundException
-     *
-     * @param e the exception
-     * @return a response containing an error message
-     */
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-
 }

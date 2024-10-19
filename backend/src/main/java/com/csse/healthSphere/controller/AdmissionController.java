@@ -102,17 +102,4 @@ public class AdmissionController {
         List<Admission> admissionList = admissionService.findAdmissionsByPatient(patientId);
         return new ResponseEntity<>(admissionList, HttpStatus.OK);
     }
-
-    /**
-     * Handle ResourceNotFoundException
-     *
-     * @param e the exception
-     * @return a response containing an error message
-     */
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-
 }

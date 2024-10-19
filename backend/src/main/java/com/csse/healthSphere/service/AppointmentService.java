@@ -27,7 +27,6 @@ public class AppointmentService {
     private final ModelMapper modelMapper;
 
     /**
-     *
      * @param appointmentRequest
      * @return
      */
@@ -37,14 +36,16 @@ public class AppointmentService {
         Patient patient = patientRepository.findById(appointmentRequest.getPatientId())
                 .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 
+        Schedule schedule = scheduleRepository.findById(appointmentRequest.getScheduleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
+
         appointment.setPatient(patient);
         appointment.setStatus(AppointmentStatus.PENDING);
-        appointment.setAppointmentId(null);
+        appointment.setSchedule(schedule);
         return appointmentRepository.save(appointment);
     }
 
     /**
-     *
      * @return
      */
     public List<Appointment> getAllAppointments() {
@@ -52,7 +53,6 @@ public class AppointmentService {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -61,22 +61,26 @@ public class AppointmentService {
     }
 
     /**
-     *
      * @param id
      * @param appointmentRequest
      * @return
      */
     public Appointment updateAppointment(Long id, AppointmentRequest appointmentRequest) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
-        appointment.setTime(appointmentRequest.getTime());
-        appointment.setDate(appointmentRequest.getDate());
-        appointment.setQueueNo(appointmentRequest.getQueueNo());
+
+        Schedule schedule = scheduleRepository.findById(appointmentRequest.getScheduleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
+        Patient patient = patientRepository.findById(appointmentRequest.getPatientId())
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
+
+        modelMapper.map(appointmentRequest, appointment);
+        appointment.setSchedule(schedule);
+        appointment.setPatient(patient);
 
         return appointmentRepository.save(appointment);
     }
 
     /**
-     *
      * @param id
      */
     public void deleteAppointment(Long id) {
@@ -85,32 +89,29 @@ public class AppointmentService {
     }
 
     /**
-     *
      * @param patientId
      * @return
      */
-    public List<Appointment> findAppointmentsByPatient(Long patientId){
-        Patient patient = patientRepository.findById(patientId).orElseThrow(()-> new ResourceNotFoundException("Patient not found"));
+    public List<Appointment> findAppointmentsByPatient(Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
         return appointmentRepository.findByPatient(patient);
     }
 
     /**
-     *
      * @param scheduleId
      * @return
      */
-    public List<Appointment> findAppointmentsBySchedule(Long scheduleId){
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()-> new ResourceNotFoundException("Schedule not found"));
+    public List<Appointment> findAppointmentsBySchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
         return appointmentRepository.findBySchedule(schedule);
     }
 
     /**
-     *
      * @param doctorId
      * @return
      */
-    public List<Appointment> findAppointmentsByDoctor(Long doctorId){
-        Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(()-> new ResourceNotFoundException("Doctor not found"));
+    public List<Appointment> findAppointmentsByDoctor(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
         return appointmentRepository.findByScheduleDoctor(doctor);
     }
 }

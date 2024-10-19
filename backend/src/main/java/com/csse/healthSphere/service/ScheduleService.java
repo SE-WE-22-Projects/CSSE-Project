@@ -19,7 +19,7 @@ import java.util.List;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final DoctorRepository doctorRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     /**
      * Creates a schedule from the given data
@@ -30,7 +30,8 @@ public class ScheduleService {
     public Schedule createSchedule(ScheduleRequest scheduleRequest) {
         Schedule schedule = modelMapper.map(scheduleRequest, Schedule.class);
         Doctor doctor = doctorRepository.findById(scheduleRequest.getDoctorId())
-                .orElseThrow(()-> new ResourceNotFoundException("Doctor not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
+        schedule.setDoctor(doctor);
         schedule.setScheduleId(null);
         return scheduleRepository.save(schedule);
     }
@@ -52,7 +53,7 @@ public class ScheduleService {
      * @throws ResourceNotFoundException if the schedule does not exist
      */
     public Schedule getScheduleById(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Schedule not found"));
+        return scheduleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
     }
 
     /**
@@ -64,8 +65,12 @@ public class ScheduleService {
      */
     public Schedule updateSchedule(Long id, ScheduleRequest scheduleRequest) {
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Schedule not found"));
-        modelMapper.map(scheduleRequest,schedule);
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
+        Doctor doctor = doctorRepository.findById(scheduleRequest.getDoctorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
+
+        modelMapper.map(scheduleRequest, schedule);
+        schedule.setDoctor(doctor);
         return scheduleRepository.save(schedule);
     }
 
@@ -76,40 +81,37 @@ public class ScheduleService {
      */
     public void deleteSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Schedule not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
         scheduleRepository.delete(schedule);
     }
 
     /**
-     *
      * @param doctorId
      * @return
      */
-    public List<Schedule> findSchedulesByDoctor(Long doctorId){
+    public List<Schedule> findSchedulesByDoctor(Long doctorId) {
         Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(()-> new ResourceNotFoundException("Doctor not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
         return scheduleRepository.findByDoctor(doctor);
     }
 
     /**
-     *
      * @param day
      * @return
      */
-    public List<Schedule> findScheduleByDay(WeekDay day){
+    public List<Schedule> findScheduleByDay(WeekDay day) {
         return scheduleRepository.findByDay(day);
     }
 
     /**
-     *
      * @param doctorId
      * @param day
      * @return
      */
-    public List<Schedule> findByDoctorAndDay(Long doctorId, WeekDay day){
+    public List<Schedule> findByDoctorAndDay(Long doctorId, WeekDay day) {
         Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(()-> new ResourceNotFoundException("Doctor not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
 
-        return scheduleRepository.findByDoctorAndDay(doctor,day);
+        return scheduleRepository.findByDoctorAndDay(doctor, day);
     }
 }

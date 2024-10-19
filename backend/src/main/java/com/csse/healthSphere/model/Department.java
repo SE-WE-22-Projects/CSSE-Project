@@ -10,5 +10,4 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long departmentId;
     private String name;
-
 }

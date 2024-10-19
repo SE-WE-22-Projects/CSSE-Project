@@ -102,17 +102,4 @@ public class DiagnosisController {
         List<Diagnosis> diagnosisList = diagnosisService.findDiagnosisByPatient(patientId);
         return new ResponseEntity<>(diagnosisList, HttpStatus.OK);
     }
-
-    /**
-     * Handle ResourceNotFoundException
-     *
-     * @param e the exception
-     * @return a response containing an error message
-     */
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-
 }

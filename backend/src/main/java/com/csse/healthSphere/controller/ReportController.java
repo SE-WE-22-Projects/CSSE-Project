@@ -87,6 +87,15 @@ public class ReportController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/admission/medicalservice/{admissionId}/{medicalServiceId}")
+    public ResponseEntity<List<Report>> findReportsByAdmissionAndMedicalService(
+            @PathVariable Long admissionId,
+            @PathVariable Long medicalServiceId
+    ) {
+        List<Report> reportList = reportService.findReportsByAdmissionAndMedicalService(admissionId, medicalServiceId);
+        return new ResponseEntity<>(reportList, HttpStatus.OK);
+    }
+
     /**
      * Handle ResourceNotFoundException
      *

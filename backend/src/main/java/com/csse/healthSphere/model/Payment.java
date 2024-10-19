@@ -6,6 +6,13 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * Store all charges in the appointment class.
+ * When the patient pays for the appointment, calculate the total and create a Payment and set it to the Appointment class
+ * payment == null => not paid
+ * payment != null => fully paid
+ */
+
 @Data
 @Entity
 public class Payment {
