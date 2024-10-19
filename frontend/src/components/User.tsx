@@ -15,8 +15,10 @@ export interface UserToken {
 interface UserControls {
     logout: () => void
     setToken: (token: string) => void
-    user: UserToken | null
+    token: UserToken | null
     loggedIn: boolean
+    isStaff: boolean
+    isAdmin: boolean
 }
 
 const getUser = (): UserToken | null => {
@@ -54,8 +56,10 @@ const setToken = (token: string) => {
 const UserContext = createContext<UserControls>({
     logout: logout,
     setToken: setToken,
-    user: null,
-    loggedIn: false
+    token: null,
+    loggedIn: false,
+    isAdmin: false,
+    isStaff: false
 });
 
 
@@ -78,8 +82,10 @@ export const UserProvider = ({ children }: { children: ReactNode | ReactNode[] }
                 if (newUser === null) console.error("Invalid login token");
                 setUser(newUser);
             },
-            user: user,
-            loggedIn: user != null
+            token: user,
+            loggedIn: user != null,
+            isAdmin: !!user?.isAdmin,
+            isStaff: !!user?.isStaff,
         }
     }, [user])
 
