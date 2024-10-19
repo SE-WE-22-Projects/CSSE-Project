@@ -33,7 +33,7 @@ const Appointment = () => {
   useEffect(() => {
     fetchDoctorList();
   }, []);
-  
+
   const createAppointemt = (data : AppointmentRequest) => {
         
     }
@@ -43,7 +43,7 @@ const Appointment = () => {
       <Box marginTop={20} mx={10} alignItems={"center"}>
         <Box>
           <PageTitle>Appointment</PageTitle>
-          <StyledDataGrid rows={doctorList} columns={DoctorFields} onView={viewSchedule}/>
+          <StyledDataGrid rows={doctorList} columns={DoctorFields} onView={viewSchedule} getRowId={(w) => w.personId!}/>
           <AppointmentForm />
         </Box>
       </Box>
