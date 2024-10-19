@@ -30,6 +30,7 @@ const WardPage = () => {
         createHandler={(req) => API.createWard(req)}
         deleteHandler={(id) => API.deleteWard(id)}
         updateHandler={(id, req) => API.updateWard(id, req)}
+        searcher={(row, query) => query.test(row.name ?? "")}
     />
 }
 

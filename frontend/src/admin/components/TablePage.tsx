@@ -1,5 +1,5 @@
 import { GridColDef, GridValidRowModel } from '@mui/x-data-grid'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useConfirm } from 'material-ui-confirm';
 import { enqueueSnackbar } from 'notistack';
 import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
@@ -9,6 +9,7 @@ import StyledDataGrid from '../../components/StyledDataGrid';
 import { AxiosResponse } from 'axios';
 import { Add } from '@mui/icons-material';
 import { DNA } from 'react-loader-spinner';
+import Search from './Search';
 
 function sleep(duration: number): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -33,8 +34,8 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     createHandler: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
     deleteHandler: ((id: number) => Promise<any>)
     updateHandler: ((id: number, updated: FieldData<F>) => Promise<AxiosResponse<T>>)
-    getId: (data: T) => number
-
+    getId: (data: T) => number,
+    searcher?: (row: T, query: RegExp) => boolean
 }
 
 
@@ -44,6 +45,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     const [editorShown, setEditorShown] = useState(false);
     const [selectedItem, setSelectedItem] = useState<T | null>(null);
     const [loading, setLoading] = useState(true);
+    const [query, setQuery] = useState<RegExp | null>(null);
 
     const confirm = useConfirm();
 
@@ -130,6 +132,10 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
         setEditorShown(false);
     }
 
+    const filteredRows = useMemo(() => {
+        if (query === null || props.searcher === undefined) return rows;
+        return rows.filter((v) => props.searcher!(v, query));
+    }, [rows, query])
 
 
     return (
@@ -168,21 +174,24 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                         </Stack> :
                         <>
 
-                            {props.disableAdd ? null :
-                                <Stack direction="row" py={1}>
-                                    <Box sx={{ flexGrow: 1 }} />
+                            <Stack direction="row" py={1}>
+                                {props.searcher !== undefined ?
+                                    <Search onChange={(q) => setQuery(q)} />
+                                    : null}
+                                <Box sx={{ flexGrow: 1 }} />
+                                {props.disableAdd ? null :
                                     <Button variant="outlined" startIcon={<Add />} sx={{
                                         backgroundColor: "#DB5356",
                                         color: "white",
                                         border: 'none'
                                     }} onClick={() => setEditorShown(true)}>Add {props.name}</Button>
-                                </Stack>
-                            }
+                                }
+                            </Stack>
 
 
                             <StyledDataGrid
                                 columns={props.columns}
-                                rows={rows}
+                                rows={filteredRows}
                                 getRowId={props.getId}
                                 onDelete={onDelete}
                                 onEdit={onEdit}

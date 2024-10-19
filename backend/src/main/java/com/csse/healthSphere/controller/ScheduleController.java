@@ -87,6 +87,14 @@ public class ScheduleController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<Schedule>> getSchduleByDoctor(
+            @PathVariable Long doctorId
+    ) {
+        List<Schedule> scheduleList = scheduleService.findSchedulesByDoctor(doctorId);
+        return new ResponseEntity<>(scheduleList,HttpStatus.OK);
+    }
+
     /**
      * Handle ResourceNotFoundException
      *

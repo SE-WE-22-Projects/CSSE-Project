@@ -51,6 +51,7 @@ const SchedulePage = () => {
         createHandler={(req) => API.createSchedule(req as any)}
         deleteHandler={(id) => API.deleteSchedule(id)}
         updateHandler={(id, req) => API.updateSchedule(id, req as any)}
+        searcher={(row, query) => query.test(row.name ?? "")}
     />
 }
 

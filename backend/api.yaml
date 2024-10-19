@@ -1437,6 +1437,26 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Schedule"
+  /api/schedule/doctor/{doctorId}:
+    get:
+      summary: "GET api/schedule/doctor/{doctorId}"
+      operationId: "getSchduleByDoctor"
+      parameters:
+        - name: "doctorId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Schedule"
   /api/auth/login:
     post:
       summary: "POST api/auth/login"
@@ -1485,7 +1505,14 @@ components:
         queueNo:
           type: "integer"
           format: "int32"
+        status:
+          type: "string"
+          enum:
+            - "PENDING"
         patientId:
+          type: "integer"
+          format: "int64"
+        scheduleId:
           type: "integer"
           format: "int64"
     Patient:

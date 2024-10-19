@@ -32,6 +32,7 @@ const MedicalServicePage = () => {
         createHandler={(req) => API.createService(req)}
         deleteHandler={(id) => API.deleteService(id)}
         updateHandler={(id, req) => API.updateService(id, req)}
+        searcher={(row, query) => query.test(row.name ?? "")}
     />
 }
 
