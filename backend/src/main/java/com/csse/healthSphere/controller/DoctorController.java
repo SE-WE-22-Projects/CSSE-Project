@@ -76,10 +76,4 @@ public class DoctorController {
         List<Doctor> doctorList = doctorService.findDoctorsByWard(wardId);
         return new ResponseEntity<>(doctorList,HttpStatus.OK);
     }
-
-    // Exception handler for ResourceNotFoundException
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
 }
