@@ -1,6 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid'
 import { Doctor, Schedule, ScheduleRequestDayEnum } from '../../../api';
-import { Field, OptionType } from '../../../shared/components/DataForm';
+import { Field, OptionType } from '../../../components/DataForm';
 import TablePage from '../../components/TablePage';
 import { API } from '../../../config';
 

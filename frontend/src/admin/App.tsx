@@ -2,7 +2,7 @@
 import { ConfirmProvider } from "material-ui-confirm";
 import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@mui/material";
-import AppTheme from "../shared/theme/AppTheme";
+import AppTheme from "../theme/AppTheme";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { Dashboard } from "./Dashboard";

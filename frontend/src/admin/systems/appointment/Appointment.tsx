@@ -1,6 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid'
 import { Appointment, AppointmentStatusEnum, Patient, Schedule } from '../../../api';
-import { Field } from '../../../shared/components/DataForm';
+import { Field } from '../../../components/DataForm';
 import TablePage from '../../components/TablePage';
 import { API } from '../../../config';
 

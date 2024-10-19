@@ -22,6 +22,7 @@ export default function ColorModeIconDropdown() {
     setMode(targetMode);
     handleClose();
   };
+
   if (!mode) {
     return (
       <Box
@@ -38,6 +39,7 @@ export default function ColorModeIconDropdown() {
       />
     );
   }
+
   const resolvedMode = (systemMode || mode) as 'light' | 'dark';
   const icon = {
     light: <LightModeIcon />,

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import { useConfirm } from 'material-ui-confirm';
 import { enqueueSnackbar } from 'notistack';
 import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
-import { PageSubtitle, PageTitle } from '../../shared/components/Logo';
-import DataForm, { FieldData, Fields } from '../../shared/components/DataForm';
-import StyledDataGrid from '../../shared/components/StyledDataGrid';
+import { PageSubtitle, PageTitle } from '../../components/Logo';
+import DataForm, { FieldData, Fields } from '../../components/DataForm';
+import StyledDataGrid from '../../components/StyledDataGrid';
 import { AxiosResponse } from 'axios';
 import { Add } from '@mui/icons-material';
 import { DNA } from 'react-loader-spinner';

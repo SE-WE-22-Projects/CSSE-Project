@@ -10,7 +10,7 @@ import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
-import { logout } from '../../util/user';
+import { logout } from '../../../util/user';
 import { useNavigate } from 'react-router-dom';
 
 const MenuItem = styled(MuiMenuItem)({

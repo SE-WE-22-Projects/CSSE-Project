@@ -3,8 +3,8 @@ import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import MenuContent from './MenuContent';
-import SiteLogo from '../../shared/components/Logo';
-import { SystemRoutes } from '../Dashboard';
+import SiteLogo from '../../../components/Logo';
+import { SystemRoutes } from '../../Dashboard';
 import UserCard from './UserCard';
 
 const drawerWidth = 240;

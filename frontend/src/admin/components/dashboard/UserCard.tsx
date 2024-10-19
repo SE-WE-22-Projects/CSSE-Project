@@ -1,6 +1,6 @@
 import { Stack, Avatar, Box, Typography } from '@mui/material'
 import OptionsMenu from './OptionsMenu'
-import { getUser } from '../../util/user'
+import { getUser } from '../../../util/user'
 
 const UserCard = () => {
     const user = getUser()!;

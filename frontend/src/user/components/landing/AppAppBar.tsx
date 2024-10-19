@@ -11,8 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import Sitemark from './SitemarkIcon';
-import SiteLogo from '../../../shared/components/Logo';
+import SiteLogo from '../../../components/Logo';
+import ColorModeIconDropdown from '../../../theme/ColorModeIconDropdown';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -72,6 +72,7 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
+            <ColorModeIconDropdown />
             <Button color="primary" variant="text" size="small">
               Sign in
             </Button>

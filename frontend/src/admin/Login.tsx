@@ -8,9 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 import { getUser } from '../util/user';
 import { API } from '../config';
-import DataForm, { Field } from '../shared/components/DataForm';
+import DataForm, { Field } from '../components/DataForm';
 import { LoginRequest } from '../api';
-import SiteLogo from '../shared/components/Logo';
+import SiteLogo from '../components/Logo';
 
 const LoginFields = {
     email: Field.email("Email"),
