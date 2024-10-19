@@ -9,6 +9,7 @@ import DataForm, { Field } from '../components/DataForm';
 import { LoginRequest } from '../api';
 import SiteLogo from '../components/Logo';
 import { useUser } from '../components/User';
+import AppAppBar from './components/landing/AppAppBar';
 
 const LoginFields = {
     email: Field.email("Email"),
@@ -45,29 +46,31 @@ export default function Login() {
     }, [user])
 
     return (
-        <Box sx={{ height: '100%', width: "100%" }}>
-            <Box
-                sx={{
-                    my: 8,
-                    mx: 4,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <Paper sx={{ px: 8, py: 8 }}>
-                    <Box sx={{ pb: "32px" }}>
-                        <SiteLogo size='1.5rem' />
-                    </Box>
-
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <Box sx={{ mt: 1 }}>
-                        <DataForm fields={LoginFields} onSubmit={handleSubmit} submitText='Login' />
-                    </Box>
-                </Paper>
+        <>
+            <AppAppBar />
+            <Box sx={{ height: '100%', width: "100%", pt: 10 }}>
+                <Box
+                    sx={{
+                        my: 8,
+                        mx: 4,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Paper sx={{ px: 8, py: 2 }} elevation={2}>
+                        <Box sx={{ pb: "32px" }}>
+                            <SiteLogo size='1.5rem' />
+                        </Box>
+                        <Typography component="h1" variant="h5">
+                            Login
+                        </Typography>
+                        <Box sx={{ mt: 1 }}>
+                            <DataForm fields={LoginFields} onSubmit={handleSubmit} submitText='Login' />
+                        </Box>
+                    </Paper>
+                </Box>
             </Box>
-        </Box>
+        </>
     );
 }

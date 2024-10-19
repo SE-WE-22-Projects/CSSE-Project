@@ -24,7 +24,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-export default function AppAppBar() {
+export default function AppAppBar({ isHome }: { isHome?: boolean }) {
   const user = useUser();
   const navigate = useNavigate();
 
@@ -36,26 +36,30 @@ export default function AppAppBar() {
       <Container maxWidth="lg">
         <StyledToolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            <SiteLogo />
+            <Link to="/">
+              <SiteLogo responsive />
+            </Link>
             <Box sx={{ display: 'flex' }}>
-              <Button variant="text" color="info" size="small">
-                Features
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Testimonials
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Highlights
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Pricing
-              </Button>
-              <Button variant="text" color="info" size="small" >
-                FAQ
-              </Button>
-              <Button variant="text" color="info" size="small" >
-                Blog
-              </Button>
+              {isHome ? <>
+                <Button variant="text" color="info" size="small">
+                  Features
+                </Button>
+                <Button variant="text" color="info" size="small">
+                  Testimonials
+                </Button>
+                <Button variant="text" color="info" size="small">
+                  Highlights
+                </Button>
+                <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+                  FAQ
+                </Button>
+              </> : <>
+                <Link to="/">
+                  <Button variant="text" color="info" size="small">
+                    Home
+                  </Button>
+                </Link>
+              </>}
             </Box>
           </Box>
           <Box
@@ -65,8 +69,9 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
+            <ColorModeIconDropdown />
             {
-              user.isStaff ? <Button variant="text" color="info" size="small" onClick={() => navigate("/dashboard")}>
+              user.isStaff ? <Button variant="contained" color="info" size="small" onClick={() => navigate("/dashboard")}>
                 Dashboard
               </Button> : null
             }
@@ -74,8 +79,8 @@ export default function AppAppBar() {
               user.loggedIn ?
                 <>
                   <Link to="/appointment">
-                    <Button color="primary" variant="text" size="small">
-                      Appointment
+                    <Button color="info" variant="contained" size="small">
+                      Appointments
                     </Button>
                   </Link>
                   <UserCard small /> </> :
@@ -92,7 +97,6 @@ export default function AppAppBar() {
                   </Link>
                 </>
             }
-            <ColorModeIconDropdown />
 
           </Box>
 

@@ -7,11 +7,11 @@ const LogoText = styled(Typography)({
 
 })
 
-export const SiteLogo = ({ size }: { size?: string }) => {
+export const SiteLogo = ({ size, responsive }: { size?: string, responsive?: boolean }) => {
     return (
         <Box sx={{ userSelect: "none", display: "inline-block" }}>
-            <LogoText color='#DB5356' fontSize={size}>Health</LogoText>
-            <LogoText color='MenuText' fontSize={size}>Sphere</LogoText>
+            <LogoText color='#DB5356' fontSize={size} sx={responsive ? { fontSize: { xs: '0.95rem', md: "1rem", lg: '1.2rem' } } : undefined}>Health</LogoText>
+            <LogoText color='MenuText' fontSize={size} sx={responsive ? { fontSize: { xs: '0.95rem', md: "1rem", lg: '1.2rem' } } : undefined}>Sphere</LogoText>
         </Box>
     )
 }
