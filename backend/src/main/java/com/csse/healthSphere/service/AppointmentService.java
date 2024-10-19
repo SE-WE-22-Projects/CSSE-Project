@@ -5,14 +5,8 @@ import com.csse.healthSphere.dto.AppointmentRequest;
 import com.csse.healthSphere.dto.AuthUser;
 import com.csse.healthSphere.enums.AppointmentStatus;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
-import com.csse.healthSphere.model.Appointment;
-import com.csse.healthSphere.model.Doctor;
-import com.csse.healthSphere.model.Patient;
-import com.csse.healthSphere.model.Schedule;
-import com.csse.healthSphere.repository.AppointmentRepository;
-import com.csse.healthSphere.repository.DoctorRepository;
-import com.csse.healthSphere.repository.PatientRepository;
-import com.csse.healthSphere.repository.ScheduleRepository;
+import com.csse.healthSphere.model.*;
+import com.csse.healthSphere.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -28,6 +22,7 @@ public class AppointmentService {
     private final ScheduleRepository scheduleRepository;
     private final DoctorRepository doctorRepository;
     private final ModelMapper modelMapper;
+    private final ChargeRepository chargeRepository;
 
     /**
      * @param appointmentRequest
@@ -142,6 +137,12 @@ public class AppointmentService {
         appointment.setSchedule(schedule);
         appointment.setQueueNo(queueNo);
         appointment.setTime(time);
-        return appointmentRepository.save(appointment);
+        Appointment createdAppointment =  appointmentRepository.save(appointment);
+        //create charge
+        Charge charge = new AppointmentCharge();
+        charge.setAppointment(createdAppointment);
+        charge.setAmount(2000.00F);
+        chargeRepository.save(charge);
+        return createdAppointment;
     }
 }
