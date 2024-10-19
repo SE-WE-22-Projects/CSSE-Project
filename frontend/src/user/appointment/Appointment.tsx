@@ -13,14 +13,15 @@ const Appointment = () => {
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
   const [scheduleList, setScheduleList] = useState<Schedule[]>([]);
 
-  const [showDoctorList, setShowDoctorList] = useState<boolean>(false);
+  const [showDoctorList, setShowDoctorList] = useState<boolean>(true);
 
   const fetchDoctorList = async () => {
     const response = await API.getAllDoctors();
     setDoctorList(response.data);
   }
-  const fetchScheduleList = (id: number) => {
-    const response = await API.getSc
+  const fetchScheduleList = async (id: number) => {
+    const response = await API.getSchduleByDoctor(id);
+    setScheduleList(response.data);
   }
 
   const DoctorFields: GridColDef<Doctor>[] = [
@@ -30,8 +31,17 @@ const Appointment = () => {
     { field: 'gender', headerName: "Gender", width: 90 },
   ]
 
+  const ScheduleFields: GridColDef<Schedule>[] = [
+    { field: 'scheduleId', headerName: 'ID', width: 90 },
+    { field: 'name', headerName: 'Name', width: 90 },
+    { field: 'description', headerName: 'Description', width: 90 },
+    { field: 'startTime', headerName: 'Start time', width: 90 },
+    { field: 'endTime', headerName: 'End time', width: 90 }
+  ]
+
   const viewSchedule = (id: number) => {
-    console.log(id);
+    fetchScheduleList(id);
+    setShowDoctorList(false);
   }
 
   useEffect(() => {
@@ -55,7 +65,12 @@ const Appointment = () => {
               getRowId={(w) => w.personId!}
             />
             :
-            <></>
+            <StyledDataGrid
+              rows={scheduleList}
+              columns={ScheduleFields}
+              onView={viewSchedule}
+              getRowId={(w) => w.scheduleId!}
+            />
           }
 
           <AppointmentForm />
