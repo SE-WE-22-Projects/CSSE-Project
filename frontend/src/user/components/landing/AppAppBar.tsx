@@ -1,18 +1,14 @@
-import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
-import Drawer from '@mui/material/Drawer';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import SiteLogo from '../../../components/Logo';
 import ColorModeIconDropdown from '../../../theme/ColorModeIconDropdown';
+import { useUser } from '../../../components/User';
+import { useNavigate } from 'react-router-dom';
+import UserCard from '../../../admin/components/dashboard/UserCard';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -29,11 +25,8 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 export default function AppAppBar() {
-  const [open, setOpen] = React.useState(false);
-
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
+  const user = useUser();
+  const navigate = useNavigate();
 
   return (
     <AppBar
@@ -44,7 +37,7 @@ export default function AppAppBar() {
         <StyledToolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <SiteLogo />
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ display: 'flex' }}>
               <Button variant="text" color="info" size="small">
                 Features
               </Button>
@@ -57,10 +50,10 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="small">
                 Pricing
               </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+              <Button variant="text" color="info" size="small" >
                 FAQ
               </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+              <Button variant="text" color="info" size="small" >
                 Blog
               </Button>
             </Box>
@@ -72,51 +65,26 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
-            <ColorModeIconDropdown />
-            <Button color="primary" variant="text" size="small">
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small">
-              Sign up
-            </Button>
-          </Box>
-          <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
-            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
-            <Drawer anchor="top" open={open} onClose={toggleDrawer(false)}>
-              <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <IconButton onClick={toggleDrawer(false)}>
-                    <CloseRoundedIcon />
-                  </IconButton>
-                </Box>
-                <Divider sx={{ my: 3 }} />
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Testimonials</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
+            {
+              user.user?.isStaff ? <Button variant="text" color="info" size="small" onClick={() => navigate("/admin")}>
+                Dashboard
+              </Button> : null
+            }
+            {
+              user.loggedIn ? <UserCard small /> :
+                <>
+                  <Button color="primary" variant="text" size="small">
                     Sign in
                   </Button>
-                </MenuItem>
-              </Box>
-            </Drawer>
+                  <Button color="primary" variant="contained" size="small">
+                    Sign up
+                  </Button>
+                </>
+            }
+            <ColorModeIconDropdown />
+
           </Box>
+
         </StyledToolbar>
       </Container>
     </AppBar>

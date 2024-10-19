@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useUser } from '../../../components/User';
 
-const UserCard = () => {
+const UserCard = ({ small }: { small?: boolean }) => {
     const user = useUser();
     const navigate = useNavigate();
 
@@ -19,10 +19,10 @@ const UserCard = () => {
         <Stack
             direction="row"
             sx={{
-                p: 2,
+                p: small ? 0 : 2,
                 gap: 1,
                 alignItems: 'center',
-                borderTop: '1px solid',
+                borderTop: small ? 'none' : '1px solid',
                 borderColor: 'divider',
             }}
         >
@@ -30,15 +30,17 @@ const UserCard = () => {
                 sizes="small"
                 alt={user.user?.username}
                 src="/static/images/avatar/7.jpg"
-                sx={{ width: 36, height: 36 }}
+                sx={{ width: small ? 30 : 36, height: small ? 30 : 36 }}
             />
             <Box sx={{ mr: 'auto' }}>
-                <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
+                <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px', color: 'text.primary' }}>
                     {user.user?.username}
                 </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    {user.user?.email}
-                </Typography>
+                {small ? null :
+                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        {user.user?.email}
+                    </Typography>
+                }
             </Box>
             <OptionsMenu />
         </Stack>
