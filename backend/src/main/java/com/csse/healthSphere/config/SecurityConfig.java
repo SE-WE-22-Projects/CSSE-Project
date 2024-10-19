@@ -37,7 +37,7 @@ public class SecurityConfig {
         http.cors(Customizer.withDefaults());
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        http.authenticationManager(authenticationManager(userDetailsService(), passwordEncoder()));
+        http.authenticationManager(authenticationManager(passwordEncoder()));
         http.authorizeHttpRequests(request -> {
             request
                     .requestMatchers("/api/auth/**").permitAll()
@@ -48,20 +48,14 @@ public class SecurityConfig {
 
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return authenticationService;
-    }
-
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    AuthenticationManager authenticationManager(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
+        provider.setUserDetailsService(authenticationService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider::authenticate;
     }
