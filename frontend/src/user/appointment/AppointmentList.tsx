@@ -12,12 +12,12 @@ const AppointmentList = () => {
         { field: 'time', headerName: "Time", width: 200, flex: 1 },
         { field: 'queueNo', headerName: "Queue No.", width: 200, flex: 1 },
         { field: 'status', headerName: "Gender", width: 90 },
-      ];
+    ];
 
     return (
         <>
             <PageTitle>Appointment List</PageTitle>
-            <TablePage readonly readHandler={()=> API.getAllAppointments()} getId={(a)=> a.appointmentId!} columns={AppointmentFields} name="Appointment"/>
+            <TablePage readHandler={() => API.getAllAppointments()} getId={(a) => a.appointmentId!} columns={AppointmentFields} name="Appointment" />
         </>
     )
 }

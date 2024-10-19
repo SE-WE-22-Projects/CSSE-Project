@@ -15,7 +15,6 @@ const PatientList = () => {
     const navigate = useNavigate();
 
     return <TablePage
-        readonly
         name="Patient" title='Patient Details'
         subtitle='View Details of Registered Patients'
         columns={GridFields}

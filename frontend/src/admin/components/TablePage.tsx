@@ -25,45 +25,40 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     title?: string
     subtitle?: string
 
-    readonly?: false
-
-
     columns: GridColDef<T>[]
     formFields: F
 
     readHandler: (() => Promise<AxiosResponse<T[]>>)
-    createHandler: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
-    deleteHandler: ((id: number) => Promise<any>)
-    updateHandler: ((id: number, updated: FieldData<F>) => Promise<AxiosResponse<T>>)
-    viewHandler?: ((row: T) => any)
     getId: (data: T) => number,
+    createHandler?: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
+    deleteHandler?: ((id: number) => Promise<any>)
+    updateHandler?: ((id: number, updated: FieldData<F>) => Promise<AxiosResponse<T>>)
+    viewHandler?: ((row: T) => any)
     searcher?: (row: T, query: RegExp) => boolean
 }
 
-interface ReadOnlyTablePageProps<T extends GridValidRowModel> {
+
+interface ReadonlyTablePageProps<T extends GridValidRowModel> {
     name: string
     title?: string
     subtitle?: string
 
-    readonly: true
-
     columns: GridColDef<T>[]
+    formFields?: undefined
 
     readHandler: (() => Promise<AxiosResponse<T[]>>)
-    viewHandler?: ((row: T) => any)
-    getId: (row: T) => number,
-    searcher?: (row: T, query: RegExp) => boolean
-
+    getId: (data: T) => number,
     createHandler?: undefined
-    deleteHandler?: undefined
+    deleteHandler?: ((id: number) => Promise<any>)
     updateHandler?: undefined
-    formFields?: undefined
+    viewHandler?: ((row: T) => any)
+    searcher?: (row: T, query: RegExp) => boolean
 }
 
 
 
 
-function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePageProps<T, F> | ReadOnlyTablePageProps<T>) {
+function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePageProps<T, F> | ReadonlyTablePageProps<T>) {
     const [rows, setRows] = useState<T[]>([]);
     const [editorShown, setEditorShown] = useState(false);
     const [selectedItem, setSelectedItem] = useState<T | null>(null);
@@ -85,7 +80,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     }, []);
 
     const onCreate = async (data: FieldData<F>) => {
-        if (props.readonly) return;
+        if (props.createHandler === undefined) return;
 
         try {
             setLoading(true);
@@ -105,7 +100,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     }
 
     const onUpdate = async (data: FieldData<F>) => {
-        if (props.readonly) return;
+        if (props.updateHandler === undefined) return;
 
         try {
             setLoading(true);
@@ -127,7 +122,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     }
 
     const onEdit = async (id: number) => {
-        if (props.readonly) return;
+        if (props.updateHandler === undefined) return;
 
         // find the row for the given id.
         const row = rows.find((w) => props.getId(w) === id)!;;
@@ -139,14 +134,14 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
 
 
     const onDelete = async (id: number) => {
-        if (props.readonly) return;
+        if (props.deleteHandler === undefined) return;
 
         const row = rows.find((w) => props.getId(w) === id)!;;
 
         await confirm({ title: `Permanently Delete ${props.name} ${id}?` });
         try {
             setLoading(true);
-            await props.deleteHandler!(props.getId(row))
+            await props.deleteHandler(props.getId(row))
 
             fetchRows();
 
@@ -186,7 +181,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                 : null}
 
 
-            {editorShown && !props.readonly ?
+            {editorShown && props.formFields !== undefined ?
                 <Paper elevation={2} sx={{ p: "12px" }}>
                     <PageTitle>{selectedItem == null ? `Create ${props.name}` : `Edit ${props.name} ${(selectedItem as any).name ?? ""}`}</PageTitle>
                     <DataForm
@@ -219,7 +214,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                                     <Search onChange={(q) => setQuery(q)} />
                                     : null}
                                 <Box sx={{ flexGrow: 1 }} />
-                                {props.readonly ? null :
+                                {props.createHandler === undefined ? null :
                                     <Button variant="outlined" startIcon={<Add />} sx={{
                                         backgroundColor: "#DB5356",
                                         color: "white",
@@ -234,8 +229,8 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                                 filterModel={{ items: [] }}
                                 rows={filteredRows}
                                 getRowId={props.getId}
-                                onDelete={props.readonly ? undefined : onDelete}
-                                onEdit={props.readonly ? undefined : onEdit}
+                                onDelete={props.deleteHandler == undefined ? undefined : onDelete}
+                                onEdit={props.updateHandler === undefined ? undefined : onEdit}
                                 onView={props.viewHandler === undefined ? undefined : onView}
                                 loading={loading} />
                         </>
