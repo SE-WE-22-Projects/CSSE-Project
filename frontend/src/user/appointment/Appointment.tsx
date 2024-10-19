@@ -3,7 +3,7 @@ import AppAppBar from '../components/landing/AppAppBar'
 import { Box } from '@mui/material'
 import { PageTitle } from '../../components/Logo'
 import AppointmentForm from './AppointmentForm'
-import { AppointmentRequest, Doctor } from '../../api'
+import { AppointmentRequest, Doctor, Schedule } from '../../api'
 import { API } from '../../config'
 import StyledDataGrid from '../../components/StyledDataGrid'
 import { GridColDef } from '@mui/x-data-grid'
@@ -11,13 +11,17 @@ import { GridColDef } from '@mui/x-data-grid'
 
 const Appointment = () => {
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
+  const [scheduleList, setScheduleList] = useState<Schedule[]>([]);
+
+  const [showDoctorList, setShowDoctorList] = useState<boolean>(false);
 
   const fetchDoctorList = async () => {
     const response = await API.getAllDoctors();
     setDoctorList(response.data);
   }
-
-  
+  const fetchScheduleList = (id: number) => {
+    const response = await API.getSc
+  }
 
   const DoctorFields: GridColDef<Doctor>[] = [
     { field: 'personId', headerName: 'ID', width: 90 },
@@ -27,23 +31,33 @@ const Appointment = () => {
   ]
 
   const viewSchedule = (id: number) => {
-    console.log(id);  
+    console.log(id);
   }
 
   useEffect(() => {
     fetchDoctorList();
   }, []);
 
-  const createAppointemt = (data : AppointmentRequest) => {
-        
-    }
+  const createAppointemt = (data: AppointmentRequest) => {
+
+  }
   return (
     <>
       <AppAppBar />
       <Box marginTop={20} mx={10} alignItems={"center"}>
         <Box>
           <PageTitle>Appointment</PageTitle>
-          <StyledDataGrid rows={doctorList} columns={DoctorFields} onView={viewSchedule} getRowId={(w) => w.personId!}/>
+          {showDoctorList ?
+            <StyledDataGrid
+              rows={doctorList}
+              columns={DoctorFields}
+              onView={viewSchedule}
+              getRowId={(w) => w.personId!}
+            />
+            :
+            <></>
+          }
+
           <AppointmentForm />
         </Box>
       </Box>
@@ -52,7 +66,3 @@ const Appointment = () => {
 }
 
 export default Appointment
-
-function fetchDoctorList() {
-  throw new Error('Function not implemented.')
-}
