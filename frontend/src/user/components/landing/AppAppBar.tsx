@@ -71,7 +71,14 @@ export default function AppAppBar() {
               </Button> : null
             }
             {
-              user.loggedIn ? <UserCard small /> :
+              user.loggedIn ?
+                <>
+                  <Link to="/appointment">
+                    <Button color="primary" variant="text" size="small">
+                      Appointment
+                    </Button>
+                  </Link>
+                  <UserCard small /> </> :
                 <>
                   <Link to="/login">
                     <Button color="primary" variant="text" size="small">
