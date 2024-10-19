@@ -35,6 +35,7 @@ const PatientPage = () => {
         createHandler={(req) => API.createPatient(req)}
         deleteHandler={(id) => API.deletePatient(id)}
         updateHandler={(id, req) => API.updatePatient(id, req)}
+        searcher={(row, query) => query.test(row.name ?? "")}
     />
 }
 

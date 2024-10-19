@@ -47,6 +47,7 @@ const DoctorPage = () => {
         createHandler={(req) => API.createDoctor(req as any)}
         deleteHandler={(id) => API.deleteDoctor(id)}
         updateHandler={(id, req) => API.updateDoctor(id, req as any)}
+        searcher={(row, query) => query.test(row.name ?? "")}
     />
 }
 

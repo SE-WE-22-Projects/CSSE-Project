@@ -48,6 +48,7 @@ const AppointmentPage = () => {
         createHandler={(req) => API.createAppointment(req)}
         deleteHandler={(id) => API.deleteAppointment(id)}
         updateHandler={(id, req) => API.updateAppointment(id, req)}
+        searcher={(row, query) => query.test(row.patient?.name ?? "") || query.test(row.schedule?.doctor?.name ?? "")}
     />
 }
 

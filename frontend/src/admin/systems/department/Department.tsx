@@ -26,6 +26,7 @@ const DepartmentPage = () => {
         createHandler={(req) => API.createDepartment(req)}
         deleteHandler={(id) => API.deleteDepartment(id)}
         updateHandler={(id, req) => API.updateDepartment(id, req)}
+        searcher={(row, query) => query.test(row.name ?? "")}
     />
 }
 
