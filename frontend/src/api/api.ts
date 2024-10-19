@@ -162,6 +162,25 @@ export type AppointmentStatusEnum = typeof AppointmentStatusEnum[keyof typeof Ap
 /**
  * 
  * @export
+ * @interface AppointmentCreation
+ */
+export interface AppointmentCreation {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppointmentCreation
+     */
+    'date'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppointmentCreation
+     */
+    'scheduleId'?: number;
+}
+/**
+ * 
+ * @export
  * @interface AppointmentRequest
  */
 export interface AppointmentRequest {
@@ -948,7 +967,7 @@ export interface Payment {
      * @type {string}
      * @memberof Payment
      */
-    'paymentType'?: string;
+    'paymentType'?: PaymentPaymentTypeEnum;
     /**
      * 
      * @type {string}
@@ -956,6 +975,16 @@ export interface Payment {
      */
     'paymentDate'?: string;
 }
+
+export const PaymentPaymentTypeEnum = {
+    CreditCard: 'CREDIT_CARD',
+    DebitCard: 'DEBIT_CARD',
+    Cash: 'CASH',
+    Insurance: 'INSURANCE'
+} as const;
+
+export type PaymentPaymentTypeEnum = typeof PaymentPaymentTypeEnum[keyof typeof PaymentPaymentTypeEnum];
+
 /**
  * 
  * @export
@@ -1288,6 +1317,42 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(appointmentRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary POST api/appointment/patient
+         * @param {AppointmentCreation} appointmentCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAppointmentByPatient: async (appointmentCreation: AppointmentCreation, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'appointmentCreation' is not null or undefined
+            assertParamExists('createAppointmentByPatient', 'appointmentCreation', appointmentCreation)
+            const localVarPath = `/api/appointment/patient`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(appointmentCreation, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4176,6 +4241,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary POST api/appointment/patient
+         * @param {AppointmentCreation} appointmentCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createAppointmentByPatient(appointmentCreation: AppointmentCreation, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Appointment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createAppointmentByPatient(appointmentCreation, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.createAppointmentByPatient']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary POST api/bill
          * @param {BillRequest} billRequest 
          * @param {*} [options] Override http request option.
@@ -5272,6 +5350,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary POST api/appointment/patient
+         * @param {AppointmentCreation} appointmentCreation 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAppointmentByPatient(appointmentCreation: AppointmentCreation, options?: any): AxiosPromise<Appointment> {
+            return localVarFp.createAppointmentByPatient(appointmentCreation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary POST api/bill
          * @param {BillRequest} billRequest 
          * @param {*} [options] Override http request option.
@@ -6122,6 +6210,18 @@ export class DefaultApi extends BaseAPI {
      */
     public createAppointment(appointmentRequest: AppointmentRequest, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).createAppointment(appointmentRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary POST api/appointment/patient
+     * @param {AppointmentCreation} appointmentCreation 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public createAppointmentByPatient(appointmentCreation: AppointmentCreation, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).createAppointmentByPatient(appointmentCreation, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
