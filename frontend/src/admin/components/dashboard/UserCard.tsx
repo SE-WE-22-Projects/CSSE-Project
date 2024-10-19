@@ -1,18 +1,18 @@
 import { Stack, Avatar, Box, Typography } from '@mui/material'
 import OptionsMenu from './OptionsMenu'
-import { getUser } from '../../../util/user'
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useUser } from '../../../components/User';
 
 const UserCard = () => {
-    const user = getUser();
+    const user = useUser();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user == null) {
+        if (!user.loggedIn || !user.user?.isStaff) {
             navigate("/login");
         }
-    }, [])
+    }, [user])
 
 
     return (
@@ -28,16 +28,16 @@ const UserCard = () => {
         >
             <Avatar
                 sizes="small"
-                alt={user?.username}
+                alt={user.user?.username}
                 src="/static/images/avatar/7.jpg"
                 sx={{ width: 36, height: 36 }}
             />
             <Box sx={{ mr: 'auto' }}>
                 <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-                    {user?.username}
+                    {user.user?.username}
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    {user?.email}
+                    {user.user?.email}
                 </Typography>
             </Box>
             <OptionsMenu />

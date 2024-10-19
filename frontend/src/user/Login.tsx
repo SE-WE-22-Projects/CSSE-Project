@@ -4,11 +4,11 @@ import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
-import { getUser } from '../util/user';
 import { API } from '../config';
 import DataForm, { Field } from '../components/DataForm';
 import { LoginRequest } from '../api';
 import SiteLogo from '../components/Logo';
+import { useUser } from '../components/User';
 
 const LoginFields = {
     email: Field.email("Email"),
@@ -18,13 +18,12 @@ const LoginFields = {
 
 export default function Login() {
     const navigate = useNavigate();
+    const user = useUser();
 
     const handleSubmit = async (data: LoginRequest) => {
         try {
             let response = await API.login(data);
-            localStorage.setItem("jwt", response.data);
-
-
+            user.setToken(response.data);
         } catch (e: any) {
             if (e?.response?.status === 400) {
                 enqueueSnackbar("Invalid username or password", { variant: "error" })
@@ -35,19 +34,15 @@ export default function Login() {
         }
     };
 
-    const redirect = () => {
-        const user = getUser();
-        if (user !== null) {
-            if (!!user.role.find(v => v === "STAFF")) {
+    useEffect(() => {
+        if (user.loggedIn) {
+            if (user.user?.isStaff) {
                 navigate('/admin')
             } else {
                 navigate('/')
             }
         }
-    }
-
-
-    useEffect(redirect, [])
+    }, [user])
 
     return (
         <Box sx={{ height: '100%', width: "100%" }}>

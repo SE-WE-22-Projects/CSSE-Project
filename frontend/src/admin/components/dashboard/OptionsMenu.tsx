@@ -10,8 +10,8 @@ import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
-import { logout } from '../../../util/user';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../../components/User';
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
@@ -24,14 +24,13 @@ export default function OptionsMenu() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+  const user = useUser();
   const navigator = useNavigate();
 
+  const handleClose = () => setAnchorEl(null);
+
   const handleLogout = () => {
-    logout()
+    user.logout()
     navigator("/login");
   }
 
