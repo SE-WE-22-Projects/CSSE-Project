@@ -6,7 +6,7 @@ import Header from './dashboard/Header';
 import SideMenu from './dashboard/SideMenu';
 import { Link as MUILink, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { NonIndexRouteObject, Outlet } from 'react-router-dom'
 
 /**
@@ -22,10 +22,6 @@ export interface SystemRoutes {
    */
   basePath: string;
 
-  /**
-   * The main dashboard page element. This will be displayed when the user first visits the system.
-   */
-  dashboard: ReactNode
 
   /**
    * A list of all pages in the system
@@ -51,31 +47,14 @@ export interface Route extends NonIndexRouteObject {
   display?: Display;
 }
 
-
-
-export interface SidebarLinkProps {
-  /**
-   * The url the link redirects to
-   */
-  url: string
-  /**
-   * The title text to display for the link
-   */
-  title: string
-
-  /**
-   * An optional icon to display with the link
-   */
-  icon?: ReactNode
-}
-
-
-
-
 /**
  * Dashboard page component. This is the main layout used for all dashboard pages.
  */
 export const Dashboard = ({ routes }: { routes: SystemRoutes }) => {
+  useEffect(() => {
+    document.title = routes.title
+  }, [])
+
   return <Box sx={{ display: 'flex', height: "100%", minWidth: "90vw" }}>
     <SideMenu routes={routes} />
     {/* Main content */}

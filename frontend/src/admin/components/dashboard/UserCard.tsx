@@ -9,7 +9,7 @@ const UserCard = ({ small }: { small?: boolean }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user.loggedIn || !user.user?.isStaff) {
+        if (!user.loggedIn || !user.isStaff) {
             navigate("/");
         }
     }, [user])
@@ -28,17 +28,17 @@ const UserCard = ({ small }: { small?: boolean }) => {
         >
             <Avatar
                 sizes="small"
-                alt={user.user?.username}
+                alt={user.token?.username}
                 src="/static/images/avatar/7.jpg"
                 sx={{ width: small ? 30 : 36, height: small ? 30 : 36 }}
             />
             <Box sx={{ mr: 'auto' }}>
                 <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px', color: 'text.primary' }}>
-                    {user.user?.username}
+                    {user.token?.username}
                 </Typography>
                 {small ? null :
                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                        {user.user?.email}
+                        {user.token?.email}
                     </Typography>
                 }
             </Box>

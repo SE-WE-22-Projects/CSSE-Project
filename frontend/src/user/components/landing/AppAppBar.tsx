@@ -66,7 +66,7 @@ export default function AppAppBar() {
             }}
           >
             {
-              user.user?.isStaff ? <Button variant="text" color="info" size="small" onClick={() => navigate("/admin")}>
+              user.isStaff ? <Button variant="text" color="info" size="small" onClick={() => navigate("/dashboard")}>
                 Dashboard
               </Button> : null
             }
