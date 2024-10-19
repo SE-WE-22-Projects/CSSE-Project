@@ -35,7 +35,7 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     createHandler: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
     deleteHandler: ((id: number) => Promise<any>)
     updateHandler: ((id: number, updated: FieldData<F>) => Promise<AxiosResponse<T>>)
-    viewHandler?: ((id: T) => any)
+    viewHandler?: ((row: T) => any)
     getId: (data: T) => number,
     searcher?: (row: T, query: RegExp) => boolean
 }
@@ -50,8 +50,8 @@ interface ReadOnlyTablePageProps<T extends GridValidRowModel> {
     columns: GridColDef<T>[]
 
     readHandler: (() => Promise<AxiosResponse<T[]>>)
-    viewHandler?: ((id: T) => any)
-    getId: (data: T) => number,
+    viewHandler?: ((row: T) => any)
+    getId: (row: T) => number,
     searcher?: (row: T, query: RegExp) => boolean
 
     createHandler?: undefined
