@@ -1,6 +1,7 @@
 package com.csse.healthSphere.service;
 
 import com.csse.healthSphere.dto.DoctorRequest;
+import com.csse.healthSphere.dto.WardAllocation;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
 import com.csse.healthSphere.model.Department;
 import com.csse.healthSphere.model.Doctor;
@@ -23,15 +24,14 @@ public class DoctorService {
     private final ModelMapper modelMapper;
 
     /**
-     *
      * @param doctorRequest
      * @return
      */
     public Doctor createDoctor(DoctorRequest doctorRequest) {
         Department department = departmentRepository.findById(doctorRequest.getDepartmentId())
-                .orElseThrow(()-> new ResourceNotFoundException("Department not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
         Ward ward = wardRepository.findById(doctorRequest.getWardId())
-                .orElseThrow(()-> new ResourceNotFoundException("Ward not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ward not found"));
         Doctor doctor = modelMapper.map(doctorRequest, Doctor.class);
         doctor.setDepartment(department);
         doctor.setWard(ward);
@@ -40,7 +40,6 @@ public class DoctorService {
     }
 
     /**
-     *
      * @return
      */
     public List<Doctor> getAllDoctors() {
@@ -48,7 +47,6 @@ public class DoctorService {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -57,7 +55,6 @@ public class DoctorService {
     }
 
     /**
-     *
      * @param id
      * @param doctorRequest
      * @return
@@ -70,7 +67,6 @@ public class DoctorService {
     }
 
     /**
-     *
      * @param id
      */
     public void deleteDoctor(Long id) {
@@ -79,24 +75,31 @@ public class DoctorService {
     }
 
     /**
-     *
      * @param departmentId
      * @return
      */
-    public List<Doctor> findDoctorsByDepartment(Long departmentId){
+    public List<Doctor> findDoctorsByDepartment(Long departmentId) {
         Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(()-> new ResourceNotFoundException("Department not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
         return doctorRepository.findByDepartment(department);
     }
 
     /**
-     *
      * @param wardId
      * @return
      */
-    public List<Doctor> findDoctorsByWard(Long wardId){
+    public List<Doctor> findDoctorsByWard(Long wardId) {
         Ward ward = wardRepository.findById(wardId)
-                .orElseThrow(()-> new ResourceNotFoundException("Ward not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ward not found"));
         return doctorRepository.findByWard(ward);
+    }
+
+    public Doctor allocateWard(Long doctorId, WardAllocation wardAllocation) {
+        Ward ward = wardRepository.findById(wardAllocation.getWardId())
+                .orElseThrow(() -> new ResourceNotFoundException("Ward not found"));
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
+        doctor.setWard(ward);
+        return  doctorRepository.save(doctor);
     }
 }

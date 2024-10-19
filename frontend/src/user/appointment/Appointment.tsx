@@ -17,7 +17,6 @@ const Appointment = () => {
   const [showDoctorList, setShowDoctorList] = useState<boolean>(true);
   const [hideAppointmentForm, setHideAppointmentForm] = useState<boolean>(true);
 
-  const [selectedDoctorId, setSelectedDoctorId] = useState<number | undefined>();
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | undefined>();
 
   const fetchDoctorList = async () => {
@@ -46,7 +45,6 @@ const Appointment = () => {
   ]
 
   const viewSchedule = (id: number) => {
-    setSelectedDoctorId(id);
     fetchScheduleList(id);
     setShowDoctorList(false);
   }
@@ -72,7 +70,6 @@ const Appointment = () => {
   }
 
   const reset = () => {
-    setSelectedDoctorId(undefined);
     setSelectedSchedule(undefined);
     setShowDoctorList(true);
     setHideAppointmentForm(true);
