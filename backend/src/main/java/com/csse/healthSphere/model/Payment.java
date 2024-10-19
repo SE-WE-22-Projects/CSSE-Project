@@ -19,9 +19,9 @@ public class Payment {
     @Id
     private Long paymentId;
 
+    private double totalAmount;
     private String paymentType;
     private LocalDate paymentDate;
 }
 
 
-// TODO: no need any more
