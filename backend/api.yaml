@@ -6,6 +6,17 @@ info:
 servers:
   - url: "https://backend"
 paths:
+  /:
+    get:
+      summary: "GET "
+      operationId: "index"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
   /api/appointment/{id}:
     put:
       summary: "PUT api/appointment/{id}"
@@ -384,17 +395,6 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Patient"
-  /:
-    get:
-      summary: "GET "
-      operationId: "index"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                type: "string"
   /api/service/{id}:
     put:
       summary: "PUT api/service/{id}"
@@ -482,6 +482,93 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/MedicalService"
+  /api/bill/{id}:
+    put:
+      summary: "PUT api/bill/{id}"
+      operationId: "updateBill"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Bill"
+    delete:
+      summary: "DELETE api/bill/{id}"
+      operationId: "deleteBill"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "GET api/bill/{id}"
+      operationId: "getBillById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Bill"
+  /api/bill:
+    post:
+      summary: "POST api/bill"
+      operationId: "createBill"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Bill"
+    get:
+      summary: "GET api/bill"
+      operationId: "getAllBills"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Bill"
   /api/diagnosis/{id}:
     put:
       summary: "PUT api/diagnosis/{id}"
@@ -807,6 +894,26 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Admission"
+  /api/admission/patient/{id}:
+    get:
+      summary: "GET api/admission/patient/{id}"
+      operationId: "getAdmissionByPatientId"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Admission"
   /api/admission/appointment/{appointmentId}:
     get:
       summary: "GET api/admission/appointment/{appointmentId}"
@@ -1019,93 +1126,6 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/MedicalStaff"
-  /api/bill/{id}:
-    put:
-      summary: "PUT api/bill/{id}"
-      operationId: "updateBill"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BillRequest"
-        required: true
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Bill"
-    delete:
-      summary: "DELETE api/bill/{id}"
-      operationId: "deleteBill"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Void"
-    get:
-      summary: "GET api/bill/{id}"
-      operationId: "getBillById"
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Bill"
-  /api/bill:
-    post:
-      summary: "POST api/bill"
-      operationId: "createBill"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BillRequest"
-        required: true
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Bill"
-    get:
-      summary: "GET api/bill"
-      operationId: "getAllBills"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Bill"
   /api/department/{id}:
     put:
       summary: "PUT api/department/{id}"
@@ -1508,6 +1528,17 @@ paths:
             '*/*':
               schema:
                 type: "string"
+  /api/person:
+    get:
+      summary: "GET api/person"
+      operationId: "getLoggedPerson"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Person"
 components:
   schemas:
     AppointmentRequest:
@@ -1751,6 +1782,50 @@ components:
         price:
           type: "number"
           format: "float"
+    BillRequest:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+        totalPayment:
+          type: "number"
+          format: "float"
+    Payment:
+      type: "object"
+      properties:
+        paymentId:
+          type: "integer"
+          format: "int64"
+        totalAmount:
+          type: "number"
+          format: "double"
+        paymentType:
+          type: "string"
+          enum:
+            - "CREDIT_CARD"
+            - "DEBIT_CARD"
+            - "CASH"
+            - "INSURANCE"
+        paymentDate:
+          type: "string"
+          format: "date"
+    Bill:
+      type: "object"
+      properties:
+        billId:
+          type: "integer"
+          format: "int64"
+        status:
+          type: "string"
+          enum: [ ]
+        total:
+          type: "number"
+          format: "float"
+        payment:
+          $ref: "#/components/schemas/Payment"
+        paymentDate:
+          type: "string"
+          format: "date"
     DiagnosisRequest:
       type: "object"
       properties:
@@ -1907,50 +1982,6 @@ components:
             - "USER"
             - "STAFF"
             - "ADMIN"
-    BillRequest:
-      type: "object"
-      properties:
-        status:
-          type: "string"
-        totalPayment:
-          type: "number"
-          format: "float"
-    Payment:
-      type: "object"
-      properties:
-        paymentId:
-          type: "integer"
-          format: "int64"
-        totalAmount:
-          type: "number"
-          format: "double"
-        paymentType:
-          type: "string"
-          enum:
-            - "CREDIT_CARD"
-            - "DEBIT_CARD"
-            - "CASH"
-            - "INSURANCE"
-        paymentDate:
-          type: "string"
-          format: "date"
-    Bill:
-      type: "object"
-      properties:
-        billId:
-          type: "integer"
-          format: "int64"
-        status:
-          type: "string"
-          enum: [ ]
-        total:
-          type: "number"
-          format: "float"
-        payment:
-          $ref: "#/components/schemas/Payment"
-        paymentDate:
-          type: "string"
-          format: "date"
     DepartmentRequest:
       type: "object"
       properties:
@@ -2016,3 +2047,28 @@ components:
           type: "string"
         password:
           type: "string"
+    Person:
+      type: "object"
+      properties:
+        personId:
+          type: "integer"
+          format: "int64"
+        dob:
+          type: "string"
+          format: "date"
+        name:
+          type: "string"
+        address:
+          type: "string"
+        gender:
+          type: "string"
+        email:
+          type: "string"
+        phoneNo:
+          type: "string"
+        role:
+          type: "string"
+          enum:
+            - "USER"
+            - "STAFF"
+            - "ADMIN"
