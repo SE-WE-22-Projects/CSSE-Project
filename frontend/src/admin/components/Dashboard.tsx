@@ -34,6 +34,12 @@ interface Display {
    * Title to display in the sidebar
    */
   title: string;
+
+  /**
+   * If the page is an admin page
+   */
+  admin: boolean,
+
   /**
    * An optional icon to display in the sidebar.
    */
