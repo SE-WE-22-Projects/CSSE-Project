@@ -1,6 +1,7 @@
 package com.csse.healthSphere.controller;
 
 import com.csse.healthSphere.dto.DoctorRequest;
+import com.csse.healthSphere.dto.WardAllocation;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
 import com.csse.healthSphere.model.Doctor;
 import com.csse.healthSphere.service.DoctorService;
@@ -64,9 +65,9 @@ public class DoctorController {
     @GetMapping("/department/{departmentId}")
     public ResponseEntity<List<Doctor>> findDoctorsByDepartment(
             @PathVariable Long departmentId
-    ){
+    ) {
         List<Doctor> doctorList = doctorService.findDoctorsByDepartment(departmentId);
-        return new ResponseEntity<>(doctorList,HttpStatus.OK);
+        return new ResponseEntity<>(doctorList, HttpStatus.OK);
     }
 
     @GetMapping("/ward/{wardId}")
@@ -74,6 +75,15 @@ public class DoctorController {
             @PathVariable Long wardId
     ) {
         List<Doctor> doctorList = doctorService.findDoctorsByWard(wardId);
-        return new ResponseEntity<>(doctorList,HttpStatus.OK);
+        return new ResponseEntity<>(doctorList, HttpStatus.OK);
+    }
+
+    @PutMapping("/ward/{doctorId}")
+    public ResponseEntity<Doctor> allocateWard(
+            @PathVariable Long doctorId,
+            @RequestBody WardAllocation wardAllocation
+    ) {
+        Doctor doctor = doctorService.allocateWard(doctorId, wardAllocation);
+        return new ResponseEntity<>(doctor, HttpStatus.OK);
     }
 }
