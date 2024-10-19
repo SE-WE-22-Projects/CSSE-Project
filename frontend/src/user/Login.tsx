@@ -48,7 +48,15 @@ export default function Login() {
     return (
         <>
             <AppAppBar />
-            <Box sx={{ height: '100%', width: "100%", pt: 10 }}>
+            <Box sx={(theme) => ({
+                height: '100%', width: "100%", pt: 10,
+                backgroundImage:
+                    'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)',
+                ...theme.applyStyles('dark', {
+                    backgroundImage:
+                        'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
+                }),
+            })}>
                 <Box
                     sx={{
                         my: 8,

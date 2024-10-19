@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import SiteLogo from '../../../components/Logo';
 import ColorModeIconDropdown from '../../../theme/ColorModeIconDropdown';
 import { useUser } from '../../../components/User';
@@ -15,9 +14,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'space-between',
   flexShrink: 0,
-  borderRadius: `calc(${theme.shape.borderRadius}px + 8px)`,
   backdropFilter: 'blur(24px)',
-  border: '1px solid',
   borderColor: theme.palette.divider,
   backgroundColor: alpha(theme.palette.background.default, 0.4),
   boxShadow: theme.shadows[1],
@@ -31,77 +28,75 @@ export default function AppAppBar({ isHome }: { isHome?: boolean }) {
   return (
     <AppBar
       position="fixed"
-      sx={{ boxShadow: 0, bgcolor: 'transparent', backgroundImage: 'none', mt: 1 }}
+      sx={{ boxShadow: 0, bgcolor: 'transparent', backgroundImage: 'none' }}
     >
-      <Container maxWidth="lg">
-        <StyledToolbar variant="dense" disableGutters>
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            <Link to="/">
-              <SiteLogo responsive />
-            </Link>
-            <Box sx={{ display: 'flex' }}>
-              {isHome ? <>
+      <StyledToolbar variant="dense" disableGutters>
+        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
+          <Link to="/">
+            <SiteLogo responsive />
+          </Link>
+          <Box sx={{ display: 'flex' }}>
+            {isHome ? <>
+              <Button variant="text" color="info" size="small">
+                Features
+              </Button>
+              <Button variant="text" color="info" size="small">
+                Testimonials
+              </Button>
+              <Button variant="text" color="info" size="small">
+                Highlights
+              </Button>
+              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+                FAQ
+              </Button>
+            </> : <>
+              <Link to="/">
                 <Button variant="text" color="info" size="small">
-                  Features
+                  Home
                 </Button>
-                <Button variant="text" color="info" size="small">
-                  Testimonials
-                </Button>
-                <Button variant="text" color="info" size="small">
-                  Highlights
-                </Button>
-                <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
-                  FAQ
-                </Button>
-              </> : <>
-                <Link to="/">
-                  <Button variant="text" color="info" size="small">
-                    Home
+              </Link>
+            </>}
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: { xs: 'none', md: 'flex' },
+            gap: 1,
+            alignItems: 'center',
+          }}
+        >
+          <ColorModeIconDropdown />
+          {
+            user.isStaff ? <Button variant="contained" color="info" size="small" onClick={() => navigate("/dashboard")}>
+              Dashboard
+            </Button> : null
+          }
+          {
+            user.loggedIn ?
+              <>
+                <Link to="/appointment">
+                  <Button color="info" variant="contained" size="small">
+                    Appointments
                   </Button>
                 </Link>
-              </>}
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              gap: 1,
-              alignItems: 'center',
-            }}
-          >
-            <ColorModeIconDropdown />
-            {
-              user.isStaff ? <Button variant="contained" color="info" size="small" onClick={() => navigate("/dashboard")}>
-                Dashboard
-              </Button> : null
-            }
-            {
-              user.loggedIn ?
-                <>
-                  <Link to="/appointment">
-                    <Button color="info" variant="contained" size="small">
-                      Appointments
-                    </Button>
-                  </Link>
-                  <UserCard small /> </> :
-                <>
-                  <Link to="/login">
-                    <Button color="primary" variant="text" size="small">
-                      Sign in
-                    </Button>
-                  </Link>
-                  <Link to="/register">
-                    <Button color="primary" variant="contained" size="small">
-                      Sign up
-                    </Button>
-                  </Link>
-                </>
-            }
+                <UserCard small /> </> :
+              <>
+                <Link to="/login">
+                  <Button color="primary" variant="text" size="small">
+                    Sign in
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button color="primary" variant="contained" size="small">
+                    Sign up
+                  </Button>
+                </Link>
+              </>
+          }
 
-          </Box>
+        </Box>
 
-        </StyledToolbar>
-      </Container>
+      </StyledToolbar>
     </AppBar>
   );
 }
