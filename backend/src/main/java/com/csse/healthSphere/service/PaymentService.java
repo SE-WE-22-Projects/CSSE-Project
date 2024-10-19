@@ -23,7 +23,9 @@ public class PaymentService {
      * @return the created payment
      */
     public Payment createPayment(PaymentRequest paymentRequest) {
-        return null;
+        Payment payment = modelMapper.map(paymentRequest, Payment.class);
+        payment.setPaymentId(null);
+        return paymentRepository.save(payment);
     }
 
     /**
@@ -32,7 +34,7 @@ public class PaymentService {
      * @return a list of payments
      */
     public List<Payment> getAllPayments() {
-        return List.of();
+        return paymentRepository.findAll();
     }
 
     /**
@@ -43,7 +45,7 @@ public class PaymentService {
      * @throws ResourceNotFoundException if the payment does not exist
      */
     public Payment getPaymentById(Long id) {
-        return null;
+        return paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
     }
 
     /**
@@ -54,7 +56,9 @@ public class PaymentService {
      * @return the updated payment
      */
     public Payment updatePayment(Long id, PaymentRequest paymentRequest) {
-        return null;
+        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
+        payment.setPaymentType(paymentRequest.getPaymentType());
+        return paymentRepository.save(payment);
     }
 
     /**
@@ -63,6 +67,7 @@ public class PaymentService {
      * @param id the id of the payment
      */
     public void deletePayment(Long id) {
-
+        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
+        paymentRepository.delete(payment);
     }
 }
