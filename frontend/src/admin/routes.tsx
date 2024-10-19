@@ -72,7 +72,7 @@ export const DashboardRoutes: Route[] = [
 export const Routes = [
     {
         path: "/dashboard",
-        element: <Dashboard routes={{ title: "HealthSphere", basePath: "dashboard", routes: DashboardRoutes, dashboard: <></> }} />,
+        element: <Dashboard routes={{ title: "HealthSphere Dashboard", basePath: "dashboard", routes: DashboardRoutes }} />,
         children: [...DashboardRoutes],
     },
     {
