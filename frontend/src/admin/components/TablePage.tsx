@@ -35,7 +35,7 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     createHandler: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
     deleteHandler: ((id: number) => Promise<any>)
     updateHandler: ((id: number, updated: FieldData<F>) => Promise<AxiosResponse<T>>)
-    viewHandler?: ((id: number) => any)
+    viewHandler?: ((id: T) => any)
     getId: (data: T) => number,
     searcher?: (row: T, query: RegExp) => boolean
 }
@@ -50,7 +50,7 @@ interface ReadOnlyTablePageProps<T extends GridValidRowModel> {
     columns: GridColDef<T>[]
 
     readHandler: (() => Promise<AxiosResponse<T[]>>)
-    viewHandler?: ((id: number) => any)
+    viewHandler?: ((id: T) => any)
     getId: (data: T) => number,
     searcher?: (row: T, query: RegExp) => boolean
 
@@ -157,6 +157,13 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
         }
     }
 
+    const onView = async (id: number) => {
+        if (props.viewHandler === undefined) return;
+
+        const row = rows.find((w) => props.getId(w) === id)!;;
+        props.viewHandler(row);
+    }
+
     const closeEditor = () => {
         setSelectedItem(null);
         setEditorShown(false);
@@ -226,7 +233,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                                 getRowId={props.getId}
                                 onDelete={props.readonly ? undefined : onDelete}
                                 onEdit={props.readonly ? undefined : onEdit}
-                                onView={props.viewHandler}
+                                onView={props.viewHandler === undefined ? undefined : onView}
                                 loading={loading} />
                         </>
                     }
