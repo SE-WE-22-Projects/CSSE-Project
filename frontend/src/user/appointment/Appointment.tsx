@@ -3,7 +3,7 @@ import AppAppBar from '../components/landing/AppAppBar'
 import { Box } from '@mui/material'
 import { PageTitle } from '../../components/Logo'
 import AppointmentForm from './AppointmentForm'
-import { Doctor } from '../../api'
+import { AppointmentRequest, Doctor } from '../../api'
 import { API } from '../../config'
 import StyledDataGrid from '../../components/StyledDataGrid'
 import { GridColDef } from '@mui/x-data-grid'
@@ -17,9 +17,7 @@ const Appointment = () => {
     setDoctorList(response.data);
   }
 
-  const createAppointemt = () => {
-
-  }
+  
 
   const DoctorFields: GridColDef<Doctor>[] = [
     { field: 'personId', headerName: 'ID', width: 90 },
@@ -35,7 +33,10 @@ const Appointment = () => {
   useEffect(() => {
     fetchDoctorList();
   }, []);
-
+  
+  const createAppointemt = (data : AppointmentRequest) => {
+        
+    }
   return (
     <>
       <AppAppBar />
