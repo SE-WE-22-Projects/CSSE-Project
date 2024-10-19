@@ -3,10 +3,12 @@ package com.csse.healthSphere.service;
 import com.csse.healthSphere.model.Admission;
 import com.csse.healthSphere.dto.AdmissionRequest;
 import com.csse.healthSphere.model.Appointment;
+import com.csse.healthSphere.model.Diagnosis;
 import com.csse.healthSphere.model.Patient;
 import com.csse.healthSphere.repository.AdmissionRepository;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
 import com.csse.healthSphere.repository.AppointmentRepository;
+import com.csse.healthSphere.repository.DiagnosisRepository;
 import com.csse.healthSphere.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,7 +22,9 @@ public class AdmissionService {
     private final AdmissionRepository admissionRepository;
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+    private final DiagnosisService diagnosisService;
+    private final DiagnosisRepository diagnosisRepository;
 
     /**
      * Creates an admission from the given data
@@ -33,7 +37,12 @@ public class AdmissionService {
         Appointment appointment = appointmentRepository.findById(admissionRequest.getAppointmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
         admission.setAppointment(appointment);
-        admission.setAdmissionId(null);
+        admission = admissionRepository.save(admission);
+
+        Diagnosis diagnosis = new Diagnosis();
+        diagnosisRepository.save(diagnosis);
+        admission.setDiagnosis(diagnosis);
+
         return admissionRepository.save(admission);
     }
 
@@ -95,7 +104,6 @@ public class AdmissionService {
     }
 
     /**
-     *
      * @param patientId
      * @return
      */

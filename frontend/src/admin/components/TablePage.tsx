@@ -28,6 +28,7 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     columns: GridColDef<T>[]
     formFields: F
 
+    disableAdd?: boolean
     readHandler: (() => Promise<AxiosResponse<T[]>>)
     getId: (data: T) => number,
     createHandler?: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
@@ -46,6 +47,7 @@ interface ReadonlyTablePageProps<T extends GridValidRowModel> {
     columns: GridColDef<T>[]
     formFields?: undefined
 
+    disableAdd?: boolean
     readHandler: (() => Promise<AxiosResponse<T[]>>)
     getId: (data: T) => number,
     createHandler?: undefined
@@ -219,7 +221,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                                         backgroundColor: "#DB5356",
                                         color: "white",
                                         border: 'none'
-                                    }} onClick={() => setEditorShown(true)}>Add {props.name}</Button>
+                                    }} onClick={() => setEditorShown(true)} disabled={props.disableAdd}>Add {props.name}</Button>
                                 }
                             </Stack>
 

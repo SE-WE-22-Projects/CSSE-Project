@@ -680,44 +680,6 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Diagnosis"
-  /api/diagnosis/appointment/{appointmentId}:
-    get:
-      summary: "GET api/diagnosis/appointment/{appointmentId}"
-      operationId: "findDiagnosisByAppointment"
-      parameters:
-        - name: "appointmentId"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Diagnosis"
-  /api/diagnosis/patient/{patientId}:
-    get:
-      summary: "GET api/diagnosis/patient/{patientId}"
-      operationId: "findDiagnosisByPatient"
-      parameters:
-        - name: "patientId"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Diagnosis"
   /api/report/{id}:
     put:
       summary: "PUT api/report/{id}"
@@ -1839,45 +1801,30 @@ components:
     DiagnosisRequest:
       type: "object"
       properties:
-        patientId:
-          type: "integer"
-          format: "int64"
-        doctorId:
-          type: "integer"
-          format: "int64"
-        appointmentId:
+        admissionId:
           type: "integer"
           format: "int64"
         diagnosis:
           type: "string"
         prescription:
           type: "string"
-    Diagnosis:
+    Report:
       type: "object"
       properties:
-        diagnosisId:
+        reportId:
           type: "integer"
           format: "int64"
-        patient:
-          $ref: "#/components/schemas/Patient"
-        doctor:
-          $ref: "#/components/schemas/Doctor"
-        appointment:
-          $ref: "#/components/schemas/Appointment"
-        diagnosis:
-          type: "string"
-        prescription:
-          type: "string"
-    ReportRequest:
-      type: "object"
-      properties:
         result:
           type: "string"
         status:
           type: "string"
-        serviceId:
-          type: "integer"
-          format: "int64"
+          enum:
+            - "PENDING"
+            - "COMPLETED"
+        medicalService:
+          $ref: "#/components/schemas/MedicalService"
+        admission:
+          $ref: "#/components/schemas/Admission"
     Admission:
       type: "object"
       properties:
@@ -1900,21 +1847,31 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/Report"
-    Report:
+    Diagnosis:
       type: "object"
       properties:
-        reportId:
+        diagnosisId:
           type: "integer"
           format: "int64"
+        admission:
+          $ref: "#/components/schemas/Admission"
+        diagnosis:
+          type: "string"
+        prescription:
+          type: "string"
+    ReportRequest:
+      type: "object"
+      properties:
         result:
           type: "string"
         status:
           type: "string"
-          enum: [ ]
-        medicalService:
-          $ref: "#/components/schemas/MedicalService"
-        admission:
-          $ref: "#/components/schemas/Admission"
+        serviceId:
+          type: "integer"
+          format: "int64"
+        admissionId:
+          type: "integer"
+          format: "int64"
     AdmissionRequest:
       type: "object"
       properties:

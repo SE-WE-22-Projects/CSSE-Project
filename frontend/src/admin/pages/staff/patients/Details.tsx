@@ -7,13 +7,27 @@ import { API } from '../../../../config';
 import { enqueueSnackbar } from 'notistack';
 import { PageTitle } from '../../../../components/Logo';
 import { AccountCircle, Bed, History } from '@mui/icons-material';
+import TablePage from '../../../components/TablePage';
+import { GridColDef } from '@mui/x-data-grid';
+import { Field } from '../../../../components/DataForm';
+import dayjs from 'dayjs';
+import AdmissionViewer from './AdmissionViewer';
+
+const AdmissionFields: GridColDef<Admission>[] = [
+    { field: "admissionId", headerName: "ID" },
+    { field: "description", headerName: "Description", flex: 1 },
+    { field: "admissionDate", headerName: "Admission Date", width: 250 },
+    { field: "dischargeDate", headerName: "Discharge Date", valueGetter: (v) => v ?? "Ongoing", width: 250 },
+]
 
 const PatientDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [patient, setPatient] = useState<Patient>();
-    const [admissions, setAdmissions] = useState<Admission[]>();
+    const [admissions, setAdmissions] = useState<Admission[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const currentAdmission = admissions.find((a) => a.dischargeDate === null)
 
     const [page, setPage] = useState<'details' | 'admission' | 'history'>('details');
 
@@ -31,13 +45,18 @@ const PatientDetails = () => {
 
         setLoading(true);
         let patientRes = await API.getPatientById(Number.parseInt(id));
-        setPatient(patientRes.data);
-
         let admissionRes = await API.findAdmissionsByPatient(Number.parseInt(id));
+
         setAdmissions(admissionRes.data);
+        setPatient(patientRes.data);
 
         setLoading(false);
     });
+
+    const refresh = () => {
+        setLoading(true);
+        loadPatient();
+    }
 
     useEffect(() => {
         loadPatient()
@@ -56,6 +75,18 @@ const PatientDetails = () => {
             <Typography sx={{ fontSize: "1.4em" }}>Loading...</Typography>
         </Stack>
     }
+
+    const FormFields = {
+        admissionDate: Field.date("Admission Date", { minDate: dayjs() }),
+        description: Field.text("Description"),
+        appointmentId: Field.select("Appointment", {
+            loader: async () => (await API.findAppointmentsByPatient(patient.personId!)).data,
+            getInitial: (o: Admission) => o.appointment?.appointmentId,
+            valueFor: (v) => v.appointmentId,
+            labelFor: (v) => v.date!,
+        }),
+    }
+
 
     return <>
         <Box mb={4}>
@@ -102,7 +133,22 @@ const PatientDetails = () => {
             </>
             : null}
 
-        {page === "history" ? admissions?.map(v => JSON.stringify(v)) : null}
+        {page === "admission" ? <AdmissionViewer admission={currentAdmission!} canEdit refresh={refresh} /> : null}
+
+
+        {page === "history" ?
+            <TablePage
+                disableAdd={currentAdmission != null}
+                name='Admissions'
+                getId={(a) => a.admissionId!}
+                formFields={FormFields}
+                createHandler={(req) => API.createAdmission(req)}
+                viewHandler={() => console.log}
+                updateHandler={(id, data) => API.updateAdmission(id, data)}
+                readHandler={async () => { return API.findAdmissionsByPatient(patient.personId!) }}
+                columns={AdmissionFields}
+            /> : null}
+
     </>
 }
 

@@ -1,15 +1,9 @@
 package com.csse.healthSphere.service;
 
-import com.csse.healthSphere.model.Appointment;
-import com.csse.healthSphere.model.Diagnosis;
+import com.csse.healthSphere.model.*;
 import com.csse.healthSphere.dto.DiagnosisRequest;
-import com.csse.healthSphere.model.Doctor;
-import com.csse.healthSphere.model.Patient;
-import com.csse.healthSphere.repository.AppointmentRepository;
-import com.csse.healthSphere.repository.DiagnosisRepository;
+import com.csse.healthSphere.repository.*;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
-import com.csse.healthSphere.repository.DoctorRepository;
-import com.csse.healthSphere.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,10 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DiagnosisService {
     private final DiagnosisRepository diagnosisRepository;
-    private final PatientRepository patientRepository;
-    private final DoctorRepository doctorRepository;
-    private final AppointmentRepository appointmentRepository;
-    private ModelMapper modelMapper;
+    private final AdmissionRepository admissionRepository;
+    private final ModelMapper modelMapper;
 
     /**
      * Creates a diagnosis from the given data
@@ -32,18 +24,12 @@ public class DiagnosisService {
      * @return the created diagnosis
      */
     public Diagnosis createDiagnosis(DiagnosisRequest diagnosisRequest) {
-        Patient patient = patientRepository.findById(diagnosisRequest.getPatientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
-        Doctor doctor = doctorRepository.findById(diagnosisRequest.getDoctorId())
-                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
-        Appointment appointment = appointmentRepository.findById(diagnosisRequest.getAppointmentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+        Admission admission = admissionRepository.findById(diagnosisRequest.getAdmissionId())
+                .orElseThrow(() -> new ResourceNotFoundException("Admission not found"));
 
         Diagnosis diagnosis = modelMapper.map(diagnosisRequest, Diagnosis.class);
         diagnosis.setDiagnosisId(null);
-        diagnosis.setPatient(patient);
-        diagnosis.setDoctor(doctor);
-        diagnosis.setAppointment(appointment);
+        diagnosis.setAdmission(admission);
         return diagnosisRepository.save(diagnosis);
     }
 
@@ -78,7 +64,7 @@ public class DiagnosisService {
         Diagnosis diagnosis = diagnosisRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Diagnosis not found"));
         diagnosis.setDiagnosis(diagnosisRequest.getDiagnosis());
-        diagnosis.setPrescription(diagnosis.getPrescription());
+        diagnosis.setPrescription(diagnosisRequest.getPrescription());
 
         return diagnosisRepository.save(diagnosis);
     }
@@ -94,25 +80,5 @@ public class DiagnosisService {
         diagnosisRepository.delete(diagnosis);
     }
 
-    /**
-     *
-     * @param appointmentId
-     * @return
-     */
-    public Diagnosis findDiagnosisByAppointment(Long appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
-        return diagnosisRepository.findByAppointment(appointment);
-    }
 
-    /**
-     *
-     * @param patientId
-     * @return
-     */
-    public List<Diagnosis> findDiagnosisByPatient(Long patientId){
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(()-> new ResourceNotFoundException("Patient not found"));
-        return diagnosisRepository.findByPatient(patient);
-    }
 }

@@ -368,22 +368,10 @@ export interface Diagnosis {
     'diagnosisId'?: number;
     /**
      * 
-     * @type {Patient}
+     * @type {Admission}
      * @memberof Diagnosis
      */
-    'patient'?: Patient;
-    /**
-     * 
-     * @type {Doctor}
-     * @memberof Diagnosis
-     */
-    'doctor'?: Doctor;
-    /**
-     * 
-     * @type {Appointment}
-     * @memberof Diagnosis
-     */
-    'appointment'?: Appointment;
+    'admission'?: Admission;
     /**
      * 
      * @type {string}
@@ -408,19 +396,7 @@ export interface DiagnosisRequest {
      * @type {number}
      * @memberof DiagnosisRequest
      */
-    'patientId'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiagnosisRequest
-     */
-    'doctorId'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiagnosisRequest
-     */
-    'appointmentId'?: number;
+    'admissionId'?: number;
     /**
      * 
      * @type {string}
@@ -1095,7 +1071,7 @@ export interface Report {
      * @type {string}
      * @memberof Report
      */
-    'status'?: string;
+    'status'?: ReportStatusEnum;
     /**
      * 
      * @type {MedicalService}
@@ -1109,6 +1085,14 @@ export interface Report {
      */
     'admission'?: Admission;
 }
+
+export const ReportStatusEnum = {
+    Pending: 'PENDING',
+    Completed: 'COMPLETED'
+} as const;
+
+export type ReportStatusEnum = typeof ReportStatusEnum[keyof typeof ReportStatusEnum];
+
 /**
  * 
  * @export
@@ -1133,6 +1117,12 @@ export interface ReportRequest {
      * @memberof ReportRequest
      */
     'serviceId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ReportRequest
+     */
+    'admissionId'?: number;
 }
 /**
  * 
@@ -2532,74 +2522,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('findAppointsByDoctor', 'doctorId', doctorId)
             const localVarPath = `/api/appointment/doctor/{doctorId}`
                 .replace(`{${"doctorId"}}`, encodeURIComponent(String(doctorId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary GET api/diagnosis/appointment/{appointmentId}
-         * @param {number} appointmentId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findDiagnosisByAppointment: async (appointmentId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'appointmentId' is not null or undefined
-            assertParamExists('findDiagnosisByAppointment', 'appointmentId', appointmentId)
-            const localVarPath = `/api/diagnosis/appointment/{appointmentId}`
-                .replace(`{${"appointmentId"}}`, encodeURIComponent(String(appointmentId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary GET api/diagnosis/patient/{patientId}
-         * @param {number} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findDiagnosisByPatient: async (patientId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'patientId' is not null or undefined
-            assertParamExists('findDiagnosisByPatient', 'patientId', patientId)
-            const localVarPath = `/api/diagnosis/patient/{patientId}`
-                .replace(`{${"patientId"}}`, encodeURIComponent(String(patientId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4818,32 +4740,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary GET api/diagnosis/appointment/{appointmentId}
-         * @param {number} appointmentId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async findDiagnosisByAppointment(appointmentId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Diagnosis>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findDiagnosisByAppointment(appointmentId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.findDiagnosisByAppointment']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @summary GET api/diagnosis/patient/{patientId}
-         * @param {number} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async findDiagnosisByPatient(patientId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Diagnosis>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findDiagnosisByPatient(patientId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.findDiagnosisByPatient']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @summary GET api/doctor/department/{departmentId}
          * @param {number} departmentId 
          * @param {*} [options] Override http request option.
@@ -5854,26 +5750,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary GET api/diagnosis/appointment/{appointmentId}
-         * @param {number} appointmentId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findDiagnosisByAppointment(appointmentId: number, options?: any): AxiosPromise<Diagnosis> {
-            return localVarFp.findDiagnosisByAppointment(appointmentId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary GET api/diagnosis/patient/{patientId}
-         * @param {number} patientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        findDiagnosisByPatient(patientId: number, options?: any): AxiosPromise<Array<Diagnosis>> {
-            return localVarFp.findDiagnosisByPatient(patientId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary GET api/doctor/department/{departmentId}
          * @param {number} departmentId 
          * @param {*} [options] Override http request option.
@@ -6800,30 +6676,6 @@ export class DefaultApi extends BaseAPI {
      */
     public findAppointsByDoctor(doctorId: number, options?: RawAxiosRequestConfig) {
         return DefaultApiFp(this.configuration).findAppointsByDoctor(doctorId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary GET api/diagnosis/appointment/{appointmentId}
-     * @param {number} appointmentId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public findDiagnosisByAppointment(appointmentId: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).findDiagnosisByAppointment(appointmentId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary GET api/diagnosis/patient/{patientId}
-     * @param {number} patientId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public findDiagnosisByPatient(patientId: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).findDiagnosisByPatient(patientId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

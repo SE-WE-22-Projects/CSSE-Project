@@ -10,17 +10,9 @@ public class Diagnosis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diagnosisId;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
-
     @OneToOne
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
+    @JoinColumn(name = "admission_id")
+    private Admission admission;
 
     private String diagnosis;
     private String prescription;

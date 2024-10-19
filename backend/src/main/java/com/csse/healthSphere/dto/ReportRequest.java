@@ -7,4 +7,5 @@ public class ReportRequest {
     String result;
     String status;
     Long serviceId;
+    Long admissionId;
 }
