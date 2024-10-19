@@ -57,7 +57,7 @@ public class PaymentService {
      */
     public Payment updatePayment(Long id, PaymentRequest paymentRequest) {
         Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
-        payment.setPaymentType(paymentRequest.getPaymentType());
+        //payment.setPaymentType(paymentRequest.getPaymentType());
         return paymentRepository.save(payment);
     }
 
