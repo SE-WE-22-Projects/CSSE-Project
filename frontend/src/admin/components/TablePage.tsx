@@ -25,7 +25,8 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     title: string
     subtitle: string
 
-    disableAdd?: boolean
+    readonly?: false
+
 
     columns: GridColDef<T>[]
     formFields: F
@@ -34,13 +35,35 @@ interface TablePageProps<T extends GridValidRowModel, F extends Fields> {
     createHandler: ((data: FieldData<F>) => Promise<AxiosResponse<T>>)
     deleteHandler: ((id: number) => Promise<any>)
     updateHandler: ((id: number, updated: FieldData<F>) => Promise<AxiosResponse<T>>)
+    viewHandler?: ((id: number) => any)
     getId: (data: T) => number,
     searcher?: (row: T, query: RegExp) => boolean
 }
 
+interface ReadOnlyTablePageProps<T extends GridValidRowModel> {
+    name: string
+    title: string
+    subtitle: string
+
+    readonly: true
+
+    columns: GridColDef<T>[]
+
+    readHandler: (() => Promise<AxiosResponse<T[]>>)
+    viewHandler?: ((id: number) => any)
+    getId: (data: T) => number,
+    searcher?: (row: T, query: RegExp) => boolean
+
+    createHandler?: undefined
+    deleteHandler?: undefined
+    updateHandler?: undefined
+    formFields?: undefined
+}
 
 
-function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePageProps<T, F>) {
+
+
+function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePageProps<T, F> | ReadOnlyTablePageProps<T>) {
     const [rows, setRows] = useState<T[]>([]);
     const [editorShown, setEditorShown] = useState(false);
     const [selectedItem, setSelectedItem] = useState<T | null>(null);
@@ -62,6 +85,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     }, []);
 
     const onCreate = async (data: FieldData<F>) => {
+        if (props.readonly) return;
 
         try {
             setLoading(true);
@@ -81,6 +105,8 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     }
 
     const onUpdate = async (data: FieldData<F>) => {
+        if (props.readonly) return;
+
         try {
             setLoading(true);
 
@@ -101,6 +127,8 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
     }
 
     const onEdit = async (id: number) => {
+        if (props.readonly) return;
+
         // find the row for the given id.
         const row = rows.find((w) => props.getId(w) === id)!;;
 
@@ -111,12 +139,14 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
 
 
     const onDelete = async (id: number) => {
+        if (props.readonly) return;
+
         const row = rows.find((w) => props.getId(w) === id)!;;
 
         await confirm({ title: `Permanently Delete ${props.name} ${id}?` });
         try {
             setLoading(true);
-            await props.deleteHandler(props.getId(row))
+            await props.deleteHandler!(props.getId(row))
 
             fetchRows();
 
@@ -146,7 +176,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                 <Divider />
             </Box>
 
-            {editorShown ?
+            {editorShown && !props.readonly ?
                 <Paper elevation={2} sx={{ p: "12px" }}>
                     <PageTitle>{selectedItem == null ? `Create ${props.name}` : `Edit ${props.name} ${(selectedItem as any).name ?? ""}`}</PageTitle>
                     <DataForm
@@ -179,7 +209,7 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
                                     <Search onChange={(q) => setQuery(q)} />
                                     : null}
                                 <Box sx={{ flexGrow: 1 }} />
-                                {props.disableAdd ? null :
+                                {props.readonly ? null :
                                     <Button variant="outlined" startIcon={<Add />} sx={{
                                         backgroundColor: "#DB5356",
                                         color: "white",
@@ -191,10 +221,12 @@ function TablePage<T extends GridValidRowModel, F extends Fields>(props: TablePa
 
                             <StyledDataGrid
                                 columns={props.columns}
+                                filterModel={{ items: [] }}
                                 rows={filteredRows}
                                 getRowId={props.getId}
-                                onDelete={onDelete}
-                                onEdit={onEdit}
+                                onDelete={props.readonly ? undefined : onDelete}
+                                onEdit={props.readonly ? undefined : onEdit}
+                                onView={props.viewHandler}
                                 loading={loading} />
                         </>
                     }
