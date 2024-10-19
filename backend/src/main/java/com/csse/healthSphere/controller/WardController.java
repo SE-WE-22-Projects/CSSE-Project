@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/ward")
 @RestController
 @RequiredArgsConstructor
-public class WardController {
+public class WardController extends BaseController {
     private final WardService wardService;
 
     /**
@@ -86,17 +86,4 @@ public class WardController {
         wardService.deleteWard(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    /**
-     * Handle ResourceNotFoundException
-     *
-     * @param e the exception
-     * @return a response containing an error message
-     */
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-
 }
