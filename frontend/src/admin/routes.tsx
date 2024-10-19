@@ -1,11 +1,12 @@
 import { Route } from "./Dashboard";
-import { Apartment, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
+import { Apartment, BookmarkAdd, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
 import WardPage from "./systems/ward/Ward";
 import DepartmentPage from "./systems/department/Department";
 import PatientPage from "./systems/patient/Patient";
 import DoctorPage from "./systems/doctor/Doctor";
 import MedicalServicePage from "./systems/medicalService/MedicalService";
 import SchedulePage from "./systems/schedule/Schedule";
+import AppointmentPage from "./systems/appointment/Appointment";
 
 export const Routes: Route[] = [
     {
@@ -54,6 +55,14 @@ export const Routes: Route[] = [
         display: {
             title: "Schedule",
             icon: <DateRange />
+        }
+    },
+    {
+        element: <AppointmentPage />,
+        path: "appointment",
+        display: {
+            title: "Appointment",
+            icon: <BookmarkAdd />
         }
     }
 ];

@@ -72,6 +72,7 @@ interface FieldText extends FieldBasic<string> {
     minLength?: number
     maxLength?: number
     textArea?: boolean
+    hidden?: boolean
 }
 
 
@@ -535,7 +536,7 @@ const StringInput = (props: InputFieldProps<string, FieldText> & { parser?: (v?:
             validate();
             setHasFocus(false);
         }}
-
+        type={props.field.hidden ? 'password' : 'text'}
         multiline={props.field.textArea}
 
     />

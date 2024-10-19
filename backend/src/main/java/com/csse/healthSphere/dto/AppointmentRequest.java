@@ -1,5 +1,6 @@
 package com.csse.healthSphere.dto;
 
+import com.csse.healthSphere.enums.AppointmentStatus;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ public class AppointmentRequest {
     private LocalDate date;
     private LocalTime time;
     private int queueNo;
-    // private String status; // TODO: Use enum when implemented
+    private AppointmentStatus status;
     private long patientId;
-//    private int doctorId;
+    private long scheduleId;
 }

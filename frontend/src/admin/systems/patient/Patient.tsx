@@ -1,6 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid'
 import { Patient } from '../../../api';
-import { Field } from '../../../shared/components/DataForm';
+import { Field } from '../../../components/DataForm';
 import TablePage from '../../components/TablePage';
 import { API } from '../../../config';
 
@@ -25,7 +25,7 @@ const FormFields = {
 
 const PatientPage = () => {
     return <TablePage
-        disableAdd
+        // disableAdd
         name="Patient" title='Patient Management'
         subtitle='Manager Patient Details'
         columns={GridFields}
