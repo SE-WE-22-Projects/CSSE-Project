@@ -138,11 +138,19 @@ public class AppointmentService {
         appointment.setQueueNo(queueNo);
         appointment.setTime(time);
         Appointment createdAppointment =  appointmentRepository.save(appointment);
+
         //create charge
         Charge charge = new AppointmentCharge();
         charge.setAppointment(createdAppointment);
         charge.setAmount(2000.00F);
         chargeRepository.save(charge);
+
+        //create charge
+        Charge doctorCharge = new DoctorCharge();
+        doctorCharge.setAppointment(createdAppointment);
+        doctorCharge.setAmount(4000.00F);
+        chargeRepository.save(doctorCharge);
+
         return createdAppointment;
     }
 }

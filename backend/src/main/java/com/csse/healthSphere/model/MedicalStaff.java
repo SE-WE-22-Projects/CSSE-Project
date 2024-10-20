@@ -9,11 +9,11 @@ import lombok.EqualsAndHashCode;
 @Data
 @Inheritance(strategy = InheritanceType.JOINED)
 public class MedicalStaff extends Person {
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "ward_id")
     private Ward ward;
 }

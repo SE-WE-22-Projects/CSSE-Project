@@ -2,14 +2,8 @@ package com.csse.healthSphere.service;
 
 import com.csse.healthSphere.dto.ReportRequest;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
-import com.csse.healthSphere.model.Admission;
-import com.csse.healthSphere.model.MedicalService;
-import com.csse.healthSphere.model.Patient;
-import com.csse.healthSphere.model.Report;
-import com.csse.healthSphere.repository.AdmissionRepository;
-import com.csse.healthSphere.repository.MedicalServiceRepository;
-import com.csse.healthSphere.repository.PatientRepository;
-import com.csse.healthSphere.repository.ReportRepository;
+import com.csse.healthSphere.model.*;
+import com.csse.healthSphere.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,6 +18,7 @@ public class ReportService {
     private final MedicalServiceRepository medicalServiceRepository;
     private final AdmissionRepository admissionRepository;
     private final ModelMapper modelMapper;
+    private final ChargeRepository chargeRepository;
 
     /**
      * @param reportRequest
@@ -37,11 +32,17 @@ public class ReportService {
 
         Admission admission = admissionRepository.findById(reportRequest.getAdmissionId())
                 .orElseThrow(() -> new ResourceNotFoundException("Admission not found"));
+        report = reportRepository.save(report);
+
+        ServiceCharge charge = new ServiceCharge();
+        charge.setAmount(medicalService.getPrice());
+        charge.setReport(report);
+        charge.setAppointment(admission.getAppointment());
+        chargeRepository.save(charge);
 
         report.setAdmission(admission);
         report.setMedicalService(medicalService);
-        report.setReportId(null);
-        return reportRepository.save(report);
+        return report;
     }
 
     /**
