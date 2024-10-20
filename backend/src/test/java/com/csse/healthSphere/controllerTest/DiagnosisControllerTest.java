@@ -51,9 +51,7 @@ public class DiagnosisControllerTest {
         diagnosis.setPrescription("Rest and Flu medication");
 
         DiagnosisRequest request = new DiagnosisRequest();
-        request.setPatientId(1L);
-        request.setDoctorId(1L);
-        request.setAppointmentId(1L);
+        request.setAdmissionId(1L);
         request.setDiagnosis("Flu");
         request.setPrescription("Rest and Flu medication");
 
@@ -176,7 +174,7 @@ public class DiagnosisControllerTest {
 
     // Test for finding diagnosis by appointment id - positive case
     @Test
-    void findDiagnosisByAppointment_PositiveTest() throws Exception {
+    void findDiagnosisByAdmission_PositiveTest() throws Exception {
         Diagnosis diagnosis = new Diagnosis();
         diagnosis.setDiagnosisId(1L);
         diagnosis.setDiagnosis("COVID-19");
@@ -199,31 +197,6 @@ public class DiagnosisControllerTest {
                 .andExpect(jsonPath("$.message").value("Diagnosis not found"));
     }
 
-    // Test for finding diagnosis by patient id - positive case
-    @Test
-    void findDiagnosisByPatient_PositiveTest() throws Exception {
-        Diagnosis diagnosis = new Diagnosis();
-        diagnosis.setDiagnosisId(1L);
-        diagnosis.setDiagnosis("Allergy");
 
-        List<Diagnosis> diagnosisList = List.of(diagnosis);
-
-        when(diagnosisService.findDiagnosisByPatient(1L)).thenReturn(diagnosisList);
-
-        mockMvc.perform(get("/api/diagnosis/patient/{patientId}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].diagnosis").value("Allergy"));
-    }
-
-    // Test for finding diagnosis by patient id - negative case (no diagnosis found)
-    @Test
-    void findDiagnosisByPatient_NegativeTest_NotFound() throws Exception {
-        when(diagnosisService.findDiagnosisByPatient(1L)).thenReturn(List.of());
-
-        mockMvc.perform(get("/api/diagnosis/patient/{patientId}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
-    }
 }
 
