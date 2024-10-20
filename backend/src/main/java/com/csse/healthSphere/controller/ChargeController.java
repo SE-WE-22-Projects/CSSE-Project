@@ -86,4 +86,12 @@ public class ChargeController {
         chargeService.deleteCharge(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/appointment/{appointmentId}")
+    public ResponseEntity<List<Charge>> findChargesByAppointment(
+            @PathVariable Long appointmentId
+    ) {
+        List<Charge> chargeList = chargeService.findChargesByAppointment(appointmentId);
+        return new ResponseEntity<>(chargeList,HttpStatus.OK);
+    }
 }

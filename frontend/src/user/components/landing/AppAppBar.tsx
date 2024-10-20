@@ -52,7 +52,7 @@ export default function AppAppBar() {
         >
           <ColorModeIconDropdown />
           {
-            user.isStaff ? <Button variant="contained" color="info" size="small" onClick={() => navigate("/dashboard")}>
+            user.isStaff ? <Button variant="contained" color="info" size="small" onClick={() => navigate("/dashboard/patients")}>
               Dashboard
             </Button> : null
           }

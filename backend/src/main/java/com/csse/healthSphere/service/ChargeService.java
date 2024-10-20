@@ -1,7 +1,9 @@
 package com.csse.healthSphere.service;
 
+import com.csse.healthSphere.model.Appointment;
 import com.csse.healthSphere.model.Charge;
 import com.csse.healthSphere.dto.ChargeRequest;
+import com.csse.healthSphere.repository.AppointmentRepository;
 import com.csse.healthSphere.repository.ChargeRepository;
 import com.csse.healthSphere.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChargeService {
     private final ChargeRepository chargeRepository;
+    private final AppointmentRepository appointmentRepository;
     private ModelMapper modelMapper;
 
     /**
@@ -69,5 +72,12 @@ public class ChargeService {
     public void deleteCharge(Long id) {
         Charge charge = chargeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Charge not found"));
         chargeRepository.delete(charge);
+    }
+
+    public List<Charge> findChargesByAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(()-> new ResourceNotFoundException("Appointment not found"));
+
+        return chargeRepository.findByAppointment(appointment);
     }
 }
