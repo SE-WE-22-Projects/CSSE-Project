@@ -38,7 +38,7 @@ export default function Login() {
     useEffect(() => {
         if (user.loggedIn) {
             if (user.isStaff) {
-                navigate('/dashboard')
+                navigate('/dashboard/patients')
             } else {
                 navigate('/')
             }
