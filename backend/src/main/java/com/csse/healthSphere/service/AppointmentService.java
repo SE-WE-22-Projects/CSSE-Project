@@ -114,4 +114,6 @@ public class AppointmentService {
         Doctor doctor = doctorRepository.findById(doctorId).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
         return appointmentRepository.findByScheduleDoctor(doctor);
     }
+
+
 }
