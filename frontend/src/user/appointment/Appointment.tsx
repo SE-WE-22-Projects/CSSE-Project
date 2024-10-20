@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Button, Paper } from '@mui/material'
+import { Box, Button, Paper, Typography } from '@mui/material'
 import { PageTitle } from '../../components/Logo'
 import AppointmentForm from './AppointmentForm'
 import { Doctor, Schedule } from '../../api'
@@ -58,10 +58,16 @@ const Appointment = () => {
 
   const handleSubmit = async (data: { date: string }) => {
     try {
-      await API.createAppointmentByPatient({ ...data, scheduleId: selectedSchedule?.scheduleId });
+      let res =   await API.createAppointmentByPatient({ ...data, scheduleId: selectedSchedule?.scheduleId });
       setShowDoctorList(true);
       setHideAppointmentForm(true);
-      enqueueSnackbar("Appointment Created Successfully");
+      enqueueSnackbar(
+        <Box>
+        <Typography>Appointment Created Successfully.</Typography>
+        <Typography>Your Appointment is at {res.data.time}.</Typography>
+        <Typography>Queue No: {res.data.queueNo}</Typography>
+        </Box>
+        , {variant:'success'});
     }
     catch (e) {
       enqueueSnackbar("Failed to create appointment");

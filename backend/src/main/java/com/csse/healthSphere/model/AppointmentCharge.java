@@ -12,7 +12,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @DiscriminatorValue("appointment")
 public class AppointmentCharge extends Charge {
-    @OneToOne
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
+
 }
