@@ -3,7 +3,8 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
+import sideImage from "../../../assets/doctor_image.png";
+import { Link as NavLink } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -33,46 +34,57 @@ export default function Hero() {
         <Stack
           spacing={2}
           useFlexGap
-          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
+          sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' } }}
         >
-          <Typography
-            variant="h1"
-            sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: 'center',
-              alignContent: 'center',
-              justifyContent: 'center',
-              fontSize: 'clamp(2rem, 10vw, 2.5rem)',
-            }}
-          >
-            Providing Quality Healthcare For A
-            Brighter And Healthy Future
-          </Typography>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
-          >
-            At Our Hospital, We Are Dedicated To Providing Exceptional  Medical Care To Our Patients And Their Families. Our Experienced Team Of Medical Professionals. Cutting Edge Technology, And Compassionate Approach Make Us A Leader In The Healthcare Industry.
-          </Typography>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={1}
-            useFlexGap
-            sx={{ pt: 2, width: { xs: '100%', sm: '350px' } }}
-          >
+          <Stack direction="row" alignItems="center">
+            <Box>
+              <Typography
+                variant="h1"
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  alignItems: 'center',
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  textAlign: "center",
+                  fontSize: 'clamp(2rem, 10vw, 2.5rem)',
+                }}
+              >
+                Providing Quality Healthcare For A Brighter And Healthy Future
+              </Typography>
+              <Typography
+                sx={{
+                  pt: 4,
+                  textAlign: 'center',
+                  color: 'text.secondary',
+                }}
+              >
+                At Our Hospital, We Are Dedicated To Providing Exceptional  Medical Care To Our Patients And Their Families. Our Experienced Team Of Medical Professionals. Cutting Edge Technology, And Compassionate Approach Make Us A Leader In The Healthcare Industry.
+              </Typography>
+              <Stack
+                spacing={1}
+                alignContent={"center"}
+                useFlexGap
+                direction="row"
+                justifyContent="center"
+                sx={{ pt: 8 }}
+              >
+                <NavLink to="/appointment">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    sx={{ minWidth: 'fit-content' }}
+                  >
+                    Book Appointment
+                  </Button>
+                </NavLink>
 
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              sx={{ minWidth: 'fit-content' }}
-            >
-              Book Appointment
-            </Button>
+              </Stack>
+
+
+            </Box>
+            <img src={sideImage} style={{ maxWidth: "35vw" }} />
           </Stack>
 
         </Stack>

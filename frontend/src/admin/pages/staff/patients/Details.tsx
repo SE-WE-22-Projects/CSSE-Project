@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Admission, Patient } from '../../../../api';
-import { Box, List, ListItem, ListItemText, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Divider, List, ListItem, ListItemText, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { DNA } from 'react-loader-spinner';
 import { API } from '../../../../config';
 import { enqueueSnackbar } from 'notistack';
@@ -89,7 +89,10 @@ const PatientDetails = () => {
 
 
     return <>
-        <Box mb={4}>
+        <PageTitle>Patient Details</PageTitle>
+        <Divider />
+
+        <Box mt={4} mb={4}>
             <ToggleButtonGroup
                 value={page}
                 exclusive

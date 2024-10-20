@@ -27,6 +27,8 @@ export const ReportPage = () => {
     return (
         <TablePage
             name="Reports"
+            title='Report Management'
+            subtitle='Manage the state of reports'
             getId={(r) => r.reportId!}
             columns={ReportFields}
             readHandler={() => API.getAllReports()}

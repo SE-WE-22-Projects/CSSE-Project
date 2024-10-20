@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import AppAppBar from '../components/landing/AppAppBar'
-import { Box, Button } from '@mui/material'
+import { Box, Button, Paper } from '@mui/material'
 import { PageTitle } from '../../components/Logo'
 import AppointmentForm from './AppointmentForm'
 import { Doctor, Schedule } from '../../api'
@@ -31,7 +30,7 @@ const Appointment = () => {
   const DoctorFields: GridColDef<Doctor>[] = [
     { field: 'personId', headerName: 'ID', width: 90 },
     { field: 'name', headerName: "Name", width: 200, flex: 1 },
-    { field: 'dob', headerName: "Date of Birth", width: 200, flex: 1 },
+    { field: 'speciality', headerName: "Speciality", width: 200 },
     { field: 'gender', headerName: "Gender", width: 90 },
   ]
 
@@ -75,16 +74,15 @@ const Appointment = () => {
     setHideAppointmentForm(true);
   }
   return (
-    <>
-      <AppAppBar />
-      <Box marginTop={20} mx={10} alignItems={"center"}>
+    <Box marginTop={10} mx={10} alignItems={"center"}>
+      <Paper sx={{ px: 8, py: 8 }}>
         <Box justifyContent={"center"}>
-          <PageTitle textAlign="center">Create Appointment</PageTitle>
+          <PageTitle textAlign="center" pb={6}>Create Appointment</PageTitle>
           {
             hideAppointmentForm ?
               showDoctorList ?
                 <>
-                  <PageTitle>Doctor List</PageTitle>
+                  <PageTitle pb={4}>Select a Doctor</PageTitle>
                   <StyledDataGrid
                     rows={doctorList}
                     columns={DoctorFields}
@@ -94,7 +92,7 @@ const Appointment = () => {
                 </>
                 :
                 <>
-                  <PageTitle>Schedule List</PageTitle>
+                  <PageTitle pb={4}>Schedule List</PageTitle>
                   <StyledDataGrid
                     rows={scheduleList}
                     columns={ScheduleFields}
@@ -105,13 +103,14 @@ const Appointment = () => {
               :
               <AppointmentForm handleSubmit={handleSubmit} selectedSchedule={selectedSchedule} />
           }
-          <Box my={5} display={"flex"}>
-            <Box flexGrow={1}></Box>
-            <Button variant="contained" onClick={reset}>Reset</Button>
-          </Box>
+          {!showDoctorList ?
+            <Box my={5} display={"flex"} >
+              <Box flexGrow={1}></Box>
+              <Button variant="contained" onClick={reset}>Reset</Button>
+            </Box> : null}
         </Box>
-      </Box>
-    </>
+      </Paper>
+    </Box>
   )
 }
 
