@@ -4,6 +4,7 @@ import { Appointment } from "../../api"
 import TablePage from "../../admin/components/TablePage"
 import { API } from "../../config"
 import { Box, Paper } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 
 const AppointmentList = () => {
 
@@ -15,13 +16,20 @@ const AppointmentList = () => {
         { field: 'status', headerName: "Status", width: 90 },
     ];
 
+    const navigate = useNavigate();
+
     return (
         <>
             <Box marginTop={10} mx={10} alignItems={"center"}>
                 <Paper sx={{ px: 8, py: 8 }}>
                     <Box justifyContent={"center"}></Box>
                     <PageTitle>Appointment List</PageTitle>
-                    <TablePage readHandler={() => API.getAllAppointments()} getId={(a) => a.appointmentId!} columns={AppointmentFields} name="Appointment" />
+                    <TablePage 
+                    readHandler={() => API.getAllAppointments()}
+                    getId={(a) => a.appointmentId!}
+                    columns={AppointmentFields}
+                    viewHandler={(r)=>navigate(`/appointment/list/${r.appointmentId}`)}
+                     name="Appointment" />
                 </Paper>
             </Box>
         </>

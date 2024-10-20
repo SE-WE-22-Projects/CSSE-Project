@@ -51,6 +51,7 @@ public class DiagnosisControllerTest {
         diagnosis.setPrescription("Rest and Flu medication");
 
         DiagnosisRequest request = new DiagnosisRequest();
+        request.setAdmissionId(1L);
         request.setDiagnosis("Flu");
         request.setPrescription("Rest and Flu medication");
 
@@ -170,6 +171,5 @@ public class DiagnosisControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Diagnosis not found"));
     }
-
 }
 
