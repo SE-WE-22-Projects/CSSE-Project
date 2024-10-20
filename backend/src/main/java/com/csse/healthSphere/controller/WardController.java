@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/ward")
 @RestController
 @RequiredArgsConstructor
-public class WardController extends BaseController {
+public class WardController{
     private final WardService wardService;
 
     /**
