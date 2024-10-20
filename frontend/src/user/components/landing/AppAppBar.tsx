@@ -21,7 +21,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-export default function AppAppBar({ isHome }: { isHome?: boolean }) {
+export default function AppAppBar() {
   const user = useUser();
   const navigate = useNavigate();
 

@@ -78,6 +78,8 @@ public class AdmissionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Admission not found"));
         admission.setAdmissionDate(admissionRequest.getAdmissionDate());
         admission.setDescription(admissionRequest.getDescription());
+        if (admissionRequest.getDischargeDate() != null)
+            admission.setDischargeDate(admissionRequest.getDischargeDate());
 
         return admissionRepository.save(admission);
     }

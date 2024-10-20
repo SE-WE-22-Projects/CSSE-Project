@@ -3,9 +3,10 @@ import { Admission, MedicalService, Report } from '../../../../api'
 import TablePage from '../../../components/TablePage'
 import { API } from '../../../../config'
 import DataForm, { Field, FieldData } from '../../../../components/DataForm'
-import { Box, Button, Divider, List, ListItem, ListItemText } from '@mui/material'
+import { Box, Button, Divider, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { PageTitle } from '../../../../components/Logo'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 
 const ReportFields: GridColDef<Report>[] = [
     { field: "reportId", headerName: "ID" },
@@ -14,7 +15,7 @@ const ReportFields: GridColDef<Report>[] = [
     { field: "status", headerName: "Status" },
 ]
 
-const AdmissionForm = {
+const ReportForm = {
     serviceId: Field.select("Service", {
         loader: async () => (await API.getAllServices()).data,
         valueFor: (v) => v.serviceId,
@@ -28,15 +29,28 @@ const DiagnosisForm = {
     prescription: Field.text("Prescription", { textArea: true })
 }
 
-const AdmissionViewer = ({ admission, canEdit, refresh }: { admission: Admission, canEdit: boolean, refresh: () => any }) => {
+const AdmissionViewer = ({ admission, canEdit, refresh }: { admission?: Admission, canEdit: boolean, refresh: (close?: boolean) => any }) => {
 
     const [editing, setEditing] = useState(false);
 
     const updateDiagnosis = async (data: FieldData<typeof DiagnosisForm>) => {
-        await API.updateDiagnosis(admission.diagnosis?.diagnosisId!, { ...data, admissionId: admission.admissionId });
+        await API.updateDiagnosis(admission!.diagnosis?.diagnosisId!, { ...data, admissionId: admission!.admissionId });
         setEditing(false);
         refresh();
     }
+
+    const discharge = async () => {
+        await API.updateAdmission(admission!.admissionId!, { admissionDate: admission!.admissionDate, description: admission!.description, appointmentId: admission!.appointment?.appointmentId, dischargeDate: dayjs().format("YYYY-MM-DD") });
+        refresh(true);
+    }
+
+    if (admission === undefined) {
+        return <Typography sx={{ fontWeight: 700, fontSize: "1.2rem", textAlign: "center" }}>
+            Patient is not currently admitted.
+        </Typography>
+    }
+
+
 
     return (
         <>
@@ -54,6 +68,7 @@ const AdmissionViewer = ({ admission, canEdit, refresh }: { admission: Admission
                     </List>
                     <Box>
                         <Button variant='contained' onClick={() => setEditing(true)}>Edit</Button>
+                        <Button variant='contained' onClick={() => discharge()}>Discharge</Button>
                     </Box>
                 </>
             }
@@ -61,7 +76,7 @@ const AdmissionViewer = ({ admission, canEdit, refresh }: { admission: Admission
                 title='Reports'
                 name="Report Request"
                 columns={ReportFields}
-                formFields={AdmissionForm}
+                formFields={ReportForm}
                 readHandler={() => API.getAllReports()}
                 getId={(v) => v.reportId!}
                 createHandler={canEdit ? (req) => API.createReport({ ...req, admissionId: admission.admissionId, status: "PENDING" }) : undefined}

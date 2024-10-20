@@ -53,8 +53,9 @@ const PatientDetails = () => {
         setLoading(false);
     });
 
-    const refresh = () => {
+    const refresh = (close?: boolean) => {
         setLoading(true);
+        if (close) setPage("details");
         loadPatient();
     }
 

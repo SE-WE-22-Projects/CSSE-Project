@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 export default function PageLayout() {
   return <>
     <Box sx={{ width: "100%", minHeight: "100%", display: "flex", flexDirection: "column" }}>
-      <AppAppBar isHome />
+      <AppAppBar />
       <Box flexGrow="1">
         <Outlet />
       </Box>
