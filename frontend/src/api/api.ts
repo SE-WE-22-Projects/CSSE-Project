@@ -2780,8 +2780,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllCharges: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/charge`;
+        getAllChargesByPatientId: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            assertParamExists('deleteChargeById', 'id', id)
+            const localVarPath = `/api/charge/appointment/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4833,8 +4836,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllCharges(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Charge>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllCharges(options);
+        async getAllCharges(id:number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Charge>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllChargesByPatientId(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getAllCharges']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6767,8 +6770,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getAllCharges(options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getAllCharges(options).then((request) => request(this.axios, this.basePath));
+    public getAllChargeByPatient(id:number, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getAllCharges(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
