@@ -35,7 +35,7 @@ public class AuthenticationService implements org.springframework.security.core.
         }
 
         return patientRepository.findByEmail(email).map(
-                person -> new AuthUser(person.getEmail(), person.getPassword(), Role.ADMIN, person)
+                person -> new AuthUser(person.getEmail(), person.getPassword(), Role.USER, person)
         );
     }
 }
