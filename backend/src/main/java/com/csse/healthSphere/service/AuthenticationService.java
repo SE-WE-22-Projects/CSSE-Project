@@ -4,6 +4,7 @@ import com.csse.healthSphere.dto.AuthUser;
 import com.csse.healthSphere.enums.Role;
 import com.csse.healthSphere.repository.MedicalServiceRepository;
 import com.csse.healthSphere.repository.MedicalStaffRepository;
+import com.csse.healthSphere.repository.PatientRepository;
 import com.csse.healthSphere.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService implements org.springframework.security.core.userdetails.UserDetailsService {
-    private final PersonRepository personRepository;
+    private final PatientRepository patientRepository;
     private final MedicalStaffRepository medicalStaffRepository;
 
 
@@ -25,7 +26,15 @@ public class AuthenticationService implements org.springframework.security.core.
 
 
     public Optional<AuthUser> findByEmail(String email) {
-        return medicalStaffRepository.findByEmail(email).map(
+        var staff =  medicalStaffRepository.findByEmail(email).map(
+                person -> new AuthUser(person.getEmail(), person.getPassword(), Role.ADMIN, person)
+        );
+
+        if (staff.isPresent()){
+            return staff;
+        }
+
+        return patientRepository.findByEmail(email).map(
                 person -> new AuthUser(person.getEmail(), person.getPassword(), Role.ADMIN, person)
         );
     }
