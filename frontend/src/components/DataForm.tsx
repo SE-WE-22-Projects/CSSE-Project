@@ -5,7 +5,7 @@ import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const numberRegex = /^[+-]?\d+(\.\d+)?$/;
-const phoneRegex = /\d{10}/;
+const phoneRegex = /^\d{10}$/;
 
 enum FieldType {
     Text,
