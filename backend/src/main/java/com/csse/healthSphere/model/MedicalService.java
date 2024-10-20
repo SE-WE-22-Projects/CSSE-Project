@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
@@ -17,12 +18,5 @@ public class MedicalService {
     private String description;
     private String category;
     private float price;
-
-    public MedicalService(Long id, String name, String description, float price) {
-        this.serviceId = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
 
 }
