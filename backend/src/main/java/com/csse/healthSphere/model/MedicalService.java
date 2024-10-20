@@ -17,4 +17,12 @@ public class MedicalService {
     private String description;
     private String category;
     private float price;
+
+    public MedicalService(Long id, String name, String description, float price) {
+        this.serviceId = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+
 }
