@@ -20,4 +20,15 @@ public class BaseController {
     public ResponseEntity<Map<String,String>> handleResourceNotFoundException(ResourceNotFoundException e) {
         return new ResponseEntity<>(Map.of("message",e.getMessage()), HttpStatus.NOT_FOUND);
     }
+
+    /**
+     * Handle all exceptions thrown by the server
+     *
+     * @param e the exception
+     * @return a response containing an error message
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String,String>> handleExceptions(Exception e){
+        return new ResponseEntity<>(Map.of("message", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
