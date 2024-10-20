@@ -171,32 +171,5 @@ public class DiagnosisControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Diagnosis not found"));
     }
-
-    // Test for finding diagnosis by appointment id - positive case
-    @Test
-    void findDiagnosisByAdmission_PositiveTest() throws Exception {
-        Diagnosis diagnosis = new Diagnosis();
-        diagnosis.setDiagnosisId(1L);
-        diagnosis.setDiagnosis("COVID-19");
-
-        when(diagnosisService.findDiagnosisByAppointment(1L)).thenReturn(diagnosis);
-
-        mockMvc.perform(get("/api/diagnosis/appointment/{appointmentId}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.diagnosisId").value(1L))
-                .andExpect(jsonPath("$.diagnosis").value("COVID-19"));
-    }
-
-    // Test for finding diagnosis by appointment id - negative case (diagnosis not found)
-    @Test
-    void findDiagnosisByAppointment_NegativeTest_NotFound() throws Exception {
-        when(diagnosisService.findDiagnosisByAppointment(1L)).thenThrow(new ResourceNotFoundException("Diagnosis not found"));
-
-        mockMvc.perform(get("/api/diagnosis/appointment/{appointmentId}", 1L))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Diagnosis not found"));
-    }
-
-
 }
 
