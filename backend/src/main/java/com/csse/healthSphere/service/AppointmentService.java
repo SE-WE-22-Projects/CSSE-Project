@@ -25,8 +25,9 @@ public class AppointmentService {
     private final ChargeRepository chargeRepository;
 
     /**
+     * Create a new appointment
      * @param appointmentRequest
-     * @return
+     * @return the newly created appointment
      */
     public Appointment createAppointment(AppointmentRequest appointmentRequest) {
         Appointment appointment = modelMapper.map(appointmentRequest, Appointment.class);
@@ -44,21 +45,24 @@ public class AppointmentService {
     }
 
     /**
-     * @return
+     * Get all appointments
+     * @return a list of all appointments
      */
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 
     /**
+     * Get a appointment by id
      * @param id
-     * @return
+     * @return the appointment for the given id
      */
     public Appointment getAppointmentById(Long id) {
         return appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
     }
 
     /**
+     * Update an appointment
      * @param id
      * @param appointmentRequest
      * @return
@@ -79,7 +83,9 @@ public class AppointmentService {
     }
 
     /**
+     * Delete an appointment
      * @param id
+     * @return
      */
     public void deleteAppointment(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
@@ -87,8 +93,9 @@ public class AppointmentService {
     }
 
     /**
+     * Find appointments by patient
      * @param patientId
-     * @return
+     * @return a list of all appointments for the given patient
      */
     public List<Appointment> findAppointmentsByPatient(Long patientId) {
         Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
@@ -96,8 +103,9 @@ public class AppointmentService {
     }
 
     /**
+     * Find appointments by schedule
      * @param scheduleId
-     * @return
+     * @return a list of all appointments for the given schedule
      */
     public List<Appointment> findAppointmentsBySchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ResourceNotFoundException("Schedule not found"));
@@ -105,6 +113,7 @@ public class AppointmentService {
     }
 
     /**
+     * Find appointments by doctor
      * @param doctorId
      * @return
      */
@@ -114,7 +123,7 @@ public class AppointmentService {
     }
 
     /**
-     *
+     *  Create a new appointment by patient
      * @param appointmentRequest
      * @param authUser
      * @return

@@ -63,7 +63,7 @@ public class ChargeService {
 
     /**
      * Deletes a charge
-     *
+     * 
      * @param id the id of the charge
      */
     public void deleteCharge(Long id) {

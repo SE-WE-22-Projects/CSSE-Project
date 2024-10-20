@@ -96,6 +96,7 @@ public class AdmissionService {
     }
 
     /**
+     * Finds the admission for the given appointment
      * @param appointmentId
      * @return
      */
@@ -106,6 +107,7 @@ public class AdmissionService {
     }
 
     /**
+     * Finds all admissions for the given patient
      * @param patientId
      * @return
      */

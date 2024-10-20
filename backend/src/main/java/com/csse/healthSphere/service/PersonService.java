@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 public class PersonService {
     private final PersonRepository personRepository;
 
+    /**
+     * Get the logged in person
+     * @param authUser the authenticated user
+     * @return the logged in person
+     */
     public Person getLoggedPerson(AuthUser authUser){
         return personRepository.findById(authUser.getPerson().getPersonId())
                 .orElseThrow(()-> new ResourceNotFoundException("Person not found"));

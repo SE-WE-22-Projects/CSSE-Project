@@ -28,7 +28,7 @@ public class BillService {
 
     /**
      * Gets a list of all existing bills.
-     *
+     * 
      * @return a list of bills
      */
     public List<Bill> getAllBills() {

@@ -29,7 +29,11 @@ public class JwtTokenUtil {
         this.modelMapper = modelMapper;
     }
 
-
+    /**
+     * Generate a new access token for the given user
+     * @param user the user to generate the token for
+     * @return the generated token
+     */
     public String generateAccessToken(AuthUser user) {
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("email", user.getUsername());
@@ -43,7 +47,11 @@ public class JwtTokenUtil {
                 .signWith(getSignInKey()).compact();
     }
 
-
+    /**
+     * Parse the given token
+     * @param token the token to parse
+     * @return the parsed token
+     */
     public Optional<JWTToken> parseToken(String token) {
         try {
             Jws<Claims> jwt = Jwts.parser()
@@ -62,6 +70,10 @@ public class JwtTokenUtil {
         return Optional.empty();
     }
 
+    /**
+     * Get the secret key for signing in
+     * @return the secret key
+     */
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);

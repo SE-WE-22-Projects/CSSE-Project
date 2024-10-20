@@ -30,7 +30,7 @@ public class PaymentService {
 
     /**
      * Gets a list of all existing payments.
-     *
+     *@param paymentRequest the data for the new payment
      * @return a list of payments
      */
     public List<Payment> getAllPayments() {

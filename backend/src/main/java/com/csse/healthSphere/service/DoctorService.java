@@ -24,6 +24,7 @@ public class DoctorService {
     private final ModelMapper modelMapper;
 
     /**
+     * create a new doctor
      * @param doctorRequest
      * @return
      */
@@ -40,24 +41,27 @@ public class DoctorService {
     }
 
     /**
-     * @return
+     * get all doctors
+     * @return a list of all doctors
      */
     public List<Doctor> getAllDoctors() {
         return doctorRepository.findAll();
     }
 
     /**
+     * get a doctor by id
      * @param id
-     * @return
+     * @return the doctor for the given id
      */
     public Doctor getDoctorById(Long id) {
         return doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
     }
 
     /**
+     * update a doctor by id
      * @param id
      * @param doctorRequest
-     * @return
+     * @return the updated doctor
      */
     public Doctor updateDoctor(Long id, DoctorRequest doctorRequest) {
         Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
@@ -67,7 +71,9 @@ public class DoctorService {
     }
 
     /**
+     * delete a doctor
      * @param id
+     * @throws ResourceNotFoundException
      */
     public void deleteDoctor(Long id) {
         Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
@@ -75,8 +81,9 @@ public class DoctorService {
     }
 
     /**
+     * find doctors by department
      * @param departmentId
-     * @return
+     * @return  a list of doctors
      */
     public List<Doctor> findDoctorsByDepartment(Long departmentId) {
         Department department = departmentRepository.findById(departmentId)
@@ -85,8 +92,9 @@ public class DoctorService {
     }
 
     /**
+     * find doctors by ward
      * @param wardId
-     * @return
+     * @return a list of doctors
      */
     public List<Doctor> findDoctorsByWard(Long wardId) {
         Ward ward = wardRepository.findById(wardId)
@@ -94,6 +102,12 @@ public class DoctorService {
         return doctorRepository.findByWard(ward);
     }
 
+    /**
+     * allocate a ward to a doctor
+     * @param doctorId the id of the doctor
+     * @param wardAllocation the ward to allocate
+     * @return the updated doctor
+     */
     public Doctor allocateWard(Long doctorId, WardAllocation wardAllocation) {
         Ward ward = wardRepository.findById(wardAllocation.getWardId())
                 .orElseThrow(() -> new ResourceNotFoundException("Ward not found"));

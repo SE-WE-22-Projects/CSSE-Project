@@ -86,6 +86,7 @@ public class ScheduleService {
     }
 
     /**
+     * find schedules by doctor
      * @param doctorId
      * @return
      */
@@ -96,6 +97,7 @@ public class ScheduleService {
     }
 
     /**
+     * find schedules by day
      * @param day
      * @return
      */
@@ -104,6 +106,7 @@ public class ScheduleService {
     }
 
     /**
+     * find schedule by doctor and day
      * @param doctorId
      * @param day
      * @return
