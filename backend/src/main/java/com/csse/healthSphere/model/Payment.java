@@ -1,5 +1,6 @@
 package com.csse.healthSphere.model;
 
+import com.csse.healthSphere.enums.PaymentType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Payment {
     private Long paymentId;
 
     private double totalAmount;
-    private String paymentType;
+    private PaymentType paymentType;
     private LocalDate paymentDate;
 }
 

@@ -1,5 +1,5 @@
 import { Dashboard, Route } from "./components/Dashboard";
-import { Apartment, BookmarkAdd, DateRange, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
+import { Apartment, Badge, BookmarkAdd, DateRange, FileCopy, Hotel, LocalHospital, MedicalInformation, MedicalServices } from "@mui/icons-material";
 import WardPage from "./pages/admin/Ward";
 import DepartmentPage from "./pages/admin/Department";
 import PatientPage from "./pages/admin/Patient";
@@ -8,8 +8,34 @@ import MedicalServicePage from "./pages/admin/MedicalService";
 import SchedulePage from "./pages/admin/Schedule";
 import AppointmentPage from "./pages/admin/Appointment";
 import Login from "../user/Login";
+import PatientList from "./pages/staff/patients/List";
+import PatientDetails from "./pages/staff/patients/Details";
+import WardAllocation from "./pages/admin/WardAllocation";
+import { ReportPage } from "./pages/staff/Report";
 
 export const DashboardRoutes: Route[] = [
+    {
+        element: <PatientList />,
+        path: "patients",
+        display: {
+            title: "Patient Details",
+            icon: <Hotel />,
+            admin: false
+        },
+    },
+    {
+        element: <ReportPage />,
+        path: "report",
+        display: {
+            title: "Reports",
+            icon: <FileCopy />,
+            admin: false
+        }
+    },
+    {
+        path: "patients/:id",
+        element: <PatientDetails />
+    },
     {
         element: <WardPage />,
         path: "ward",
@@ -61,6 +87,15 @@ export const DashboardRoutes: Route[] = [
         display: {
             title: "Schedule",
             icon: <DateRange />,
+            admin: true
+        }
+    },
+    {
+        element: <WardAllocation />,
+        path: "allocation",
+        display: {
+            title: "Ward Allocation",
+            icon: <Badge />,
             admin: true
         }
     },

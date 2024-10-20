@@ -1,37 +1,10 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
-import { visuallyHidden } from '@mui/utils';
-import { styled } from '@mui/material/styles';
-
-const StyledBox = styled('div')(({ theme }) => ({
-  alignSelf: 'center',
-  width: '100%',
-  height: 400,
-  marginTop: theme.spacing(8),
-  borderRadius: theme.shape.borderRadius,
-  outline: '6px solid',
-  outlineColor: 'hsla(220, 25%, 80%, 0.2)',
-  border: '1px solid',
-  borderColor: theme.palette.grey[200],
-  boxShadow: '0 0 12px 8px hsla(220, 25%, 80%, 0.2)',
-  backgroundSize: 'cover',
-  [theme.breakpoints.up('sm')]: {
-    marginTop: theme.spacing(10),
-    height: 700,
-  },
-  ...theme.applyStyles('dark', {
-    boxShadow: '0 0 24px 12px hsla(210, 100%, 25%, 0.2)',
-    outlineColor: 'hsla(220, 20%, 42%, 0.1)',
-    borderColor: theme.palette.grey[700],
-  }),
-}));
+import sideImage from "../../../assets/doctor_image.png";
+import { Link as NavLink } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -61,87 +34,60 @@ export default function Hero() {
         <Stack
           spacing={2}
           useFlexGap
-          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
+          sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' } }}
         >
-          <Typography
-            variant="h1"
-            sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: 'center',
-              fontSize: 'clamp(3rem, 10vw, 3.5rem)',
-            }}
-          >
-            Our&nbsp;latest&nbsp;
-            <Typography
-              component="span"
-              variant="h1"
-              sx={(theme) => ({
-                fontSize: 'inherit',
-                color: 'primary.main',
-                ...theme.applyStyles('dark', {
-                  color: 'primary.light',
-                }),
-              })}
-            >
-              products
-            </Typography>
-          </Typography>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
-          >
-            At Our Hospital, We Are Dedicated To Providing Exceptional  Medical Care To Our Patients And Their Families. Our Experienced Team Of Medical Professionals. Cutting Edge Technology, And Compassionate Approach Make Us A Leader In The Healthcare Industry.
-          </Typography>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={1}
-            useFlexGap
-            sx={{ pt: 2, width: { xs: '100%', sm: '350px' } }}
-          >
-            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
-              Email
-            </InputLabel>
-            <TextField
-              id="email-hero"
-              hiddenLabel
-              size="small"
-              variant="outlined"
-              aria-label="Enter your email address"
-              placeholder="Your email address"
-              fullWidth
-              slotProps={{
-                htmlInput: {
-                  autoComplete: 'off',
-                  'aria-label': 'Enter your email address',
-                },
-              }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              sx={{ minWidth: 'fit-content' }}
-            >
-              Start now
-            </Button>
+          <Stack direction="row" alignItems="center">
+            <Box>
+              <Typography
+                variant="h1"
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  alignItems: 'center',
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  textAlign: "center",
+                  fontSize: 'clamp(2rem, 10vw, 2.5rem)',
+                }}
+              >
+                Providing Quality Healthcare For A Brighter And Healthy Future
+              </Typography>
+              <Typography
+                sx={{
+                  pt: 4,
+                  textAlign: 'center',
+                  color: 'text.secondary',
+                }}
+              >
+                At Our Hospital, We Are Dedicated To Providing Exceptional  Medical Care To Our Patients And Their Families. Our Experienced Team Of Medical Professionals. Cutting Edge Technology, And Compassionate Approach Make Us A Leader In The Healthcare Industry.
+              </Typography>
+              <Stack
+                spacing={1}
+                alignContent={"center"}
+                useFlexGap
+                direction="row"
+                justifyContent="center"
+                sx={{ pt: 8 }}
+              >
+                <NavLink to="/appointment">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    sx={{ minWidth: 'fit-content' }}
+                  >
+                    Book Appointment
+                  </Button>
+                </NavLink>
+
+              </Stack>
+
+
+            </Box>
+            <img src={sideImage} style={{ maxWidth: "35vw" }} />
           </Stack>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ textAlign: 'center' }}
-          >
-            By clicking &quot;Start now&quot; you agree to our&nbsp;
-            <Link href="#" color="primary">
-              Terms & Conditions
-            </Link>
-            .
-          </Typography>
+
         </Stack>
-        <StyledBox id="image" />
       </Container>
     </Box>
   );

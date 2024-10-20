@@ -1,6 +1,7 @@
 import Stack from '@mui/material/Stack';
 import NavbarBreadcrumbs from './NavbarBreadcrumbs';
 import ColorModeIconDropdown from '../../../theme/ColorModeIconDropdown';
+import { Box } from '@mui/material';
 
 
 export default function Header() {
@@ -17,7 +18,7 @@ export default function Header() {
       }}
       spacing={2}
     >
-      <NavbarBreadcrumbs />
+      <Box />
       <ColorModeIconDropdown />
     </Stack>
   );

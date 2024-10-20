@@ -21,7 +21,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-export default function AppAppBar({ isHome }: { isHome?: boolean }) {
+export default function AppAppBar() {
   const user = useUser();
   const navigate = useNavigate();
 
@@ -36,26 +36,11 @@ export default function AppAppBar({ isHome }: { isHome?: boolean }) {
             <SiteLogo responsive />
           </Link>
           <Box sx={{ display: 'flex' }}>
-            {isHome ? <>
+            <Link to="/">
               <Button variant="text" color="info" size="small">
-                Features
+                Home
               </Button>
-              <Button variant="text" color="info" size="small">
-                Testimonials
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Highlights
-              </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
-                FAQ
-              </Button>
-            </> : <>
-              <Link to="/">
-                <Button variant="text" color="info" size="small">
-                  Home
-                </Button>
-              </Link>
-            </>}
+            </Link>
           </Box>
         </Box>
         <Box
@@ -74,9 +59,9 @@ export default function AppAppBar({ isHome }: { isHome?: boolean }) {
           {
             user.loggedIn ?
               <>
-                <Link to="/appointment">
+                <Link to="/appointment/list">
                   <Button color="info" variant="contained" size="small">
-                    Appointments
+                    My Appointments
                   </Button>
                 </Link>
                 <UserCard small /> </> :

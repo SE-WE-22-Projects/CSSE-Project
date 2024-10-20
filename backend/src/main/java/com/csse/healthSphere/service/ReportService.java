@@ -33,6 +33,12 @@ public class ReportService {
         Report report = modelMapper.map(reportRequest, Report.class);
         MedicalService medicalService = medicalServiceRepository.findById(reportRequest.getServiceId())
                 .orElseThrow(() -> new ResourceNotFoundException("Medical Service not found"));
+
+
+        Admission admission = admissionRepository.findById(reportRequest.getAdmissionId())
+                .orElseThrow(() -> new ResourceNotFoundException("Admission not found"));
+
+        report.setAdmission(admission);
         report.setMedicalService(medicalService);
         report.setReportId(null);
         return reportRepository.save(report);
@@ -88,7 +94,6 @@ public class ReportService {
     }
 
     /**
-     *
      * @param patientId
      * @param medicalServiceId
      * @return
@@ -102,22 +107,20 @@ public class ReportService {
     }
 
     /**
-     *
      * @param admissionId
      * @return
      */
-    public List<Report> findReportsByAdmission(Long admissionId){
+    public List<Report> findReportsByAdmission(Long admissionId) {
         Admission admission = admissionRepository.findById(admissionId)
-                .orElseThrow(()-> new ResourceNotFoundException("Admission not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Admission not found"));
         return reportRepository.findByAdmission(admission);
     }
 
     /**
-     *
      * @param patientId
      * @return
      */
-    public List<Report> findReportsByPatient(Long patientId){
+    public List<Report> findReportsByPatient(Long patientId) {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
         return reportRepository.findByAdmissionAppointmentPatient(patient);

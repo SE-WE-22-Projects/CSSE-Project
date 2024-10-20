@@ -87,19 +87,5 @@ public class DiagnosisController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/appointment/{appointmentId}")
-    public ResponseEntity<Diagnosis> findDiagnosisByAppointment(
-            @PathVariable Long appointmentId
-    ) {
-        Diagnosis diagnosis = diagnosisService.findDiagnosisByAppointment(appointmentId);
-        return new ResponseEntity<>(diagnosis, HttpStatus.OK);
-    }
 
-    @GetMapping("patient/{patientId}")
-    public ResponseEntity<List<Diagnosis>> findDiagnosisByPatient(
-            @PathVariable Long patientId
-    ) {
-        List<Diagnosis> diagnosisList = diagnosisService.findDiagnosisByPatient(patientId);
-        return new ResponseEntity<>(diagnosisList, HttpStatus.OK);
-    }
 }
