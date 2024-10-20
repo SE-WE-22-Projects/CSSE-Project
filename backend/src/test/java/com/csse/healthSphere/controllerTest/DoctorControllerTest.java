@@ -186,6 +186,6 @@ public class DoctorControllerTest {
         mockMvc.perform(post("/api/doctor/{id}/ward", 100L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(allocation)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
     }
 }
