@@ -87,6 +87,12 @@ public class ReportController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Get all reports for a given admission
+     *
+     * @param admissionId the id of the admission
+     * @return a list of reports for the given admission
+     */
     @GetMapping("/admission/medicalservice/{admissionId}/{medicalServiceId}")
     public ResponseEntity<List<Report>> findReportsByAdmissionAndMedicalService(
             @PathVariable Long admissionId,

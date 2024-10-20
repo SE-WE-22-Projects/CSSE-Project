@@ -21,7 +21,11 @@ import java.util.List;
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
-    // create new appointment
+    /**
+     * Create a new appointment
+     * @param appointmentRequest: the data for the new appointment
+     * @return the newly created appointment
+     */
     @PostMapping
     public ResponseEntity<Appointment> createAppointment(
             @RequestBody AppointmentRequest appointmentRequest
@@ -30,14 +34,21 @@ public class AppointmentController {
         return new ResponseEntity<>(createdAppointment, HttpStatus.CREATED);
     }
 
-    // get all appointments
+    /**
+     * Get all appointments
+     * @return a list of all appointments
+     */
     @GetMapping
     public ResponseEntity<List<Appointment>> getAllAppointments() {
         List<Appointment> appointmentList = appointmentService.getAllAppointments();
         return new ResponseEntity<>(appointmentList, HttpStatus.OK);
     }
 
-    // get appointment by id
+    /**
+     * Get a appointment by id
+     * @param id the id of the appointment
+     * @return the appointment for the given id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointmentById(
             @PathVariable Long id
@@ -46,7 +57,12 @@ public class AppointmentController {
         return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 
-    // update appointment by id
+    /**
+     * Update an appointment
+     * @param id the id of the appointment
+     * @param appointmentRequest the updated data for the appointment
+     * @return the updated appointment
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Appointment> updateAppointment(
             @PathVariable Long id,
@@ -56,7 +72,11 @@ public class AppointmentController {
         return new ResponseEntity<>(updatedAppointment, HttpStatus.OK);
     }
 
-    // delete appointment by id
+    /**
+     * Delete an appointment
+     * @param id the id of the appointment
+     * @return no content
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAppointment(
             @PathVariable Long id
@@ -65,6 +85,11 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Find appointments by patient
+     * @param patientId the id of the patient
+     * @return a list of all appointments for the given patient
+     */
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<Appointment>> findAppointmentsByPatient(
             @PathVariable Long patientId
@@ -73,6 +98,11 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentList, HttpStatus.OK);
     }
 
+    /**
+     * Find appointments by schedule
+     * @param scheduleId the id of the schedule
+     * @return a list of all appointments for the given schedule
+     */
     @GetMapping("/schedule/{scheduleId}")
     public ResponseEntity<List<Appointment>> findAppointmentsBySchedule(
             @PathVariable Long scheduleId
@@ -81,6 +111,11 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentList, HttpStatus.OK);
     }
 
+    /**
+     * Find appointments by doctor
+     * @param doctorId the id of the doctor
+     * @return a list of all appointments for the given doctor
+     */
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<Appointment>> findAppointsByDoctor(
             @PathVariable Long doctorId
@@ -89,6 +124,11 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentList, HttpStatus.OK);
     }
 
+    /**
+     * Create a new appointment by patient
+     * @param appointmentRequest: the data for the new appointment
+     * @return the newly created appointment
+     */
     @PostMapping("/patient")
     public ResponseEntity<Appointment> createAppointmentByPatient(
             @RequestBody AppointmentCreation appointmentRequest,

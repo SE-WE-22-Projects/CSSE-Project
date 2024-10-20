@@ -19,6 +19,11 @@ import java.security.Principal;
 public class PersonController {
     private final PersonService personService;
 
+    /**
+     * Get the logged in person
+     * @param principal the principal of the logged in user
+     * @return the logged in person
+     */
     @GetMapping
     public ResponseEntity<Person> getLoggedPerson(
             Principal principal

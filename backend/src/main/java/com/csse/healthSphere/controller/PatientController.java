@@ -17,7 +17,12 @@ import java.util.List;
 public class PatientController {
     private final PatientService patientService;
 
-    // create new patient
+    /**
+     * Create a new patient
+     *
+     * @param patientRequest: the data for the new patient
+     * @return the newly created patient
+     */
     @PostMapping
     public ResponseEntity<Patient> createPatient(
             @RequestBody PatientRequest patientRequest
@@ -26,14 +31,23 @@ public class PatientController {
         return new ResponseEntity<>(createdPatient, HttpStatus.CREATED);
     }
 
-    // get all patients
+    /**
+     * Get all patients
+     *
+     * @return a list of all patients
+     */
     @GetMapping
     public ResponseEntity<List<Patient>> getAllPatients() {
         List<Patient> patientList = patientService.getAllPatients();
         return new ResponseEntity<>(patientList, HttpStatus.OK);
     }
 
-    // get patient by id
+    /**
+     * Get a PatientService by id
+     *
+     * @param id the id of the patient
+     * @return the patient for the given id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Patient> getPatientById(
             @PathVariable Long id
@@ -42,6 +56,13 @@ public class PatientController {
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
+    /**
+     * Update a patient
+     *
+     * @param id: the id of the patient to update
+     * @param patientRequest: the new data for the patient
+     * @return the updated patient
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Patient> updatePatient(
             @PathVariable Long id,
@@ -51,6 +72,12 @@ public class PatientController {
         return new ResponseEntity<>(updatedPatient, HttpStatus.OK);
     }
 
+    /**
+     * Delete a patient
+     *
+     * @param id: the id of the patient to delete
+     * @return no content
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePatient(
             @PathVariable Long id

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RequestMapping(path = "api/auth")
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +33,12 @@ public class AuthController {
 
     private final PersonRepository personRepository;
 
+    /**
+     * Login
+     *
+     * @param request: the login request
+     * @return the JWT token
+     */
     @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
         Authentication authenticate = authenticationManager
@@ -46,6 +53,12 @@ public class AuthController {
         return ResponseEntity.ok().body(jwtTokenUtil.generateAccessToken(user));
     }
 
+    /**
+     * Register
+     *
+     * @param request: the login request
+     * @return the JWT token
+     */
     @PostMapping("set_password")
     public ResponseEntity<String> setPassword(@RequestBody LoginRequest request) {
         // TODO: remove this method

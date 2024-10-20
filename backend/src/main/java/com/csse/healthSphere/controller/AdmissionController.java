@@ -87,6 +87,11 @@ public class AdmissionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Find a admission by appointment
+     * @param appointmentId the id of the appointment
+     * @return the admission for the given appointment
+     */
     @GetMapping("/appointment/{appointmentId}")
     public ResponseEntity<Admission> findAdmissionByAppointment(
             @PathVariable Long appointmentId
@@ -95,6 +100,11 @@ public class AdmissionController {
         return new ResponseEntity<>(admission, HttpStatus.OK);
     }
 
+    /**
+     * Find all admissions by patient
+     * @param patientId the id of the patient
+     * @return a list of all admissions for the given patient
+     */
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<Admission>> findAdmissionsByPatient(
             @PathVariable Long patientId

@@ -87,6 +87,12 @@ public class ScheduleController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Get all schedules by doctor
+     *
+     * @param doctorId the id of the doctor
+     * @return a list of all schedules for the given doctor
+     */
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<Schedule>> getSchduleByDoctor(
             @PathVariable Long doctorId
