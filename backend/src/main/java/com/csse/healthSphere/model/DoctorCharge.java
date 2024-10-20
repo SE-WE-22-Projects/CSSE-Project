@@ -12,7 +12,4 @@ import lombok.EqualsAndHashCode;
 @Entity
 @DiscriminatorValue("doctor")
 public class DoctorCharge extends Charge {
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
 }
