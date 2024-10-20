@@ -3,6 +3,7 @@ import { Doctor } from '../../../api';
 import { Field } from '../../../components/DataForm';
 import TablePage from '../../components/TablePage';
 import { API } from '../../../config';
+import dayjs from 'dayjs';
 
 
 const GridFields: GridColDef<Doctor>[] = [
@@ -14,7 +15,7 @@ const GridFields: GridColDef<Doctor>[] = [
 
 const FormFields = {
     name: Field.text("Name", { minLength: 1, maxLength: 50 }),
-    dob: Field.date("Date of birth"),
+    dob: Field.date("Date of birth", {maxDate: dayjs().subtract(18, 'years')}),
     gender: Field.select("Gender", { values: [{ label: "Male", value: "male" }, { label: "Female", value: "female" }] }),
     address: Field.text("Address", { textArea: true }),
     email: Field.email("Email"),
